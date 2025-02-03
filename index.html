@@ -1,203 +1,34 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shadowdark Monstercard Codex</title>
+  <!-- Link to custom CSS -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="header">
-    <h1 class="main-title">Shadowdark Monstercard Codex</h1>
+    <h1 class="main-title">Shadowdark Monster Card Codex</h1>
     <input type="text" id="search-bar" placeholder="Search Monsters...">
+    
+    <!-- Dual Slider using two native range inputs -->
+    <div id="slider-range-container">
+      <label class="slider-label" for="range-min">Level:</label>
+      <span id="range-display"></span>
+      <div class="slider-inputs">
+        <input type="range" id="range-min" value="1" step="1">
+        <input type="range" id="range-max" value="10" step="1">
+      </div>
+    </div>
   </header>
-
+  
+  <!-- Spacer (25px blank space below the header) -->
+  <div class="header-spacer"></div>
+  
   <div id="monster-list"></div>
 
-  <script>
-      document.getElementById("search-bar").addEventListener("input", function () {
-          const searchQuery = this.value.toLowerCase();
-          filterMonsters(searchQuery);
-      });
-
-      function filterMonsters(searchQuery) {
-          const monsterCards = document.querySelectorAll(".monster-card-container");
-          monsterCards.forEach(card => {
-              const name = card.querySelector(".monster-header").textContent.toLowerCase();
-              card.style.display = name.includes(searchQuery) ? "block" : "none";
-          });
-      }
-
-      // Fetch Google Sheets Data
-      fetch("https://opensheet.elk.sh/1E9c3F3JPCDnxqLE0qVtW0K7PBsgHSd7s5oU8p8qeAAY/All")
-        .then(response => response.json())
-        .then(monsters => {
-            displayMonsterList(monsters);
-        })
-        .catch(error => console.error("Error loading Google Sheets data:", error));
-
-  function displayMonsterList(data) {
-    const listContainer = document.getElementById("monster-list");
-    listContainer.innerHTML = ""; // Clear previous content
-
-    // Create the "About" card first, then the "License" card
-    createAboutCard();
-    createLicenseCard();
-
-    // Group and sort monsters by Level
-    const groupedByLevel = {};
-    data.forEach(monster => {
-        const level = monster["Level"] || "Unknown"; // Default to 'Unknown' if Level is missing
-        if (!groupedByLevel[level]) {
-            groupedByLevel[level] = [];
-        }
-        groupedByLevel[level].push(monster);
-    });
-
-    // Sort levels numerically (handling 'Unknown' cases)
-    const sortedLevels = Object.keys(groupedByLevel)
-        .sort((a, b) => (isNaN(a) ? 999 : parseInt(a)) - (isNaN(b) ? 999 : parseInt(b)));
-
-    sortedLevels.forEach(level => {
-        // Sort monsters alphabetically within the level
-        groupedByLevel[level].sort((a, b) => a["Name"].localeCompare(b["Name"]));
-
-        // Append sorted monster cards
-        groupedByLevel[level].forEach((monster, index) => {
-            const abilities = [
-                monster["Ability 1"], monster["Ability 2"], monster["Ability 3"],
-                monster["Ability 4"], monster["Ability 5"], monster["Ability 6"],
-                monster["Ability 7"], monster["Ability 8"], monster["Ability 9"]
-            ]
-            .filter(ability => ability && ability.trim().length > 0)
-            .map(ability => `<p>${ability}</p>`) // Wrap each ability in a <p> tag for spacing
-            .join(""); 
-
-            const item = document.createElement("div");
-            item.classList.add("monster-card-container");
-            item.innerHTML = `
-                <div class="monster-card" onclick="toggleCard('${level}-${index}')">
-                    <div class="card-header">
-                        <div class="monster-header">${monster["Name"]}</div> 
-                        <div class="monster-level">${monster["Level"]}</div>
-                    </div>
-                    <div class="card-body" id="monster-body-${level}-${index}">
-                        <div class="monster-description">${monster["Flavor Text"]}</div>
-                        <div class="monster-content">
-                            <div class="monster-left">
-                                <div class="monster-stats-container">
-                                    <div class="monster-stats-labels">
-                                        <div>STR</div>
-                                        <div>DEX</div>
-                                        <div>CON</div>
-                                        <div>INT</div>
-                                        <div>WIS</div>
-                                        <div>CHA</div>
-                                    </div>
-                                    <div class="monster-stats-values">
-                                        <div>${monster["S"]}</div>
-                                        <div>${monster["D"]}</div>
-                                        <div>${monster["C"]}</div>
-                                        <div>${monster["I"]}</div>
-                                        <div>${monster["W"]}</div>
-                                        <div>${monster["Ch"]}</div>
-                                    </div>
-                                    <div class="monster-traits-labels">
-                                        <div>AL</div>
-                                        <div>HP</div>
-                                        <div>AC</div>
-                                        <div>MV</div>
-                                    </div>
-                                    <div class="monster-traits-values">
-                                        <div>${monster["AL"]}</div>
-                                        <div>${monster["HP"]}</div>
-                                        <div><b>${monster["AC"]}</b></div>
-                                        <div><i>${monster["MV"]}</i></div>
-                                    </div>
-                                </div>
-                                <p><b>Attack:</b> ${monster["ATK"]}</p>
-                            </div>
-                            <div class="monster-right">${abilities}</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            listContainer.appendChild(item);
-        });
-    });
-}
-
-function createLicenseCard() {
-    const listContainer = document.getElementById("monster-list");
-    const licenseCard = document.createElement("div");
-    licenseCard.classList.add("monster-card-container");
-    licenseCard.innerHTML = `
-        <div class="monster-card" onclick="toggleLicenseCard()">
-            <div class="card-header">
-                <div class="monster-header">License Information</div>
-            </div>
-            <div class="card-body" id="license-card-body">
-                <div class="custom-text">
-                    Shadowdark Monstercard Codex is an independent product published under the Shadowdark RPG Third-Party License and is not affiliated with The Arcane Library, LLC.<br><br>
-                    Shadowdark RPG © 2023 The Arcane Library, LLC.<br><br>
-                    This product is built on the work of Night Noon Games (available <a href="https://nightnoongames.itch.io/shadowdark-monster-list" target="_blank">here</a>
-) with material available under the <a href="https://creativecommons.org/licenses/by-sa/4.0/#ref-appropriate-credit" target="_blank">Attribution-ShareAlike 4.0 International License</a>.
-                </div>
-            </div>
-        </div>
-    `;
-    listContainer.prepend(licenseCard); // Ensure "License" is below "About"
-}
-    function createAboutCard() {
-    const listContainer = document.getElementById("monster-list");
-    const aboutCard = document.createElement("div");
-    aboutCard.classList.add("monster-card-container");
-    aboutCard.innerHTML = `
-        <div class="monster-card" onclick="toggleAboutCard()">
-            <div class="card-header">
-                <div class="monster-header">About</div>
-            </div>
-            <div class="card-body" id="about-card-body">
-                <div class="custom-text">
-                    This is a codex of monsters for Shadowdark. I love Shadowdark. 
-                    <p>For me, the humble 3x5 card captures the soul of flexible, creative dungeon delving. But it's not always practical to have paper cards. (Alas!)
-                    <p>So I built this. I hope you like it. 
-                </div>
-            </div>
-        </div>
-    `;
-    listContainer.prepend(aboutCard); // Ensure "About" is at the top
-}
-
-function toggleAboutCard() {
-    const body = document.getElementById("about-card-body");
-    const card = body.closest(".monster-card");
-    const isExpanded = card.classList.contains("expanded");
-
-    if (isExpanded) {
-        body.style.maxHeight = null;
-        card.classList.remove("expanded");
-    } else {
-        body.style.maxHeight = body.scrollHeight + "px";
-        card.classList.add("expanded");
-    }
-}
-
-
-
-function toggleLicenseCard() {
-    const body = document.getElementById("license-card-body");
-    const card = body.closest(".monster-card");
-    const isExpanded = card.classList.contains("expanded");
-
-    if (isExpanded) {
-        body.style.maxHeight = null;
-        card.classList.remove("expanded");
-    } else {
-        body.style.maxHeight = body.scrollHeight + "px";
-        card.classList.add("expanded");
-    }
-}
-
-  </script>
+  <!-- Custom JavaScript -->
+  <script src="script.js"></script>
 </body>
 </html>
