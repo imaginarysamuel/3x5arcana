@@ -197,7 +197,7 @@ function createLicenseCard() {
       </div>
       <div class="card-body" id="license-card-body">
         <div class="custom-text">
-          Shadowdark Monstercard Codex is an independent product published under the Shadowdark RPG Third-Party License and is not affiliated with <a href="https://www.thearcanelibrary.com/?srsltid=AfmBOoqRfXqQ1e2xAnuGEP8PCppQ3q0fhd-P5hrxc7HDDsc0nkEMt5j1"The Arcane Library, LLC.</a>
+          Shadowdark Monstercard Codex is an independent product published under the Shadowdark RPG Third-Party License and is not affiliated with <a href="https://www.thearcanelibrary.com/?srsltid=AfmBOoqRfXqQ1e2xAnuGEP8PCppQ3q0fhd-P5hrxc7HDDsc0nkEMt5j1">The Arcane Library, LLC.</a>
           <p>Shadowdark RPG © 2023 The Arcane Library, LLC.
           <p>This product is built on the good work of Night Noon Games (<a href="https://nightnoongames.itch.io/shadowdark-monster-list">here</a>) with material available under the <a href="https://creativecommons.org/licenses/by-sa/4.0/#ref-appropriate-credit" target="_blank">Attribution-ShareAlike 4.0 International License</a>.
         </div>
@@ -220,28 +220,35 @@ function toggleLicenseCard() {
   }
 }
 
+/* Updated toggleCard function */
 function toggleCard(id, isDuplicate = false) {
-  const body = document.getElementById(`monster-body-${id}`);
-  const card = body.closest(".monster-card");
+  // Always target the main card (exclude duplicate cards)
+  const mainBody = document.querySelector(`.monster-card:not(.duplicate-card) #monster-body-${id}`);
+  if (!mainBody) return; // safeguard if not found
+  const card = mainBody.closest(".monster-card");
   const listContainer = document.getElementById("monster-list");
-  const cardType = isDuplicate ? "duplicate" : "main";
   const isExpanded = card.classList.contains("expanded");
+
   if (isExpanded) {
-    body.style.maxHeight = null;
+    // Collapse the main card
+    mainBody.style.maxHeight = null;
     card.classList.remove("expanded");
-    if (cardType === "main") {
-      const duplicateCard = document.getElementById(`duplicate-${id}`);
-      if (duplicateCard) {
-        duplicateCard.classList.add("removing");
-        duplicateCard.addEventListener("animationend", function () {
-          duplicateCard.remove();
-        });
-      }
+
+    // Remove the duplicate if it exists
+    const duplicateCard = document.getElementById(`duplicate-${id}`);
+    if (duplicateCard) {
+      duplicateCard.classList.add("removing");
+      duplicateCard.addEventListener("animationend", function () {
+        duplicateCard.remove();
+      });
     }
   } else {
-    body.style.maxHeight = body.scrollHeight + "px";
+    // Expand the main card
+    mainBody.style.maxHeight = mainBody.scrollHeight + "px";
     card.classList.add("expanded");
-    if (cardType === "main") {
+
+    // Only create a duplicate if the click was on the main card
+    if (!isDuplicate) {
       const existingDuplicate = document.getElementById(`duplicate-${id}`);
       if (existingDuplicate) {
         existingDuplicate.remove();
