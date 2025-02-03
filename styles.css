@@ -196,11 +196,14 @@ body {
 .monster-traits-values {
   display: flex;
   flex-direction: column;
-  max-width: 50px;
+  max-width: 50px; /* Keep this */
   font-weight: bold;
   line-height: 0.7em;
   gap: 10px;
   color: var(--text-color);
+  word-wrap: break-word;  /* Add this */
+  overflow-wrap: break-word; /* Add this */
+  white-space: normal; /* Add this */
 }
 .monster-right {
   border-left: 1px solid black;
