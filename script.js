@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
         item.classList.add("monster-card-container");
         // Store the monster's level for filtering
         item.setAttribute("data-level", monster["Level"]);
-        item.innerHTML = "" +
+        item.innerHTML = 
           '<div class="monster-card" onclick="toggleCard(\'' + level + '-' + index + '\')">' +
             '<div class="card-header">' +
               '<div class="monster-header">' + monster["Name"] + '</div>' +
@@ -166,11 +166,137 @@ document.addEventListener("DOMContentLoaded", function () {
     var listContainer = document.getElementById("monster-list");
     var aboutCard = document.createElement("div");
     aboutCard.classList.add("monster-card-container");
-    aboutCard.innerHTML = "" +
+    aboutCard.innerHTML = 
       '<div class="monster-card" onclick="toggleAboutCard()">' +
         '<div class="card-header">' +
           '<div class="monster-header">About</div>' +
         '</div>' +
         '<div class="card-body" id="about-card-body">' +
           '<div class="custom-text">' +
-            'This is a codex of monsters for Shadowdark. For me, the humble 3x5 card captures the soul of flexible, 
+            'This is a codex of monsters for Shadowdark. For me, the humble 3x5 card captures the soul of flexible, creative dungeon delving. It\'s not always practical to have paper cards. So I built this.' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    listContainer.prepend(aboutCard);
+  }
+
+  function toggleAboutCard() {
+    var body = document.getElementById("about-card-body");
+    var card = body.closest(".monster-card");
+    var isExpanded = card.classList.contains("expanded");
+    if (isExpanded) {
+      body.style.maxHeight = null;
+      card.classList.remove("expanded");
+    } else {
+      body.style.maxHeight = body.scrollHeight + "px";
+      card.classList.add("expanded");
+    }
+  }
+
+  function createLicenseCard() {
+    var listContainer = document.getElementById("monster-list");
+    var licenseCard = document.createElement("div");
+    licenseCard.classList.add("monster-card-container");
+    licenseCard.innerHTML = 
+      '<div class="monster-card" onclick="toggleLicenseCard()">' +
+        '<div class="card-header">' +
+          '<div class="monster-header">License Information</div>' +
+        '</div>' +
+        '<div class="card-body" id="license-card-body">' +
+          '<div class="custom-text">' +
+            'Shadowdark Monstercard Codex is an independent product published under the Shadowdark RPG Third-Party License and is not affiliated with The Arcane Library, LLC.<br><br>' +
+            'Shadowdark RPG © 2023 The Arcane Library, LLC.<br><br>' +
+            'This product is built on the work of Night Noon Games, with material available under the <a href="https://creativecommons.org/licenses/by-sa/4.0/#ref-appropriate-credit" target="_blank">Attribution-ShareAlike 4.0 International License</a>.' +
+            'You can view the full terms and give appropriate credit as per the license.' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    listContainer.prepend(licenseCard);
+  }
+
+  function toggleLicenseCard() {
+    var body = document.getElementById("license-card-body");
+    var card = body.closest(".monster-card");
+    var isExpanded = card.classList.contains("expanded");
+    if (isExpanded) {
+      body.style.maxHeight = null;
+      card.classList.remove("expanded");
+    } else {
+      body.style.maxHeight = body.scrollHeight + "px";
+      card.classList.add("expanded");
+    }
+  }
+
+  function toggleCard(id, isDuplicate) {
+    if (typeof isDuplicate === "undefined") { isDuplicate = false; }
+    var body = document.getElementById("monster-body-" + id);
+    var card = body.closest(".monster-card");
+    var listContainer = document.getElementById("monster-list");
+    var cardType = isDuplicate ? "duplicate" : "main";
+    var isExpanded = card.classList.contains("expanded");
+    if (isExpanded) {
+      body.style.maxHeight = null;
+      card.classList.remove("expanded");
+      if (cardType === "main") {
+        var duplicateCard = document.getElementById("duplicate-" + id);
+        if (duplicateCard) {
+          duplicateCard.classList.add("removing");
+          duplicateCard.addEventListener("animationend", function () {
+            duplicateCard.remove();
+          });
+        }
+      }
+    } else {
+      body.style.maxHeight = body.scrollHeight + "px";
+      card.classList.add("expanded");
+      if (cardType === "main") {
+        var existingDuplicate = document.getElementById("duplicate-" + id);
+        if (existingDuplicate) {
+          existingDuplicate.remove();
+        }
+        var duplicate = card.cloneNode(true);
+        duplicate.id = "duplicate-" + id;
+        duplicate.classList.add("duplicate-card");
+        duplicate.addEventListener("click", function () {
+          toggleCard(id, true);
+        });
+        listContainer.prepend(duplicate);
+      }
+    }
+  }
+
+  function updateRangeDisplay() {
+    var rangeDisplay = document.getElementById("range-display");
+    rangeDisplay.textContent = currentMinLevel + " - " + currentMaxLevel;
+  }
+
+  // Event listeners for the dual range inputs
+  document.getElementById("range-min").addEventListener("input", function() {
+    var minVal = parseInt(this.value, 10);
+    var maxVal = parseInt(document.getElementById("range-max").value, 10);
+    if (minVal > maxVal) {
+      minVal = maxVal;
+      this.value = minVal;
+    }
+    currentMinLevel = minVal;
+    updateRangeDisplay();
+    updateFilters();
+  });
+
+  document.getElementById("range-max").addEventListener("input", function() {
+    var maxVal = parseInt(this.value, 10);
+    var minVal = parseInt(document.getElementById("range-min").value, 10);
+    if (maxVal < minVal) {
+      maxVal = minVal;
+      this.value = maxVal;
+    }
+    currentMaxLevel = maxVal;
+    updateRangeDisplay();
+    updateFilters();
+  });
+
+  // Expose functions to the global scope so inline event handlers work
+  window.toggleCard = toggleCard;
+  window.toggleAboutCard = toggleAboutCard;
+  window.toggleLicenseCard = toggleLicenseCard;
+});
