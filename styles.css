@@ -202,7 +202,6 @@ body {
   color: var(--text-color);
   word-wrap: break-word;  /* Add this */
   overflow-wrap: break-word; /* Add this */
-  white-space: normal; /* Add this */
 }
 .monster-right {
   border-left: 1px solid black;
