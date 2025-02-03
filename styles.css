@@ -202,15 +202,15 @@ body {
   color: var(--text-color);
 }
 .monster-right {
-  border-left: 2px solid var(--border-color);
+  border-left: 1px solid black;
   display: flex;
   flex-direction: column;
-  padding-bottom: 5px;
+  padding: 5px;
 }
 .monster-right p {
   margin-bottom: 2px;
   line-height: 1.1;
-  padding: 5px 2px;
+  padding: 5px;
   color: var(--text-muted);
 }
 @media (max-width: 768px) {
