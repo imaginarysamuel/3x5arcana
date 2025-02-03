@@ -162,7 +162,10 @@ function createAboutCard() {
       </div>
       <div class="card-body" id="about-card-body">
         <div class="custom-text">
-          This is a codex of monsters for Shadowdark. For me, the humble 3x5 card captures the soul of flexible, creative dungeon delving. It's not always practical to have paper cards. So I built this.
+          This is a codex of monsters for Shadowdark. 
+          <p>For me, the humble 3x5 card captures the soul of flexible, creative dungeon delving. 
+          <p>But alas, it's not always practical to have paper cards. 
+          <p>So I built this. I hope you like it!
         </div>
       </div>
     </div>
@@ -194,10 +197,9 @@ function createLicenseCard() {
       </div>
       <div class="card-body" id="license-card-body">
         <div class="custom-text">
-          Shadowdark Monstercard Codex is an independent product published under the Shadowdark RPG Third-Party License and is not affiliated with The Arcane Library, LLC.<br><br>
-          Shadowdark RPG © 2023 The Arcane Library, LLC.<br><br>
-          This product is built on the work of Night Noon Games, with material available under the <a href="https://creativecommons.org/licenses/by-sa/4.0/#ref-appropriate-credit" target="_blank">Attribution-ShareAlike 4.0 International License</a>.
-          You can view the full terms and give appropriate credit as per the license.
+          Shadowdark Monstercard Codex is an independent product published under the Shadowdark RPG Third-Party License and is not affiliated with <a href="https://www.thearcanelibrary.com/?srsltid=AfmBOoqRfXqQ1e2xAnuGEP8PCppQ3q0fhd-P5hrxc7HDDsc0nkEMt5j1"The Arcane Library, LLC.</a>
+          <p>Shadowdark RPG © 2023 The Arcane Library, LLC.
+          <p>This product is built on the good work of Night Noon Games (<a href="https://nightnoongames.itch.io/shadowdark-monster-list">here</a>) with material available under the <a href="https://creativecommons.org/licenses/by-sa/4.0/#ref-appropriate-credit" target="_blank">Attribution-ShareAlike 4.0 International License</a>.
         </div>
       </div>
     </div>
