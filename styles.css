@@ -29,6 +29,7 @@
   padding: 30px;
   background: var(--header-bg);
   margin-bottom: 5px; /* Ensures space below header */
+   margin-top: -10px;
 }
 .header-spacer {
   height: 25px;
