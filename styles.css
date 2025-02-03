@@ -196,7 +196,7 @@ body {
 .monster-traits-values {
   display: flex;
   flex-direction: column;
-  max-width: 100px; /* Keep this */
+  max-width: 65px; /* Keep this */
   font-weight: bold;
   line-height: 0.7em;
   gap: 10px;
