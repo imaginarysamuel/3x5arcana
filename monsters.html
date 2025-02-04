@@ -9,18 +9,18 @@
 </head>
 <body>
   <header class="header">
-    <h1 class="main-title">Shadowdark Monster Card Codex</h1>
+    <h1 class="main-title">3x5 Arcana: Monsters</h1>
     <input type="text" id="search-bar" placeholder="Search Monsters...">
     
     <!-- Dual Slider using two native range inputs -->
-    <div id="slider-range-container">
-      <label class="slider-label" for="range-min">Level:</label>
-      <span id="range-display"></span>
-      <div class="slider-inputs">
-        <input type="range" id="range-min" value="1" step="1">
-        <input type="range" id="range-max" value="10" step="1">
-      </div>
-    </div>
+  <div class="slider-container">
+  <label class="slider-label" for="range-min">Level:</label>
+  <span id="range-display">0 - 30</span>
+  <div class="slider-inputs">
+    <input type="range" id="range-min" value="0" step="1" min="0" max="30">
+    <input type="range" id="range-max" value="30" step="1" min="0" max="30">
+  </div>
+</div>
   </header>
 
   <div class="header-spacer"></div>
