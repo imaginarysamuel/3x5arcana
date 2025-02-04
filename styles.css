@@ -26,12 +26,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 30px;
+  padding: 50px;
   background: var(--header-bg);
-  margin-bottom: 5px; /* Ensures space below header */
+  margin-bottom: 30px; /* Ensures space below header */
 }
 .header-spacer {
-  height: 25px;
+  height: 15px;
   width: 100%;
 }
 .main-title {
@@ -123,7 +123,7 @@ body {
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   max-width: 5.5in;
-  width: 90%;
+  width: 98%;
 }
 .monster-card:hover {
   transform: translateY(2%);
@@ -143,7 +143,7 @@ body {
   max-width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 6px;
+  padding: 8px 8px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
@@ -153,7 +153,7 @@ body {
   font-size: 1.1em;
   font-weight: bold;
   text-transform: uppercase;
-  padding: 6px;
+  padding: 4px;
   border-radius: 5px;
   text-align: center;
   min-width: 260px;
@@ -254,6 +254,7 @@ body {
     min-width: 35px;
   }
 }
+
 /* Duplicate Card Styling */
 .duplicate-card {
   width: 100%;
@@ -295,6 +296,7 @@ body {
   padding: 10px 2px;
   color: var(--text-muted);
 }
+
 /* LEVEL SELECTOR Styles for Dual Range Inputs */
 #slider-range-container, #spell-filter-container {
   margin: 10px auto;
@@ -390,10 +392,13 @@ body {
   display: inline-block;
   position: relative;
 }
+
 /* Add a custom checkmark */
 .spell-filter-group input[type="checkbox"]:checked {
   background-color: #f1f1f1; /* White when selected */
+  
 }
+
 .spell-filter-group input[type="checkbox"]:checked::after {
   content: "✓"; /* Unicode checkmark */
   color: var(--header-bg); /* Dark checkmark inside */
@@ -403,9 +408,63 @@ body {
   text-align: center;
   line-height: 20px;
 }
+
+
 #spell-list {
   padding-bottom: 100px; /* Adjust this value as needed */
 }
 #monster-list {
   padding-bottom: 100px; /* Adjust this value as needed */
+}
+.navigation-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 15px;
+      width: 100%;
+      max-width: 5.5in;
+    }
+    
+    .nav-card {
+      display: flex;
+      width: 100%;
+      max-width: 5.5in;
+      background-color: var(--card-bg);
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0px;
+      font-size: 1.1em;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--text-color);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      background: var(--border-color);
+      color: white;
+      font-size: 1.1em;
+      padding: 10px;
+      text-align: left;
+      min-width: 260px;
+}
+
+    .nav-card:hover {
+      transform: translateY(-2px);
+      background: var(--card-hover-bg);
+      box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.2);
+      color: var(--header-bg);
+    }
+
+   .monster-card {
+    width: 100%;
+    max-width: 5.5in;
+    text-align: left;
+}
+
+#static-cards {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 5.5in;
 }
