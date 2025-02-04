@@ -7,10 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const isExpanded = card.classList.contains("expanded");
 
     if (isExpanded) {
-      body.style.maxHeight = null;
+      body.style.maxHeight = "0";  // Ensures collapse
       card.classList.remove("expanded");
     } else {
-      body.style.maxHeight = body.scrollHeight + "px";
+      body.style.maxHeight = body.scrollHeight + "px";  // Expands dynamically
       card.classList.add("expanded");
     }
   }
