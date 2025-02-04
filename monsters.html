@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shadowdark Monsters</title>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <h1 class="main-title">Shadowdark Monster Card Codex</h1>
+    <input type="text" id="search-bar" placeholder="Search Monsters...">
+    
+    <!-- Dual Slider using two native range inputs -->
+    <div id="slider-range-container">
+      <label class="slider-label" for="range-min">Level:</label>
+      <span id="range-display"></span>
+      <div class="slider-inputs">
+        <input type="range" id="range-min" value="1" step="1">
+        <input type="range" id="range-max" value="10" step="1">
+      </div>
+    </div>
+  </header>
+
+  <div class="header-spacer"></div>
+  
+  <div id="monster-list"></div>
+
+  <!-- Custom JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
