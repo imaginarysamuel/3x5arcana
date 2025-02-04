@@ -1,16 +1,16 @@
 document.addEventListener("DOMContentLoaded", function () {
   function toggleStaticCard(id) {
-    const body = document.getElementById(id);
-    if (!body) return;
+    const mainBody = document.getElementById(id);
+    if (!mainBody) return;
 
-    const card = body.closest(".monster-card");
+    const card = mainBody.closest(".monster-card");
     const isExpanded = card.classList.contains("expanded");
 
     if (isExpanded) {
-      body.style.maxHeight = "0";  // Ensures collapse
+      mainBody.style.maxHeight = null;
       card.classList.remove("expanded");
     } else {
-      body.style.maxHeight = body.scrollHeight + "px";  // Expands dynamically
+      mainBody.style.maxHeight = mainBody.scrollHeight + "px";
       card.classList.add("expanded");
     }
   }
