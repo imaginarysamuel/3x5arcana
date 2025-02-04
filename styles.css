@@ -335,3 +335,6 @@ body {
   margin-bottom: 10px;
   display: block;
 }
+#monster-list {
+  padding-bottom: 100px; /* Adjust this value as needed */
+}
