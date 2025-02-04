@@ -297,30 +297,34 @@ body {
 }
 
 /* LEVEL & TIER SELECTOR */
-.slider-container {
+.slider-section {
   display: flex;
-  align-items: center; /* Aligns elements in a row */
-  gap: 10px; /* Space between label, display, and sliders */
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
   max-width: 5.5in;
   margin: 10px auto;
 }
 
-.slider-label {
+.slider-labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  min-width: 80px;
+  text-align: right;
   color: #f1f1f1;
   font-weight: bold;
-  min-width: 50px;
-  text-align: right;
 }
 
-#range-display, #spell-range-display {
-  color: #f1f1f1;
-  font-weight: bold;
-  min-width: 70px;
-  text-align: center;
+.sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-grow: 1;
 }
 
 .slider-inputs {
-  flex-grow: 1; /* Allows sliders to take remaining space */
   display: flex;
   gap: 5px;
 }
@@ -366,7 +370,7 @@ body {
 .spell-filter-group {
   display: flex;
   align-items: center;
-  gap: 10px; /* Space between checkboxes */
+  gap: 10px;
   max-width: 300px;
   width: 100%;
   justify-content: center;
@@ -408,7 +412,6 @@ body {
   text-align: center;
   line-height: 20px;
 }
-
 
 
 #spell-list {
