@@ -30,7 +30,7 @@
   background: var(--header-bg);
 }
 .header-spacer {
-  height: 55px;
+  height: 25px;
   width: 100%;
 }
 .main-title {
