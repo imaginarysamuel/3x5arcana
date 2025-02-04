@@ -3,32 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shadowdark Monstercard Codex</title>
-  <!-- Link to custom CSS -->
+  <title>3x5 Arcana</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="header">
-    <h1 class="main-title">Shadowdark Monster Card Codex</h1>
-    <input type="text" id="search-bar" placeholder="Search Monsters...">
-    
-    <!-- Dual Slider using two native range inputs -->
-    <div id="slider-range-container">
-      <label class="slider-label" for="range-min">Level:</label>
-      <span id="range-display"></span>
-      <div class="slider-inputs">
-        <input type="range" id="range-min" value="1" step="1">
-        <input type="range" id="range-max" value="10" step="1">
+    <h1 class="main-title">3x5 Arcana</h1>
+  </header>
+
+  <div class="header-spacer"></div>
+
+  <!-- Navigation Buttons -->
+  <div class="navigation-container">
+    <a href="monsters.html" class="nav-card">Monsters</a>
+    <a href="spells.html" class="nav-card">Spells</a>
+  </div>
+
+  <!-- About and License Cards -->
+  <div id="static-cards">
+    <div class="monster-card-container">
+      <div class="monster-card">
+        <div class="card-header">
+          <div class="monster-header">About</div>
+        </div>
+        <div class="card-body">
+          <div class="custom-text">
+            This is a codex of monsters and spells for Shadowdark.
+            <p>For me, the humble 3x5 card captures the soul of flexible, creative dungeon delving.</p>
+            <p>But alas, it's not always practical to have paper cards.</p>
+            <p>So I built this. I hope you like it!</p>
+          </div>
+        </div>
       </div>
     </div>
-  </header>
-  
-  <!-- Spacer (25px blank space below the header) -->
-  <div class="header-spacer"></div>
-  
-  <div id="monster-list"></div>
-
-  <!-- Custom JavaScript -->
-  <script src="script.js"></script>
+    <div class="monster-card-container">
+      <div class="monster-card">
+        <div class="card-header">
+          <div class="monster-header">License Information</div>
+        </div>
+        <div class="card-body">
+          <div class="custom-text">
+            Shadowdark Codex is an independent product published under the Shadowdark RPG Third-Party License and is not affiliated with <a href="https://www.thearcanelibrary.com/">The Arcane Library, LLC.</a>
+            <p>Shadowdark RPG © 2023 The Arcane Library, LLC.</p>
+            <p>This product is built on the good work of Night Noon Games, <a href="https://nightnoongames.itch.io/shadowdark-monster-list">here</a>, with material available under the <a href="https://creativecommons.org/licenses/by-sa/4.0/#ref-appropriate-credit" target="_blank">Attribution-ShareAlike 4.0 International License</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+          <div class="header-spacer"></div>
+  <img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*a-oml7jro3mQZ-t2rRjTGQ.png" 
+     alt="Shadowdark Codex Logo" 
+     style="max-width: 200px; width: 100%; height: auto; display: block; margin: 0 auto;">
+      <div class="header-spacer"></div>
 </body>
 </html>
