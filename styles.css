@@ -254,7 +254,6 @@ body {
     min-width: 35px;
   }
 }
-
 /* Duplicate Card Styling */
 .duplicate-card {
   width: 100%;
@@ -296,7 +295,6 @@ body {
   padding: 10px 2px;
   color: var(--text-muted);
 }
-
 /* LEVEL SELECTOR Styles for Dual Range Inputs */
 #slider-range-container, #spell-filter-container {
   margin: 10px auto;
@@ -392,13 +390,10 @@ body {
   display: inline-block;
   position: relative;
 }
-
 /* Add a custom checkmark */
 .spell-filter-group input[type="checkbox"]:checked {
   background-color: #f1f1f1; /* White when selected */
-  
 }
-
 .spell-filter-group input[type="checkbox"]:checked::after {
   content: "✓"; /* Unicode checkmark */
   color: var(--header-bg); /* Dark checkmark inside */
