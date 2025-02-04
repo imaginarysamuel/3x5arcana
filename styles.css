@@ -30,7 +30,7 @@
   background: var(--header-bg);
 }
 .header-spacer {
-  height: 25px;
+  height: 55px;
   width: 100%;
 }
 .main-title {
@@ -296,39 +296,21 @@ body {
   color: var(--text-muted);
 }
 
-/* LEVEL & TIER SELECTOR */
-.slider-section {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  max-width: 5.5in;
+/* LEVEL SELECTOR Styles for Dual Range Inputs */
+#slider-range-container, #spell-filter-container {
   margin: 10px auto;
+  text-align: center;
+  max-width: 5in;
 }
-
-.slider-labels {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 10px;
-  min-width: 80px;
-  text-align: right;
+.slider-label {
   color: #f1f1f1;
   font-weight: bold;
 }
-
-.sliders {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex-grow: 1;
-}
-
 .slider-inputs {
-  display: flex;
-  gap: 5px;
+  position: relative;
+  width: 90%;
+  margin: 10px auto;
 }
-
 .slider-inputs input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -341,7 +323,6 @@ body {
   margin: 0;
   padding: 0;
 }
-
 .slider-inputs input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -354,7 +335,6 @@ body {
   position: relative;
   z-index: 2;
 }
-
 .slider-inputs input[type="range"]::-moz-range-thumb {
   width: 20px;
   height: 20px;
@@ -365,48 +345,62 @@ body {
   position: relative;
   z-index: 2;
 }
-
-
-/* SPELL FILTER CHECKBOXES */
+#range-display,  #spell-range-display {
+  color: #f1f1f1;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+}
+.spell-filter-group input[type="checkbox"] {
+  appearance: none;
+  width: 20px; /* Match slider size */
+  height: 20px;
+  background-color: var(--header-bg); /* Match slider square */
+  border: 2px solid var(--background-color); /* Match slider border */
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+}
+.spell-filter-group label {
+  display: flex;
+  justify-content: center;
+  color: #f1f1f1; /* Same as title color */
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 5px;
+}
 .spell-filter-group {
   display: flex;
   align-items: center;
-  gap: 10px;
-  max-width: 300px;
-  width: 100%;
-  justify-content: center;
-  margin: 0 auto;
+  gap: 10px; /* Adjust spacing between checkboxes */
+  max-width: 300px; /* Ensures the container does not stretch too wide */
+  width: 100%; /* Allows the element to be centered properly */
+  justify-content: center; /* Centers the checkboxes */
+  margin: 0 auto; /* Centers the whole container */
 }
-
-.spell-filter-group label {
-  display: flex;
-  align-items: center;
-  color: #f1f1f1;
-  font-weight: bold;
-  text-transform: uppercase;
-  gap: 5px;
-}
-
+/* Style the checkboxes to match the design */
 .spell-filter-group input[type="checkbox"] {
-  appearance: none;
+  appearance: none; /* Removes default checkbox style */
   width: 20px;
   height: 20px;
-  background-color: var(--header-bg);
-  border: 2px solid var(--background-color);
+  background-color: var(--header-bg); /* Dark color when unselected */
+  border: 2px solid var(--background-color); /* Matches slider styling */
   border-radius: 3px;
   cursor: pointer;
   display: inline-block;
   position: relative;
 }
 
-/* Checked state with a checkmark */
+/* Add a custom checkmark */
 .spell-filter-group input[type="checkbox"]:checked {
-  background-color: #f1f1f1;
+  background-color: #f1f1f1; /* White when selected */
+  
 }
 
 .spell-filter-group input[type="checkbox"]:checked::after {
-  content: "✓";
-  color: var(--header-bg);
+  content: "✓"; /* Unicode checkmark */
+  color: var(--header-bg); /* Dark checkmark inside */
   font-size: 16px;
   font-weight: bold;
   display: block;
