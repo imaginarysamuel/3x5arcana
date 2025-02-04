@@ -13,12 +13,18 @@
     
     <div id="spell-filter-container">
       
-     <div class="slider-container">
-  <label class="slider-label" for="spell-range-min">Tier:</label>
-  <span id="spell-range-display">1 - 5</span>
-  <div class="slider-inputs">
-    <input type="range" id="spell-range-min" value="1" step="1" min="1" max="5">
-    <input type="range" id="spell-range-max" value="5" step="1" min="1" max="5">
+   <div class="slider-section">
+  <!-- Labels and Values -->
+  <div class="slider-labels">
+    <div>Tier: <span id="spell-range-display">1 - 5</span></div>
+  </div>
+
+  <!-- Sliders -->
+  <div class="sliders">
+    <div class="slider-inputs">
+      <input type="range" id="spell-range-min" value="1" step="1" min="1" max="5">
+      <input type="range" id="spell-range-max" value="5" step="1" min="1" max="5">
+    </div>
   </div>
 </div>
       
