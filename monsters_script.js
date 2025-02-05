@@ -1,16 +1,12 @@
-console.log("Loaded Monsters HTML. Fetching Data..."); // ✅ Debug Step 1
-
 fetch("https://opensheet.elk.sh/1E9c3F3JPCDnxqLE0qVtW0K7PBsgHSd7s5oU8p8qeAAY/All")
   .then(response => response.json())
   .then(monsters => {
-    console.log("Fetched Monsters:", monsters); // ✅ Debug Step 2: Check if data loads
     displayMonsterList(monsters);
     updateFilters();
   })
   .catch(error => console.error("Error loading Google Sheets data:", error));
 
 function displayMonsterList(data) {
-  console.log("Running displayMonsterList with data:", data); // ✅ Debug Step 3
   const listContainer = document.getElementById("monster-list");
   
   // Clear the list before updating
