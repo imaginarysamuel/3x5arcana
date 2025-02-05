@@ -3,7 +3,7 @@
 
 /* Color Variables */
 :root {
-  --background-color: #e6e4e0; /* Soft grey background */
+  --background-color: #f2f2f2; /* Soft grey background */
   --pattern-color: #bdbdbd;    /* Lighter grey for dot pattern */
   --header-bg: #282828;        /* Medium grey for header */
   --border-color: #474747;     /* Darker grey for borders */
@@ -25,7 +25,7 @@ html, body {
 }
 /* Background Pattern */
 body {
-    background-color: #e6e4e0; /* Light grey background */
+    background-color: #f2f2f2; 
     background-image: 
         linear-gradient(to right, rgba(173, 216, 230, 0.5) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(173, 216, 230, 0.5) 1px, transparent 1px);
