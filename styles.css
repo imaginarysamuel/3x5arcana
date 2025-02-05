@@ -4,7 +4,7 @@
 /* Color Variables */
 :root {
   --background-color: #f2f2f2; /* Soft grey background */
-  --pattern-color: #bdbdbd;    /* Lighter grey for dot pattern */
+  --pattern-color: #add8e6;    /* Lighter grey for grid pattern */
   --header-bg: #282828;        /* Medium grey for header */
   --border-color: #282828;     /* Darker grey for borders */
   --card-bg: #d1d1d1;          /* Light neutral grey for cards */
@@ -270,7 +270,7 @@ body {
   opacity: 1;
   margin-top: 5px;
   margin-bottom: 5px;
-  border: 3px solid #ec7a1c;
+  border: 3px var(--pattern-color);
   transform: translateX(5px);
 }
 @keyframes expandCard {
