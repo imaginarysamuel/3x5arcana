@@ -1,14 +1,21 @@
+// Declare filtering variables for search and level range
+let currentSearchQuery = "";
+let currentMinLevel = 0;
+let currentMaxLevel = 30;
+
+// Fetch monster data from the external Google Sheet
 fetch("https://opensheet.elk.sh/1E9c3F3JPCDnxqLE0qVtW0K7PBsgHSd7s5oU8p8qeAAY/All")
   .then(response => response.json())
   .then(monsters => {
     displayMonsterList(monsters);
+    updateRangeDisplay();
     updateFilters();
   })
   .catch(error => console.error("Error loading Google Sheets data:", error));
 
+// Display the monster list, sorted by level and then name
 function displayMonsterList(data) {
   const listContainer = document.getElementById("monster-list");
-  
   // Clear the list before updating
   listContainer.innerHTML = "";
 
@@ -17,15 +24,23 @@ function displayMonsterList(data) {
     return;
   }
 
-  // Iterate through the data and create monster cards
+  // Sort the data first by level (numerically) then alphabetically by name
+  data.sort((a, b) => {
+    const levelA = parseFloat(a["Level"] || "0");
+    const levelB = parseFloat(b["Level"] || "0");
+    return levelA - levelB || a["Name"].localeCompare(b["Name"]);
+  });
+
+  // Iterate through the sorted data and create monster cards
   data.forEach((monster, index) => {
     const item = document.createElement("div");
     item.classList.add("monster-card-container");
 
-    // Validate level
+    // Validate level and store it as a data attribute for filtering
     const monsterLevel = monster["Level"] || "0";
     item.setAttribute("data-level", monsterLevel);
 
+    // Gather non-empty abilities (up to 9)
     const abilities = [
       monster["Ability 1"], monster["Ability 2"], monster["Ability 3"],
       monster["Ability 4"], monster["Ability 5"], monster["Ability 6"],
@@ -72,6 +87,7 @@ function displayMonsterList(data) {
   });
 }
 
+// Toggle the expansion of a monster card and create a duplicate card at the top
 function toggleCard(id, isDuplicate = false) {
   const body = document.getElementById(`monster-body-${id}`);
   if (!body) return;
@@ -105,25 +121,23 @@ function toggleCard(id, isDuplicate = false) {
         existingDuplicate.remove();
       }
 
-      // Clone the card and make a duplicate at the top
+      // Clone the card and create a duplicate at the top
       const duplicate = card.cloneNode(true);
       duplicate.id = `duplicate-${id}`;
       duplicate.classList.add("duplicate-card");
       duplicate.addEventListener("click", () => toggleCard(id, true));
 
-      // Insert the duplicate at the top
       listContainer.prepend(duplicate);
     }
   }
 }
 
-
-// Update Range Display
+// Update the range display text (e.g., "0 - 30")
 function updateRangeDisplay() {
   document.getElementById("range-display").textContent = `${currentMinLevel} - ${currentMaxLevel}`;
 }
 
-// Level Range Filtering
+// Level Range Filtering: When the sliders are moved, update the current min/max and filter the list
 document.getElementById("range-min").addEventListener("input", function() {
   currentMinLevel = parseInt(this.value);
   updateRangeDisplay();
@@ -136,13 +150,13 @@ document.getElementById("range-max").addEventListener("input", function() {
   updateFilters();
 });
 
-// Monster Search Filtering
+// Monster Search Filtering: When the search input changes, update the filter
 document.getElementById("search-bar").addEventListener("input", function () {
   currentSearchQuery = this.value.toLowerCase();
   updateFilters();
 });
 
-// Filtering Function
+// Filtering Function: Show or hide monster cards based on search and level range
 function updateFilters() {
   const monsterCards = document.querySelectorAll(".monster-card-container");
   monsterCards.forEach(card => {
