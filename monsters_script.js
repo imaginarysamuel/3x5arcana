@@ -1,4 +1,4 @@
-// Declare filtering variables for search and level range
+// Global filtering variables for search and level range
 let currentSearchQuery = "";
 let currentMinLevel = 0;
 let currentMaxLevel = 30;
@@ -13,7 +13,7 @@ fetch("https://opensheet.elk.sh/1E9c3F3JPCDnxqLE0qVtW0K7PBsgHSd7s5oU8p8qeAAY/All
   })
   .catch(error => console.error("Error loading Google Sheets data:", error));
 
-// Display the monster list, sorted by level and then name
+// Display the monster list, sorted by level (numeric first, then "*" monsters) and then by name
 function displayMonsterList(data) {
   const listContainer = document.getElementById("monster-list");
   // Clear the list before updating
@@ -24,11 +24,11 @@ function displayMonsterList(data) {
     return;
   }
 
-  // Sort the data first by level (numerically) then alphabetically by name
+  // Sort the data: if Level is "*" treat it as Infinity, so it sorts after numeric levels.
   data.sort((a, b) => {
-    const levelA = parseFloat(a["Level"] || "0");
-    const levelB = parseFloat(b["Level"] || "0");
-    return levelA - levelB || a["Name"].localeCompare(b["Name"]);
+    const aLevel = (a["Level"] === "*" ? Infinity : parseFloat(a["Level"] || "0"));
+    const bLevel = (b["Level"] === "*" ? Infinity : parseFloat(b["Level"] || "0"));
+    return aLevel - bLevel || a["Name"].localeCompare(b["Name"]);
   });
 
   // Iterate through the sorted data and create monster cards
@@ -36,9 +36,19 @@ function displayMonsterList(data) {
     const item = document.createElement("div");
     item.classList.add("monster-card-container");
 
-    // Validate level and store it as a data attribute for filtering
-    const monsterLevel = monster["Level"] || "0";
-    item.setAttribute("data-level", monsterLevel);
+    // Handle level value: if the level is "*" then display it as "*" exactly
+    const levelValue = monster["Level"];
+    let numericLevel;
+    let displayLevel;
+    if (levelValue === "*") {
+      numericLevel = Infinity;
+      displayLevel = "*";
+    } else {
+      numericLevel = parseFloat(levelValue || "0");
+      displayLevel = numericLevel;
+    }
+    // We store the display value; filtering will check if this value can be parsed as a number.
+    item.setAttribute("data-level", displayLevel);
 
     // Gather non-empty abilities (up to 9)
     const abilities = [
@@ -46,15 +56,15 @@ function displayMonsterList(data) {
       monster["Ability 4"], monster["Ability 5"], monster["Ability 6"],
       monster["Ability 7"], monster["Ability 8"], monster["Ability 9"]
     ]
-    .filter(ability => ability && ability.trim().length > 0)
-    .map(ability => `<p>${ability}</p>`)
-    .join("");
+      .filter(ability => ability && ability.trim().length > 0)
+      .map(ability => `<p>${ability}</p>`)
+      .join("");
 
     item.innerHTML = `
       <div class="monster-card" onclick="toggleCard('${index}')">
         <div class="card-header">
           <div class="monster-header">${monster["Name"]}</div>
-          <div class="monster-level">${monsterLevel}</div>
+          <div class="monster-level">${displayLevel}</div>
         </div>
         <div class="card-body" id="monster-body-${index}">
           <div class="monster-description">${monster["Flavor Text"] || "No description available."}</div>
@@ -97,7 +107,7 @@ function toggleCard(id, isDuplicate = false) {
   const isExpanded = card.classList.contains("expanded");
 
   if (isExpanded) {
-    // Collapse the main card
+    // Collapse the card
     body.style.maxHeight = null;
     card.classList.remove("expanded");
 
@@ -110,24 +120,31 @@ function toggleCard(id, isDuplicate = false) {
       });
     }
   } else {
-    // Expand the main card
+    // Capture the current scroll position before expanding
+    const savedScroll = window.pageYOffset;
+
+    // Expand the card
     body.style.maxHeight = body.scrollHeight + "px";
     card.classList.add("expanded");
 
     if (!isDuplicate) {
-      // Remove any existing duplicate card before adding a new one
+      // Remove any existing duplicate before adding a new one
       const existingDuplicate = document.getElementById(`duplicate-${id}`);
       if (existingDuplicate) {
         existingDuplicate.remove();
       }
 
-      // Clone the card and create a duplicate at the top
+      // Clone the card to create a duplicate at the top
       const duplicate = card.cloneNode(true);
       duplicate.id = `duplicate-${id}`;
       duplicate.classList.add("duplicate-card");
       duplicate.addEventListener("click", () => toggleCard(id, true));
-
       listContainer.prepend(duplicate);
+
+      // On mobile, restore the scroll position so the view doesn't jump.
+      if (window.innerWidth <= 768) {
+        window.scrollTo(0, savedScroll);
+      }
     }
   }
 }
@@ -138,13 +155,13 @@ function updateRangeDisplay() {
 }
 
 // Level Range Filtering: When the sliders are moved, update the current min/max and filter the list
-document.getElementById("range-min").addEventListener("input", function() {
+document.getElementById("range-min").addEventListener("input", function () {
   currentMinLevel = parseInt(this.value);
   updateRangeDisplay();
   updateFilters();
 });
 
-document.getElementById("range-max").addEventListener("input", function() {
+document.getElementById("range-max").addEventListener("input", function () {
   currentMaxLevel = parseInt(this.value);
   updateRangeDisplay();
   updateFilters();
@@ -161,10 +178,13 @@ function updateFilters() {
   const monsterCards = document.querySelectorAll(".monster-card-container");
   monsterCards.forEach(card => {
     const name = card.querySelector(".monster-header").textContent.toLowerCase();
-    const level = parseFloat(card.getAttribute("data-level"));
-
+    const levelAttr = card.getAttribute("data-level");
+    // If level is non-numeric (i.e. "*"), always show it.
+    const level = parseFloat(levelAttr);
     const matchesSearch = name.includes(currentSearchQuery);
-    const matchesLevel = level >= currentMinLevel && level <= currentMaxLevel;
+    const matchesLevel = isNaN(level)
+      ? true
+      : (level >= currentMinLevel && level <= currentMaxLevel);
 
     card.style.display = (matchesSearch && matchesLevel) ? "block" : "none";
   });
