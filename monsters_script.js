@@ -76,21 +76,51 @@ function displayMonsterList(data) {
   });
 }
 
-function toggleCard(id) {
+function toggleCard(id, isDuplicate = false) {
   const body = document.getElementById(`monster-body-${id}`);
   if (!body) return;
 
   const card = body.closest(".monster-card");
+  const listContainer = document.getElementById("monster-list");
   const isExpanded = card.classList.contains("expanded");
 
   if (isExpanded) {
+    // Collapse the main card
     body.style.maxHeight = null;
     card.classList.remove("expanded");
+
+    // Remove the duplicate card if it exists
+    const duplicateCard = document.getElementById(`duplicate-${id}`);
+    if (duplicateCard) {
+      duplicateCard.classList.add("removing");
+      duplicateCard.addEventListener("animationend", function () {
+        duplicateCard.remove();
+      });
+    }
   } else {
+    // Expand the main card
     body.style.maxHeight = body.scrollHeight + "px";
     card.classList.add("expanded");
+
+    if (!isDuplicate) {
+      // Remove any existing duplicate card before adding a new one
+      const existingDuplicate = document.getElementById(`duplicate-${id}`);
+      if (existingDuplicate) {
+        existingDuplicate.remove();
+      }
+
+      // Clone the card and make a duplicate at the top
+      const duplicate = card.cloneNode(true);
+      duplicate.id = `duplicate-${id}`;
+      duplicate.classList.add("duplicate-card");
+      duplicate.addEventListener("click", () => toggleCard(id, true));
+
+      // Insert the duplicate at the top
+      listContainer.prepend(duplicate);
+    }
   }
 }
+
 
 // Update Range Display
 function updateRangeDisplay() {
