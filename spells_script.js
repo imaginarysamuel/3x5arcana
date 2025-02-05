@@ -3,8 +3,6 @@ let spellData = [];
 let currentSearchQuery = "";
 let currentMinTier = 1;
 let currentMaxTier = 5;
-let filterWizard = true;
-let filterPriest = true;
 
 fetch(spellSheetUrl)
   .then(response => response.json())
@@ -18,16 +16,16 @@ fetch(spellSheetUrl)
 function displaySpellList() {
   const listContainer = document.getElementById("spell-list");
   listContainer.innerHTML = "";
-  
+
   let filteredSpells = spellData.filter(spell => {
     const nameMatches = spell["Name"].toLowerCase().includes(currentSearchQuery);
     const tierMatches = spell["Tier"] >= currentMinTier && spell["Tier"] <= currentMaxTier;
-    const classMatches = (filterWizard && spell["Class"].includes("Wizard")) || (filterPriest && spell["Class"].includes("Priest"));
+    const classMatches = (spell["Class"].includes("Wizard") || spell["Class"].includes("Priest"));
     return nameMatches && tierMatches && classMatches;
   });
 
   filteredSpells.sort((a, b) => a["Tier"] - b["Tier"] || a["Name"].localeCompare(b["Name"]));
-  
+
   filteredSpells.forEach((spell, index) => {
     const spellId = `spell-${index}`;
     const spellCard = document.createElement("div");
@@ -72,6 +70,9 @@ function toggleSpellCard(id, isDuplicate = false) {
       });
     }
   } else {
+    // Capture current scroll position
+    const savedScroll = window.pageYOffset;
+
     mainBody.style.maxHeight = mainBody.scrollHeight + "px";
     card.classList.add("expanded");
 
@@ -85,6 +86,11 @@ function toggleSpellCard(id, isDuplicate = false) {
       duplicate.classList.add("duplicate-card");
       duplicate.addEventListener("click", () => toggleSpellCard(id, true));
       listContainer.prepend(duplicate);
+
+      // On mobile, restore scroll position
+      if (window.innerWidth <= 768) {
+        window.scrollTo(0, savedScroll);
+      }
     }
   }
 }
@@ -99,12 +105,10 @@ document.getElementById("spell-search-bar").addEventListener("input", function (
 });
 
 document.getElementById("filter-wizard").addEventListener("change", function () {
-  filterWizard = this.checked;
   displaySpellList();
 });
 
 document.getElementById("filter-priest").addEventListener("change", function () {
-  filterPriest = this.checked;
   displaySpellList();
 });
 
