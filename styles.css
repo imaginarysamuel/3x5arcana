@@ -270,7 +270,7 @@ body {
   opacity: 1;
   margin-top: 5px;
   margin-bottom: 5px;
-  border: 2px solid #EE4B2B;
+  border: 2px solid #4EA6C2;
   transform: translateX(5px);
 }
 @keyframes expandCard {
