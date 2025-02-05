@@ -23,6 +23,14 @@ html, body {
   margin: 0;
   padding: 0;
 }
+/* Background Pattern */
+body {
+    background-color: #e6e4e0; /* Light grey background */
+    background-image: 
+        linear-gradient(to right, rgba(173, 216, 230, 0.5) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(173, 216, 230, 0.5) 1px, transparent 1px);
+    background-size: 20px 20px; /* Adjust for grid spacing */
+}
 
 /* Header Styles */
 .header {
@@ -90,15 +98,7 @@ html, body {
 }
 
 
-/* Background Pattern */
-html, body {
-  background-color: var(--background-color);
-  background-image: radial-gradient(circle, var(--pattern-color) 1px, transparent 1px);
-  background-size: 10px 10px;
-  background-repeat: repeat;
-  min-height: 100vh;
-  width: 100%;
-}
+
 body {
   display: flex;
   flex-direction: column;
