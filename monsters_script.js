@@ -51,7 +51,7 @@ function displayMonsterList() {
     const abilities = [];
     for (let i = 1; i <= 9; i++) {
       if (monster[`Ability ${i}`]) {
-        abilities.push(`<p><strong>${monster[`Ability ${i}`]}</strong></p>`);
+        abilities.push(`<p>${monster[`Ability ${i}`]}</p>`);
       }
     }
     const abilitiesHTML = abilities.length > 0 ? abilities.join("") : "<p>No special abilities.</p>";
