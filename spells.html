@@ -10,39 +10,40 @@
 
   <!-- HEADER -->
   <header class="header">
-  <h1 class="main-title">3x5 Arcana: Spells</h1>
+    <h1 class="main-title">3x5 Arcana: Spells</h1>
 
-  <!-- Search Bar -->
-  <input type="text" id="search-bar" placeholder="Search Spells...">
+    <!-- Search Bar -->
+    <input type="text" id="spell-search-bar" placeholder="Search Spells...">
 
-  <!-- Filter Container -->
-  <div id="spell-filter-container">
-    
-    <div id="slider-container">
-      <!-- Tier / Level Range Sliders -->
-      <div class="slider-range-container">
-        <label class="slider-label" for="slider-min">Level:</label>
-        <span id="spell-range-display">1 - 5</span>
-        <div class="slider-inputs">
-          <input type="range" id="slider-min" value="1" step="1" min="1" max="5">
-          <input type="range" id="slider-max" value="5" step="1" min="1" max="5">
+    <!-- Filter Container -->
+    <div id="spell-filter-container">
+      <div id="slider-container">
+        <div class="slider-range-container">
+          <label class="slider-label" for="slider-min">Level:</label>
+          <span id="spell-range-display">1 - 5</span>
+          <div class="slider-inputs">
+            <input type="range" id="slider-min" value="1" step="1" min="1" max="5">
+            <input type="range" id="slider-max" value="5" step="1" min="1" max="5">
+          </div>
         </div>
       </div>
+
+      <!-- Class Filters -->
+      <div class="filter-group">
+        <label><input type="checkbox" id="filter-wizard" checked> Wizard</label>
+        <label><input type="checkbox" id="filter-priest" checked> Priest</label>
+      </div>
     </div>
+  </header>
 
-    <!-- Class Filters -->
-    <div class="filter-group">
-      <label><input type="checkbox" id="filter-wizard" checked> Wizard</label>
-      <label><input type="checkbox" id="filter-priest" checked> Priest</label>
-    </div>
+  <!-- Spacer for Proper Header Positioning -->
+  <div class="header-spacer"></div>
 
-  </div>
-</header>
+  <!-- Spell List Container -->
+  <div id="spell-list"></div>
+  <div class="spacer"></div>
 
-<!-- Spacer for Proper Header Positioning -->
-<div class="header-spacer"></div>
-
-<!-- Spell List Container -->
-<div id="spell-list"></div>
-
-<div class="spacer"></div>
+  <!-- JavaScript -->
+  <script src="spells-script.js"></script>
+</body>
+</html>
