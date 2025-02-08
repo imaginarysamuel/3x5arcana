@@ -1,191 +1,170 @@
-// Global filtering variables for search and level range
+// Fetch monster data
+const monsterSheetUrl = "https://opensheet.elk.sh/1E9c3F3JPCDnxqLE0qVtW0K7PBsgHSd7s5oU8p8qeAAY/All";
+let monsterData = [];
 let currentSearchQuery = "";
 let currentMinLevel = 0;
 let currentMaxLevel = 30;
 
-// Fetch monster data from the external Google Sheet
-fetch("https://opensheet.elk.sh/1E9c3F3JPCDnxqLE0qVtW0K7PBsgHSd7s5oU8p8qeAAY/All")
+// Cache DOM elements
+const monsterSearchBar = document.getElementById("search-bar");
+const monsterListContainer = document.getElementById("monster-list");
+const monsterRangeDisplay = document.getElementById("range-display");
+const monsterRangeMin = document.getElementById("range-min");
+const monsterRangeMax = document.getElementById("range-max");
+
+// Fetch monster data from spreadsheet
+fetch(monsterSheetUrl)
   .then(response => response.json())
-  .then(monsters => {
-    displayMonsterList(monsters);
+  .then(data => {
+    monsterData = data;
     updateRangeDisplay();
-    updateFilters();
+    displayMonsterList();
   })
-  .catch(error => console.error("Error loading Google Sheets data:", error));
+  .catch(error => console.error("Error loading monster data:", error));
 
-// Display the monster list, sorted by level (numeric first, then "*" monsters) and then by name
-function displayMonsterList(data) {
-  const listContainer = document.getElementById("monster-list");
-  // Clear the list before updating
-  listContainer.innerHTML = "";
+function displayMonsterList() {
+  monsterListContainer.innerHTML = ""; // Clear existing list
 
-  if (!data || data.length === 0) {
-    listContainer.innerHTML = "<p>No monsters found.</p>";
-    return;
-  }
+  let filteredMonsters = monsterData.filter(monster => {
+    const nameMatches = monster["Name"].toLowerCase().includes(currentSearchQuery);
+    const level = parseFloat(monster["Level"]) || 0;
+    const levelMatches = level >= currentMinLevel && level <= currentMaxLevel;
 
-  // Sort the data: if Level is "*" treat it as Infinity, so it sorts after numeric levels.
-  data.sort((a, b) => {
-    const aLevel = (a["Level"] === "*" ? Infinity : parseFloat(a["Level"] || "0"));
-    const bLevel = (b["Level"] === "*" ? Infinity : parseFloat(b["Level"] || "0"));
+    return nameMatches && levelMatches;
+  });
+
+  // Sort monsters by level first, then alphabetically
+  filteredMonsters.sort((a, b) => {
+    const aLevel = parseFloat(a["Level"]) || 0;
+    const bLevel = parseFloat(b["Level"]) || 0;
     return aLevel - bLevel || a["Name"].localeCompare(b["Name"]);
   });
 
-  // Iterate through the sorted data and create monster cards
-  data.forEach((monster, index) => {
-    const item = document.createElement("div");
-    item.classList.add("monster-card-container");
+  filteredMonsters.forEach((monster, index) => {
+    const monsterId = `monster-${index}`;
+    const monsterCard = document.createElement("div");
+    monsterCard.classList.add("card", "collapsed");
+    monsterCard.setAttribute("data-id", monsterId);
+    monsterCard.addEventListener("click", () => toggleMonsterCard(monsterId));
 
-    // Handle level value: if the level is "*" then display it as "*" exactly
-    const levelValue = monster["Level"];
-    let numericLevel;
-    let displayLevel;
-    if (levelValue === "*") {
-      numericLevel = Infinity;
-      displayLevel = "*";
-    } else {
-      numericLevel = parseFloat(levelValue || "0");
-      displayLevel = numericLevel;
+    // Gather abilities from columns P-X (Ability 1 - Ability 9)
+    const abilities = [];
+    for (let i = 1; i <= 9; i++) {
+      if (monster[`Ability ${i}`]) {
+        abilities.push(`<p><strong>${monster[`Ability ${i}`]}</strong></p>`);
+      }
     }
-    // We store the display value; filtering will check if this value can be parsed as a number.
-    item.setAttribute("data-level", displayLevel);
+    const abilitiesHTML = abilities.length > 0 ? abilities.join("") : "<p>No special abilities.</p>";
 
-    // Gather non-empty abilities (up to 9)
-    const abilities = [
-      monster["Ability 1"], monster["Ability 2"], monster["Ability 3"],
-      monster["Ability 4"], monster["Ability 5"], monster["Ability 6"],
-      monster["Ability 7"], monster["Ability 8"], monster["Ability 9"]
-    ]
-      .filter(ability => ability && ability.trim().length > 0)
-      .map(ability => `<p>${ability}</p>`)
-      .join("");
+    monsterCard.innerHTML = `
+      <div class="card-header">
+        <div class="card-title">${monster["Name"]}</div>
+        <div class="monster-level">${monster["Level"] || "?"}</div>
+      </div>
+      <div class="card-body" id="${monsterId}-body">
+        <p class="flavor-text">${monster["Flavor Text"] || "No description available."}</p>
+        
+        <div class="divider"></div>
+        
+        <table class="stats-table">
+          <tr>
+            <th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th>
+          </tr>
+          <tr>
+            <td>${monster["S"] || "-"}</td>
+            <td>${monster["D"] || "-"}</td>
+            <td>${monster["C"] || "-"}</td>
+            <td>${monster["I"] || "-"}</td>
+            <td>${monster["W"] || "-"}</td>
+            <td>${monster["Ch"] || "-"}</td>
+          </tr>
+        </table>
 
-    item.innerHTML = `
-      <div class="monster-card" onclick="toggleCard('${index}')">
-        <div class="card-header">
-          <div class="monster-header">${monster["Name"]}</div>
-          <div class="monster-level">${displayLevel}</div>
+        <div class="divider"></div>
+
+        <table class="traits-table">
+          <tr>
+            <th>AC</th><th>HP</th><th>AL</th><th>MV</th>
+          </tr>
+          <tr>
+            <td>${monster["AC"] || "-"}</td>
+            <td>${monster["HP"] || "-"}</td>
+            <td>${monster["AL"] || "-"}</td>
+            <td>${monster["MV"] || "-"}</td>
+          </tr>
+        </table>
+
+        <div class="divider"></div>
+
+        <div class="attacks">
+          <p><strong>Attack:</strong> ${monster["ATK"] || "None"}</p>
         </div>
-        <div class="card-body" id="monster-body-${index}">
-          <div class="monster-description">${monster["Flavor Text"] || "No description available."}</div>
-          <div class="monster-content">
-            <div class="monster-left">
-              <div class="monster-stats-container">
-                <div class="monster-stats-labels">
-                  <div>STR</div><div>DEX</div><div>CON</div><div>INT</div><div>WIS</div><div>CHA</div>
-                </div>
-                <div class="monster-stats-values">
-                  <div>${monster["S"] || "-"}</div><div>${monster["D"] || "-"}</div><div>${monster["C"] || "-"}</div>
-                  <div>${monster["I"] || "-"}</div><div>${monster["W"] || "-"}</div><div>${monster["Ch"] || "-"}</div>
-                </div>
-                <div class="monster-traits-labels">
-                  <div>AL</div><div>HP</div><div>AC</div><div>MV</div>
-                </div>
-                <div class="monster-traits-values">
-                  <div>${monster["AL"] || "-"}</div><div>${monster["HP"] || "-"}</div>
-                  <div><b>${monster["AC"] || "-"}</b></div><div><i>${monster["MV"] || "-"}</i></div>
-                </div>
-              </div>
-              <p><b>Attack:</b> ${monster["ATK"] || "None"}</p>
-            </div>
-            <div class="monster-right">${abilities}</div>
-          </div>
+
+        <div class="divider"></div>
+
+        <div class="abilities">
+          ${abilitiesHTML}
         </div>
       </div>
     `;
-    listContainer.appendChild(item);
+
+    monsterListContainer.appendChild(monsterCard);
   });
 }
 
-// Toggle the expansion of a monster card and create a duplicate card at the top
-function toggleCard(id, isDuplicate = false) {
-  const body = document.getElementById(`monster-body-${id}`);
-  if (!body) return;
+function toggleMonsterCard(id) {
+  const card = document.querySelector(`[data-id="${id}"]`);
+  const body = document.getElementById(`${id}-body`);
 
-  const card = body.closest(".monster-card");
-  const listContainer = document.getElementById("monster-list");
+  if (!card || !body) return;
+
   const isExpanded = card.classList.contains("expanded");
 
   if (isExpanded) {
-    // Collapse the card
     body.style.maxHeight = null;
     card.classList.remove("expanded");
-
-    // Remove the duplicate card if it exists
-    const duplicateCard = document.getElementById(`duplicate-${id}`);
-    if (duplicateCard) {
-      duplicateCard.classList.add("removing");
-      duplicateCard.addEventListener("animationend", function () {
-        duplicateCard.remove();
-      });
-    }
   } else {
-    // Capture the current scroll position before expanding
-    const savedScroll = window.pageYOffset;
-
-    // Expand the card
     body.style.maxHeight = body.scrollHeight + "px";
     card.classList.add("expanded");
-
-    if (!isDuplicate) {
-      // Remove any existing duplicate before adding a new one
-      const existingDuplicate = document.getElementById(`duplicate-${id}`);
-      if (existingDuplicate) {
-        existingDuplicate.remove();
-      }
-
-      // Clone the card to create a duplicate at the top
-      const duplicate = card.cloneNode(true);
-      duplicate.id = `duplicate-${id}`;
-      duplicate.classList.add("duplicate-card");
-      duplicate.addEventListener("click", () => toggleCard(id, true));
-      listContainer.prepend(duplicate);
-
-      // On mobile, restore the scroll position so the view doesn't jump.
-      if (window.innerWidth <= 768) {
-        window.scrollTo(0, savedScroll);
-      }
-    }
   }
 }
 
-// Update the range display text (e.g., "0 - 30")
-function updateRangeDisplay() {
-  document.getElementById("range-display").textContent = `${currentMinLevel} - ${currentMaxLevel}`;
-}
-
-// Level Range Filtering: When the sliders are moved, update the current min/max and filter the list
-document.getElementById("range-min").addEventListener("input", function () {
+// Prevent min slider from going above max
+monsterRangeMin.addEventListener("input", function () {
   currentMinLevel = parseInt(this.value);
+  if (currentMinLevel > currentMaxLevel) {
+    currentMaxLevel = currentMinLevel;
+    monsterRangeMax.value = currentMaxLevel;
+  }
   updateRangeDisplay();
-  updateFilters();
+  displayMonsterList();
 });
 
-document.getElementById("range-max").addEventListener("input", function () {
+// Prevent max slider from going below min
+monsterRangeMax.addEventListener("input", function () {
   currentMaxLevel = parseInt(this.value);
+  if (currentMaxLevel < currentMinLevel) {
+    currentMinLevel = currentMaxLevel;
+    monsterRangeMin.value = currentMinLevel;
+  }
   updateRangeDisplay();
-  updateFilters();
+  displayMonsterList();
 });
 
-// Monster Search Filtering: When the search input changes, update the filter
-document.getElementById("search-bar").addEventListener("input", function () {
-  currentSearchQuery = this.value.toLowerCase();
-  updateFilters();
-});
-
-// Filtering Function: Show or hide monster cards based on search and level range
-function updateFilters() {
-  const monsterCards = document.querySelectorAll(".monster-card-container");
-  monsterCards.forEach(card => {
-    const name = card.querySelector(".monster-header").textContent.toLowerCase();
-    const levelAttr = card.getAttribute("data-level");
-    // If level is non-numeric (i.e. "*"), always show it.
-    const level = parseFloat(levelAttr);
-    const matchesSearch = name.includes(currentSearchQuery);
-    const matchesLevel = isNaN(level)
-      ? true
-      : (level >= currentMinLevel && level <= currentMaxLevel);
-
-    card.style.display = (matchesSearch && matchesLevel) ? "block" : "none";
-  });
+function updateRangeDisplay() {
+  monsterRangeDisplay.textContent = `${currentMinLevel} - ${currentMaxLevel}`;
 }
+
+// Add search functionality with debounce
+function debounce(func, delay) {
+  let timeout;
+  return function (...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+monsterSearchBar.addEventListener("input", debounce(function () {
+  currentSearchQuery = this.value.toLowerCase();
+  displayMonsterList();
+}, 300));
