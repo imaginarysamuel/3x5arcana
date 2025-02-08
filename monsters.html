@@ -177,39 +177,4 @@ monsterSearchBar.addEventListener("input", debounce(function () {
   displayMonsterList();
 }, 300));
 
-// adding favorite system
-document.addEventListener("DOMContentLoaded", function () {
-    const monsterListContainer = document.getElementById("monster-list");
-    const monsterSheetUrl = "https://opensheet.elk.sh/1E9c3F3JPCDnxqLE0qVtW0K7PBsgHSd7s5oU8p8qeAAY/All";
-    let monsterData = [];
 
-    fetch(monsterSheetUrl)
-        .then(response => response.json())
-        .then(data => {
-            monsterData = data;
-            displayMonsterList();
-        })
-        .catch(error => console.error("Error loading monster data:", error));
-
-    function displayMonsterList() {
-        monsterListContainer.innerHTML = ""; // Clear existing list
-
-        let filteredMonsters = monsterData.sort((a, b) => {
-            const levelA = parseInt(a["Level"] || 0);
-            const levelB = parseInt(b["Level"] || 0);
-            return levelA - levelB || a["Name"].localeCompare(b["Name"]);
-        });
-
-        filteredMonsters.forEach(monster => {
-            const cardData = {
-                id: monster["ID"],  // Unique identifier
-                name: monster["Name"],
-                level: parseInt(monster["Level"] || 0),
-                description: monster["Flavor Text"] || "No description available."
-            };
-
-            const monsterCard = createCardElement(cardData);
-            monsterListContainer.appendChild(monsterCard);
-        });
-    }
-});
