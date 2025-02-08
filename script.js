@@ -1,25 +1,58 @@
 document.addEventListener("DOMContentLoaded", function () {
-  function toggleStaticCard(id) {
-    const body = document.getElementById(id);
+    // Select all cards
+    const cards = document.querySelectorAll(".card");
+
+    // Expand the "About" card by default (assuming it's the last one)
+    const aboutCard = document.querySelector(".card-container:last-of-type .card");
+    if (aboutCard) {
+        setTimeout(() => {
+            expandCard(aboutCard);
+        }, 50); // Delay to ensure styles apply
+    }
+
+    // Add click event listener to all cards
+    cards.forEach(card => {
+        card.addEventListener("click", function (event) {
+            // Prevent expansion if a button or link was clicked
+            if (event.target.classList.contains("card-button") || event.target.tagName === "A") {
+                return;
+            }
+
+            // Toggle expansion
+            toggleCard(card);
+        });
+    });
+});
+
+// Function to toggle a card open or closed
+function toggleCard(card) {
+    const body = card.querySelector(".card-body");
+
     if (!body) return;
 
-    const card = body.closest(".monster-card");
     const isExpanded = card.classList.contains("expanded");
 
     if (isExpanded) {
-      body.style.maxHeight = null;
-      card.classList.remove("expanded");
+        collapseCard(card);
     } else {
-      body.style.maxHeight = body.scrollHeight + "px";
-      card.classList.add("expanded");
+        expandCard(card);
     }
-  }
+}
 
-  // Attach event listeners to static cards
-  document.querySelectorAll(".static-card").forEach(card => {
-    card.addEventListener("click", function () {
-      const bodyId = this.getAttribute("data-body-id");
-      toggleStaticCard(bodyId);
-    });
-  });
-});
+// Function to expand a card
+function expandCard(card) {
+    const body = card.querySelector(".card-body");
+    if (!body) return;
+
+    body.style.maxHeight = body.scrollHeight + "px";
+    card.classList.add("expanded");
+}
+
+// Function to collapse a card
+function collapseCard(card) {
+    const body = card.querySelector(".card-body");
+    if (!body) return;
+
+    body.style.maxHeight = null;
+    card.classList.remove("expanded");
+}
