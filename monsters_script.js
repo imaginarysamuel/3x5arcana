@@ -29,11 +29,9 @@ function displayMonsterList() {
     const nameMatches = monster["Name"].toLowerCase().includes(currentSearchQuery);
     const level = parseFloat(monster["Level"]) || 0;
     const levelMatches = level >= currentMinLevel && level <= currentMaxLevel;
-
     return nameMatches && levelMatches;
   });
 
-  // Sort monsters by level first, then alphabetically
   filteredMonsters.sort((a, b) => {
     const aLevel = parseFloat(a["Level"]) || 0;
     const bLevel = parseFloat(b["Level"]) || 0;
@@ -51,7 +49,7 @@ function displayMonsterList() {
     const abilities = [];
     for (let i = 1; i <= 9; i++) {
       if (monster[`Ability ${i}`]) {
-        abilities.push(`<p>${monster[`Ability ${i}`]}</p>`);
+        abilities.push(`<p>${formatAbility(monster[`Ability ${i}`])}</p>`);
       }
     }
     const abilitiesHTML = abilities.length > 0 ? abilities.join("") : "<p>No special abilities.</p>";
@@ -127,6 +125,16 @@ function toggleMonsterCard(id) {
     body.style.maxHeight = body.scrollHeight + "px";
     card.classList.add("expanded");
   }
+}
+
+// Utility function to bold the first phrase up to a colon or period
+function formatAbility(ability) {
+  const match = ability.match(/^(.*?[.:])/);
+  if (match) {
+    const bolded = `<strong>${match[1]}</strong>`;
+    return ability.replace(match[1], bolded);
+  }
+  return ability;
 }
 
 // Prevent min slider from going above max
