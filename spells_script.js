@@ -1,125 +1,157 @@
+// 📌 Spell Data Source
 const spellSheetUrl = "https://opensheet.elk.sh/1ZsdxP3KiZZ1YCGcxddqNMKhZH2LOV1uwAhVyYqBlR3E/Spells";
 let spellData = [];
 let currentSearchQuery = "";
 let currentMinTier = 1;
 let currentMaxTier = 5;
+let filterWizard = true;
+let filterPriest = true;
 
+// 📌 Cache DOM elements
+const spellSearchBar = document.getElementById("search-bar");
+const spellListContainer = document.getElementById("spell-list");
+const spellRangeDisplay = document.getElementById("spell-range-display");
+const spellRangeMin = document.getElementById("slider-min");
+const spellRangeMax = document.getElementById("slider-max");
+const filterWizardCheckbox = document.getElementById("filter-wizard");
+const filterPriestCheckbox = document.getElementById("filter-priest");
+
+// 📌 Debounce function (Limits frequent function calls for better performance)
+function debounce(func, delay) {
+    let timeout;
+    return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
+// 📌 Fetch spell data from Google Sheet
 fetch(spellSheetUrl)
-  .then(response => response.json())
-  .then(data => {
-    spellData = data;
+    .then(response => response.json())
+    .then(data => {
+        console.log("✅ Fetched Spell Data:", data); // Debugging check
+        spellData = data;
+        updateRangeDisplay();
+        displaySpellList();
+    })
+    .catch(error => console.error("❌ Error loading spell data:", error));
+
+// 📌 Display Spells (Filters & Sorts)
+function displaySpellList() {
+    spellListContainer.innerHTML = ""; // Clear spell list before updating
+
+    let filteredSpells = spellData.filter(spell => {
+        const nameMatches = spell["Name"].toLowerCase().includes(currentSearchQuery);
+        const tierMatches = spell["Tier"] >= currentMinTier && spell["Tier"] <= currentMaxTier;
+        const classMatches =
+            (filterWizard && spell["Class"].includes("Wizard")) ||
+            (filterPriest && spell["Class"].includes("Priest"));
+
+        return nameMatches && tierMatches && classMatches;
+    });
+
+    // 📌 Sort by Tier first, then alphabetically
+    filteredSpells.sort((a, b) => a["Tier"] - b["Tier"] || a["Name"].localeCompare(b["Name"]));
+
+    filteredSpells.forEach((spell, index) => {
+        const spellId = `spell-${index}`;
+        const spellCard = document.createElement("div");
+        spellCard.classList.add("card", "collapsed");
+        spellCard.setAttribute("data-id", spellId);
+
+        // Add click event listener to toggle expansion
+        spellCard.addEventListener("click", () => toggleSpellCard(spellId));
+
+        // 📌 Generate spell class label (e.g., "W 3" for Wizard level 3)
+        let classLabel = spell["Class"].includes("Wizard") && spell["Class"].includes("Priest")
+            ? "W/P"
+            : spell["Class"].includes("Wizard")
+            ? "W"
+            : "P";
+
+        // 📌 Spell Card HTML
+        spellCard.innerHTML = `
+            <div class="card-header">
+                <div class="card-title">${spell["Name"]}</div>
+                <div class="spell-tier">${classLabel} ${spell["Tier"]}</div>
+            </div>
+            <div class="card-body" id="${spellId}-body">
+                <div class="spell-stats">
+                    <p><strong>Class:</strong> ${spell["Class"]}</p>
+                    <p><strong>Range:</strong> ${spell["Range"]}</p>
+                    <p><strong>Duration:</strong> ${spell["Duration"]}</p>
+                </div>
+
+                <div class="divider"></div>
+
+                <p class="spell-description">${spell["Description"]}</p>
+            </div>
+        `;
+
+        spellListContainer.appendChild(spellCard);
+    });
+}
+
+// 📌 Toggle Spell Card Expansion
+function toggleSpellCard(id) {
+    const card = document.querySelector(`[data-id="${id}"]`);
+    const body = document.getElementById(`${id}-body`);
+
+    if (!card || !body) return;
+
+    const isExpanded = card.classList.contains("expanded");
+
+    if (isExpanded) {
+        body.style.maxHeight = null;
+        card.classList.remove("expanded");
+    } else {
+        body.style.maxHeight = body.scrollHeight + "px";
+        card.classList.add("expanded");
+    }
+}
+
+// 📌 Update Slider Range Display
+function updateRangeDisplay() {
+    spellRangeDisplay.textContent = `${currentMinTier} - ${currentMaxTier}`;
+}
+
+// 📌 Event Listeners
+
+// 🔍 Search bar input (Debounced)
+spellSearchBar.addEventListener("input", debounce(function () {
+    currentSearchQuery = this.value.toLowerCase();
+    displaySpellList();
+}, 300));
+
+// 🎚 Slider: Prevent min from exceeding max
+spellRangeMin.addEventListener("input", function () {
+    currentMinTier = parseInt(this.value);
+    if (currentMinTier > currentMaxTier) {
+        currentMaxTier = currentMinTier;
+        spellRangeMax.value = currentMaxTier;
+    }
     updateRangeDisplay();
     displaySpellList();
-  })
-  .catch(error => console.error("Error loading spell data:", error));
+});
 
-function displaySpellList() {
-  const listContainer = document.getElementById("spell-list");
-  listContainer.innerHTML = "";
-
-  let filteredSpells = spellData.filter(spell => {
-    const nameMatches = spell["Name"].toLowerCase().includes(currentSearchQuery);
-    const tierMatches = spell["Tier"] >= currentMinTier && spell["Tier"] <= currentMaxTier;
-    const classMatches = (spell["Class"].includes("Wizard") || spell["Class"].includes("Priest"));
-    return nameMatches && tierMatches && classMatches;
-  });
-
-  filteredSpells.sort((a, b) => a["Tier"] - b["Tier"] || a["Name"].localeCompare(b["Name"]));
-
-  filteredSpells.forEach((spell, index) => {
-    const spellId = `spell-${index}`;
-    const spellCard = document.createElement("div");
-    spellCard.classList.add("monster-card-container");
-    spellCard.setAttribute("data-id", spellId);
-    spellCard.innerHTML = `
-      <div class="monster-card" onclick="toggleSpellCard('${spellId}')">
-        <div class="card-header">
-          <div class="monster-header">${spell["Name"]}</div>
-          <div class="monster-level">${spell["Class"].includes("Wizard") && spell["Class"].includes("Priest") ? "W/P" : spell["Class"].charAt(0)} ${spell["Tier"]}</div>
-        </div>
-        <div class="card-body" id="${spellId}-body">
-          <div class="spell-description">${spell["Description"]}</div>
-          <div class="monster-content">
-            <div><b>Class:</b> ${spell["Class"]}</div>
-            <div><b>Duration:</b> ${spell["Duration"]}</div>
-            <div><b>Range:</b> ${spell["Range"]}</div>
-          </div>
-        </div>
-      </div>
-    `;
-    listContainer.appendChild(spellCard);
-  });
-}
-
-function toggleSpellCard(id, isDuplicate = false) {
-  const mainBody = document.getElementById(`${id}-body`);
-  if (!mainBody) return;
-  const card = mainBody.closest(".monster-card");
-  const listContainer = document.getElementById("spell-list");
-  const isExpanded = card.classList.contains("expanded");
-
-  if (isExpanded) {
-    mainBody.style.maxHeight = null;
-    card.classList.remove("expanded");
-
-    const duplicateCard = document.getElementById(`duplicate-${id}`);
-    if (duplicateCard) {
-      duplicateCard.classList.add("removing");
-      duplicateCard.addEventListener("animationend", function () {
-        duplicateCard.remove();
-      });
+// 🎚 Slider: Prevent max from going below min
+spellRangeMax.addEventListener("input", function () {
+    currentMaxTier = parseInt(this.value);
+    if (currentMaxTier < currentMinTier) {
+        currentMinTier = currentMaxTier;
+        spellRangeMin.value = currentMinTier;
     }
-  } else {
-    // Capture current scroll position
-    const savedScroll = window.pageYOffset;
-
-    mainBody.style.maxHeight = mainBody.scrollHeight + "px";
-    card.classList.add("expanded");
-
-    if (!isDuplicate) {
-      const existingDuplicate = document.getElementById(`duplicate-${id}`);
-      if (existingDuplicate) {
-        existingDuplicate.remove();
-      }
-      const duplicate = card.cloneNode(true);
-      duplicate.id = `duplicate-${id}`;
-      duplicate.classList.add("duplicate-card");
-      duplicate.addEventListener("click", () => toggleSpellCard(id, true));
-      listContainer.prepend(duplicate);
-
-      // On mobile, restore scroll position
-      if (window.innerWidth <= 768) {
-        window.scrollTo(0, savedScroll);
-      }
-    }
-  }
-}
-
-function updateRangeDisplay() {
-  document.getElementById("spell-range-display").textContent = `${currentMinTier} - ${currentMaxTier}`;
-}
-
-document.getElementById("spell-search-bar").addEventListener("input", function () {
-  currentSearchQuery = this.value.toLowerCase();
-  displaySpellList();
+    updateRangeDisplay();
+    displaySpellList();
 });
 
-document.getElementById("filter-wizard").addEventListener("change", function () {
-  displaySpellList();
+// 🧙‍♂️ Checkbox: Filter by class
+filterWizardCheckbox.addEventListener("change", function () {
+    filterWizard = this.checked;
+    displaySpellList();
 });
 
-document.getElementById("filter-priest").addEventListener("change", function () {
-  displaySpellList();
-});
-
-document.getElementById("spell-range-min").addEventListener("input", function() {
-  currentMinTier = parseInt(this.value);
-  updateRangeDisplay();
-  displaySpellList();
-});
-
-document.getElementById("spell-range-max").addEventListener("input", function() {
-  currentMaxTier = parseInt(this.value);
-  updateRangeDisplay();
-  displaySpellList();
+filterPriestCheckbox.addEventListener("change", function () {
+    filterPriest = this.checked;
+    displaySpellList();
 });
