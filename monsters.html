@@ -7,26 +7,32 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+  <!-- HEADER -->
   <header class="header">
     <h1 class="main-title">3x5 Arcana: Monsters</h1>
+
+    <!-- SEARCH BAR -->
     <input type="text" id="search-bar" placeholder="Search Monsters...">
-    
-    <!-- Dual Slider using two native range inputs -->
-    <div id="slider-range-container">
-      <label class="slider-label" for="range-min">Level:</label>
-      <span id="range-display"></span>
-      <div class="slider-inputs">
-        <input type="range" id="range-min" value="0" step="1" min="0" max="30">
-        <input type="range" id="range-max" value="30" step="1" min="0" max="30">
+
+    <!-- FILTER CONTAINER -->
+    <div id="monster-filter-container">
+      <div class="spell-range-container">
+        <label class="slider-label" for="range-min">Level:</label>
+        <span id="range-display">0 - 30</span>
+        <div class="slider-inputs">
+          <input type="range" id="range-min" value="0" step="1" min="0" max="30">
+          <input type="range" id="range-max" value="30" step="1" min="0" max="30">
+        </div>
       </div>
     </div>
   </header>
 
-  <div class="header-spacer"></div>
-  
+  <div class="spacer"></div>
+
   <div id="monster-list"></div>
 
-  <!-- Custom JavaScript -->
   <script src="monsters_script.js"></script>
+  <div class="spacer"></div>
 </body>
 </html>
