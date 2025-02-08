@@ -369,6 +369,28 @@ html, body {
   padding-bottom: 5px;
 }
 
+.favorite-icon {
+  font-size: 1.1em;
+  color: var(--grey-lightest);
+  margin-right: 5px;
+}
+
+.favorite-icon:hover {
+  color: var(--grey-darkest);
+}
+
+.favorite-icon.favorited {
+  font-size: 1.1em;
+  color: var(--grey-darkest);
+  margin-right: 5px;
+}
+
+.card-favorite-title
+{
+  display: flex;
+  align-items: center;
+}
+
 .card-title {
   font-size: 1.1em;
   color: var(--grey-darkest);

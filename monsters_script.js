@@ -7,10 +7,13 @@ let currentMaxLevel = 30;
 
 // Cache DOM elements
 const monsterSearchBar = document.getElementById("search-bar");
+const favoritesListContainer = document.getElementById("monster-favorites-list");
 const monsterListContainer = document.getElementById("monster-list");
 const monsterRangeDisplay = document.getElementById("range-display");
 const monsterRangeMin = document.getElementById("range-min");
 const monsterRangeMax = document.getElementById("range-max");
+
+let favoritesIdList = [];
 
 // Fetch monster data from spreadsheet
 fetch(monsterSheetUrl)
@@ -38,12 +41,23 @@ function displayMonsterList() {
     return aLevel - bLevel || a["Name"].localeCompare(b["Name"]);
   });
 
-  filteredMonsters.forEach((monster, index) => {
-    const monsterId = `monster-${index}`;
+  addMonsterCardsToList(filteredMonsters, monsterListContainer, "");
+
+  favoritesListContainer.innerHTML = ""
+  filteredMonsters = monsterData.filter(monster => {
+    return favoritesIdList.includes(monster["Name"]);
+  });
+  addMonsterCardsToList(filteredMonsters, favoritesListContainer, "-fav");
+}
+
+function addMonsterCardsToList(list, container, suffix) {
+  list.forEach((monster, index) => {
+    const monsterId = `monster-${monster["Name"]+suffix}`;
     const monsterCard = document.createElement("div");
     monsterCard.classList.add("card", "collapsed");
     monsterCard.setAttribute("data-id", monsterId);
     monsterCard.addEventListener("click", () => toggleMonsterCard(monsterId));
+
 
     // Gather abilities from columns P-X (Ability 1 - Ability 9)
     const abilities = [];
@@ -56,9 +70,13 @@ function displayMonsterList() {
 
     monsterCard.innerHTML = `
       <div class="card-header">
-        <div class="card-title">${monster["Name"]}</div>
+        <div class="card-favorite-title">
+          <div class="favorite-icon" id="${monsterId}-favorite-icon">★</div>
+          <div class="card-title">${monster["Name"]}</div>
+        </div>
         <div class="monster-level">${monster["Level"] || "?"}</div>
       </div>
+
       <div class="card-body" id="${monsterId}-body">
         <p class="flavor-text">${monster["Flavor Text"] || "No description available."}</p>
         
@@ -106,7 +124,18 @@ function displayMonsterList() {
       </div>
     `;
 
-    monsterListContainer.appendChild(monsterCard);
+    const favoriteIcon = monsterCard.querySelector(".favorite-icon");
+    if (favoritesIdList.includes(monster["Name"])) {
+      favoriteIcon.classList.add("favorited");
+    }
+
+    favoriteIcon.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleFavoriteCard(monster["Name"]);
+    });
+
+
+    container.appendChild(monsterCard);
   });
 }
 
@@ -125,6 +154,19 @@ function toggleMonsterCard(id) {
     body.style.maxHeight = body.scrollHeight + "px";
     card.classList.add("expanded");
   }
+}
+
+// Toggle Favorite Card
+function toggleFavoriteCard(id) {
+  const index = favoritesIdList.indexOf(id);
+  if (index > -1) {
+    favoritesIdList.splice(index, 1);
+  }
+  else {
+    favoritesIdList.push(id);
+  }
+
+  displayMonsterList();
 }
 
 // Utility function to bold the first phrase up to a colon or period
