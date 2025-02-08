@@ -28,23 +28,23 @@ fetch(monsterSheetUrl)
 function displayMonsterList() {
   monsterListContainer.innerHTML = ""; // Clear existing list
 
-  let filteredMonsters = monsterData.filter(monster => {
+  let sortedMonsters = monsterData.sort((a, b) => {
+    const aLevel = parseFloat(a["Level"]) || 0;
+    const bLevel = parseFloat(b["Level"]) || 0;
+    return aLevel - bLevel || a["Name"].localeCompare(b["Name"]);
+  });
+
+  let filteredMonsters = sortedMonsters.filter(monster => {
     const nameMatches = monster["Name"].toLowerCase().includes(currentSearchQuery);
     const level = parseFloat(monster["Level"]) || 0;
     const levelMatches = level >= currentMinLevel && level <= currentMaxLevel;
     return nameMatches && levelMatches;
   });
 
-  filteredMonsters.sort((a, b) => {
-    const aLevel = parseFloat(a["Level"]) || 0;
-    const bLevel = parseFloat(b["Level"]) || 0;
-    return aLevel - bLevel || a["Name"].localeCompare(b["Name"]);
-  });
-
   addMonsterCardsToList(filteredMonsters, monsterListContainer, "");
 
   favoritesListContainer.innerHTML = ""
-  filteredMonsters = monsterData.filter(monster => {
+  filteredMonsters = sortedMonsters.filter(monster => {
     return favoritesIdList.includes(monster["Name"]);
   });
   addMonsterCardsToList(filteredMonsters, favoritesListContainer, "-fav");
