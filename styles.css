@@ -513,10 +513,7 @@ html, body {
 }
 
 /* Paragraph Styling for Cards */
-.card-body p {
-  margin-bottom: 30px; /* Adjust spacing as needed */
-  line-height: 1.4; /* Improves readability */
-}
+
 .card-button {
   display: block; /* Ensures full width control */
   width: fit-content; /* Keeps it from stretching */
