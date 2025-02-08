@@ -213,7 +213,6 @@ html, body {
   border: 2px solid var(--grey-darkest);
   border-radius: 5px;
   outline: none;
-  margin: 0; /* Fix margin */
   padding: 0;
   display: block;
 }
@@ -367,6 +366,29 @@ html, body {
   border-bottom: 1px solid crimson;
   margin-bottom: 15px;
   padding-bottom: 5px;
+}
+
+.favorite-icon {
+  font-size: 1.5em;
+  color: var(--grey-dark);
+  margin-right: 5px;
+}
+
+.favorite-icon:hover {
+  font-size: 1.5em;
+  color: var(--blue-dark);
+}
+
+.favorite-icon.favorited {
+  font-size: 1.5em;
+  color: var(--blue-dark);
+  margin-right: 5px;
+}
+
+.card-favorite-title
+{
+  display: flex;
+  align-items: center;
 }
 
 .card-title {
@@ -548,4 +570,3 @@ html, body {
   margin-top: 30px;
 }
 
-  
