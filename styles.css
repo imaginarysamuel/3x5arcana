@@ -334,6 +334,7 @@ html, body {
   border-radius: 5px;
   padding: 10px;
   margin: -7px auto 0; /* Overlaps the previous card */
+  width: 95%;
   max-width: 5in;
   transition: transform 0.1s, box-shadow 0.1s;
   cursor: pointer;
