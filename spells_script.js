@@ -53,7 +53,7 @@ function displaySpellList() {
   });
 
   if (filteredSpells.length === 0) {
-    spellListContainer.innerHTML = <p>No spells match your criteria.</p>;
+    spellListContainer.innerHTML = `<p>No spells match your criteria.</p>`;
     return;
   }
 
@@ -62,7 +62,7 @@ function displaySpellList() {
 
   // Generate spell cards
   filteredSpells.forEach((spell, index) => {
-    const spellId = spell-${index};
+    const spellId = `spell-${index}`;
     const spellCard = document.createElement("div");
     spellCard.classList.add("card", "collapsed");
     spellCard.setAttribute("data-id", spellId);
@@ -75,7 +75,7 @@ function displaySpellList() {
       ? "W"
       : "P";
 
-    spellCard.innerHTML = 
+    spellCard.innerHTML = `
       <div class="card-header">
         <div class="card-title">${spell["Name"] || "Unknown Spell"}</div>
         <div class="spell-tier">${classLabel} ${spell["Tier"] || "?"}</div>
@@ -89,7 +89,7 @@ function displaySpellList() {
         <div class="divider"></div>
         <p class="spell-description">${spell["Description"] || "No description available."}</p>
       </div>
-    ;
+    `;
 
     spellListContainer.appendChild(spellCard);
   });
@@ -97,8 +97,8 @@ function displaySpellList() {
 
 // 📌 Toggle Spell Card Expansion
 function toggleSpellCard(id) {
-  const card = document.querySelector([data-id="${id}"]);
-  const body = document.getElementById(${id}-body);
+  const card = document.querySelector(`[data-id="${id}"]`);
+  const body = document.getElementById(`${id}-body`);
 
   if (!card || !body) return;
 
@@ -115,7 +115,7 @@ function toggleSpellCard(id) {
 
 // 📌 Update Slider Range Display
 function updateRangeDisplay() {
-  spellRangeDisplay.textContent = ${currentMinTier} - ${currentMaxTier};
+  spellRangeDisplay.textContent = `${currentMinTier} - ${currentMaxTier}`;
 }
 
 // 📌 Event Listeners
