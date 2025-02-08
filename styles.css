@@ -61,7 +61,7 @@ html, body {
 /* Search Bar */
 #search-bar {
   padding: 8px;
-  border: 2px solid var(--border-color);
+  border: none;
   border-radius: 5px;
   width: 100%;
   max-width: 5in;
@@ -75,13 +75,14 @@ html, body {
   color: var(--text-muted);
 }
 #search-bar:focus {
-  border-color: var(--text-color);
-  box-shadow: 0 0 8px rgba(50, 50, 50, 0.3);
+ outline: none;  /* Remove the default orange focus ring */
+  border-color: var(--blue-dark); /* Custom border color */
+  box-shadow: 0 0 8px var(--blue-light); /* Optional glowing effect */
 }
 
 #spell-search-bar {
   padding: 8px;
-  border: 2px solid var(--border-color);
+  border: none;;
   border-radius: 5px;
   width: 100%;
   max-width: 5in;
@@ -97,8 +98,9 @@ html, body {
 }
 
 #spell-search-bar:focus {
-  border-color: var(--text-color);
-  box-shadow: 0 0 8px rgba(50, 50, 50, 0.3);
+ outline: none;  /* Remove the default orange focus ring */
+  border-color: var(--blue-dark); /* Custom border color */
+  box-shadow: 0 0 8px var(--blue-light); /* Optional glowing effect */
 }
 
 /* Spell Filter Container */
@@ -332,7 +334,6 @@ html, body {
   border-radius: 5px;
   padding: 10px;
   margin: -7px auto 0; /* Overlaps the previous card */
-  width: 95%;
   max-width: 5in;
   transition: transform 0.1s, box-shadow 0.1s;
   cursor: pointer;
@@ -545,3 +546,5 @@ html, body {
   margin: 20px auto; /* Centers the image horizontally */
   margin-top: 30px;
 }
+
+  
