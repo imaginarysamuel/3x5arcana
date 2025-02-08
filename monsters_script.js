@@ -38,17 +38,93 @@ function displayMonsterList() {
     return aLevel - bLevel || a["Name"].localeCompare(b["Name"]);
   });
 
-  filteredMonsters.forEach(monster => {
-    const cardData = {
-      id: monster["ID"],                // Unique identifier
-      name: monster["Name"],            // Monster name
-      level: parseInt(monster["Level"] || 0),  // Monster level
-      description: monster["Flavor Text"] || "No description available." // Description
-    };
+  filteredMonsters.forEach((monster, index) => {
+    const monsterId = `monster-${index}`;
+    const monsterCard = document.createElement("div");
+    monsterCard.classList.add("card", "collapsed");
+    monsterCard.setAttribute("data-id", monsterId);
+    monsterCard.addEventListener("click", () => toggleMonsterCard(monsterId));
 
-    const monsterCard = createCardElement(cardData); // Use createCardElement from favorites.js
+    // Gather abilities from columns P-X (Ability 1 - Ability 9)
+    const abilities = [];
+    for (let i = 1; i <= 9; i++) {
+      if (monster[`Ability ${i}`]) {
+        abilities.push(`<p>${formatAbility(monster[`Ability ${i}`])}</p>`);
+      }
+    }
+    const abilitiesHTML = abilities.length > 0 ? abilities.join("") : "<p>No special abilities.</p>";
+
+    monsterCard.innerHTML = `
+      <div class="card-header">
+        <div class="card-title">${monster["Name"]}</div>
+        <div class="monster-level">${monster["Level"] || "?"}</div>
+      </div>
+      <div class="card-body" id="${monsterId}-body">
+        <p class="flavor-text">${monster["Flavor Text"] || "No description available."}</p>
+        
+        <div class="divider"></div>
+        
+        <table class="stats-table">
+          <tr>
+            <th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th>
+          </tr>
+          <tr>
+            <td>${monster["S"] || "-"}</td>
+            <td>${monster["D"] || "-"}</td>
+            <td>${monster["C"] || "-"}</td>
+            <td>${monster["I"] || "-"}</td>
+            <td>${monster["W"] || "-"}</td>
+            <td>${monster["Ch"] || "-"}</td>
+          </tr>
+        </table>
+
+        <div class="divider"></div>
+
+        <table class="traits-table">
+          <tr>
+            <th>AC</th><th>HP</th><th>AL</th><th>MV</th>
+          </tr>
+          <tr>
+            <td>${monster["AC"] || "-"}</td>
+            <td>${monster["HP"] || "-"}</td>
+            <td>${monster["AL"] || "-"}</td>
+            <td>${monster["MV"] || "-"}</td>
+          </tr>
+        </table>
+
+        <div class="divider"></div>
+
+        <div class="attacks">
+          <p><strong>Attack:</strong> ${monster["ATK"] || "None"}</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="abilities">
+          ${abilitiesHTML}
+        </div>
+      </div>
+    `;
+
     monsterListContainer.appendChild(monsterCard);
   });
+}
+
+function toggleMonsterCard(id) {
+  const card = document.querySelector(`[data-id="${id}"]`);
+  const body = document.getElementById(`${id}-body`);
+
+  if (!card || !body) return;
+
+  const isExpanded = card.classList.contains("expanded");
+
+  if (isExpanded) {
+    body.style.maxHeight = null;
+    card.classList.remove("expanded");
+  } else {
+    body.style.maxHeight = body.scrollHeight + "px";
+    card.classList.add("expanded");
+  }
 }
 
 // Utility function to bold the first phrase up to a colon or period
@@ -61,7 +137,7 @@ function formatAbility(ability) {
   return ability;
 }
 
-// Slider and search functionality
+// Prevent min slider from going above max
 monsterRangeMin.addEventListener("input", function () {
   currentMinLevel = parseInt(this.value);
   if (currentMinLevel > currentMaxLevel) {
@@ -72,6 +148,7 @@ monsterRangeMin.addEventListener("input", function () {
   displayMonsterList();
 });
 
+// Prevent max slider from going below min
 monsterRangeMax.addEventListener("input", function () {
   currentMaxLevel = parseInt(this.value);
   if (currentMaxLevel < currentMinLevel) {
@@ -86,11 +163,7 @@ function updateRangeDisplay() {
   monsterRangeDisplay.textContent = `${currentMinLevel} - ${currentMaxLevel}`;
 }
 
-monsterSearchBar.addEventListener("input", debounce(function () {
-  currentSearchQuery = this.value.toLowerCase();
-  displayMonsterList();
-}, 300));
-
+// Add search functionality with debounce
 function debounce(func, delay) {
   let timeout;
   return function (...args) {
@@ -98,3 +171,8 @@ function debounce(func, delay) {
     timeout = setTimeout(() => func.apply(this, args), delay);
   };
 }
+
+monsterSearchBar.addEventListener("input", debounce(function () {
+  currentSearchQuery = this.value.toLowerCase();
+  displayMonsterList();
+}, 300));
