@@ -12,6 +12,7 @@
   --grey-darkest: #282828;
   --blue-light: #add8e6;
   --blue-dark: #4EA6C2;
+  --red: salmon;
 }
 
 /* Global Styles */
@@ -21,14 +22,16 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   background-color: var(--grey-lightest);
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(173, 216, 230, 0.5) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(173, 216, 230, 0.5) 1px, transparent 1px);
-  background-size: 20px 20px; /* Adjust for grid spacing */
+  background-size: 20px 20px;
+  /* Adjust for grid spacing */
 }
 
 .spacer {
@@ -43,6 +46,126 @@ html, body {
   background: var(--grey-darkest);
   margin-bottom: 30px;
 }
+
+/* Burger Menu */
+/* Burger Icon */
+.burger-icon {
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--grey-lighter);
+  transition: transform 0.2s ease;
+  z-index: 1001;
+  position: relative;
+}
+
+.burger-icon:hover {
+  transform: translateY(-4px);
+}
+
+/* Menu Overlay */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  /* Semi-transparent background */
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.menu-overlay.open {
+  display: flex;
+}
+
+.menu-card {
+  background-color: var(--grey-lighter);
+  border: 1px solid var(--grey-dark);
+  border-radius: 5px;
+  padding: 10px;
+  width: 90%;
+  max-width: 5in;
+  box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.2);
+  animation: dropDown 0.3s ease-out forwards;
+}
+
+.menu-card.closing {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+.menu-card-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--grey-lighter);
+  border-bottom: 1px solid var(--red);
+  padding-bottom: 5px;
+  position: sticky;
+  top: 0;
+  z-index: 1001;
+}
+
+.menu-close-icon {
+  font-size: 1.9em;
+  color: var(--red);
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.menu-close-icon:hover {
+  transform: translateY(-4px);
+}
+
+.menu-content a {
+  display: block;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: var(--grey-darkest);
+  text-decoration: none;
+  margin: 10px auto;
+  padding: 8px 30px;
+  background-color: var(--grey-lighter);
+  border: 1px solid var(--grey-dark);
+  border-radius: 5px;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu-content a:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Drop-Down Animation opening the menu */
+@keyframes dropDown {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Slide-Up Animation (for closing) */
+@keyframes slideUp {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
 
 /* Ensure all text inside the spell filter container is light grey */
 #spell-filter-container,
@@ -71,18 +194,24 @@ html, body {
   transition: all 0.3s ease;
   margin-bottom: 8px;
 }
+
 #search-bar::placeholder {
   color: var(--text-muted);
 }
+
 #search-bar:focus {
- outline: none;  /* Remove the default orange focus ring */
-  border-color: var(--blue-dark); /* Custom border color */
-  box-shadow: 0 0 8px var(--blue-light); /* Optional glowing effect */
+  outline: none;
+  /* Remove the default orange focus ring */
+  border-color: var(--blue-dark);
+  /* Custom border color */
+  box-shadow: 0 0 8px var(--blue-light);
+  /* Optional glowing effect */
 }
 
 #spell-search-bar {
   padding: 8px;
-  border: none;;
+  border: none;
+  ;
   border-radius: 5px;
   width: 100%;
   max-width: 5in;
@@ -98,9 +227,12 @@ html, body {
 }
 
 #spell-search-bar:focus {
- outline: none;  /* Remove the default orange focus ring */
-  border-color: var(--blue-dark); /* Custom border color */
-  box-shadow: 0 0 8px var(--blue-light); /* Optional glowing effect */
+  outline: none;
+  /* Remove the default orange focus ring */
+  border-color: var(--blue-dark);
+  /* Custom border color */
+  box-shadow: 0 0 8px var(--blue-light);
+  /* Optional glowing effect */
 }
 
 /* Spell Filter Container */
@@ -116,7 +248,7 @@ html, body {
 
 /* Tier Label */
 .slider-label {
-  color: var(--grey-lightest); 
+  color: var(--grey-lightest);
   font-weight: bold;
   display: block;
   margin-bottom: 5px;
@@ -126,7 +258,7 @@ html, body {
 #spell-range-display {
   color: var(--grey-lightest);
   font-weight: bold;
-  margin-top: 8px; 
+  margin-top: 8px;
   margin-bottom: 8px;
   display: block;
 }
@@ -140,8 +272,10 @@ html, body {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  max-width: 5in; /* Matches spell search bar */
-  min-width: 2.5in; /* Ensures usability */
+  max-width: 5in;
+  /* Matches spell search bar */
+  min-width: 2.5in;
+  /* Ensures usability */
   height: 10px;
   background: var(--grey-medium);
   border: 2px solid var(--grey-darkest);
@@ -166,6 +300,7 @@ html, body {
   position: relative;
   z-index: 2;
 }
+
 /* Slider Container */
 #slider-container {
   text-align: center;
@@ -194,10 +329,12 @@ html, body {
 /* Slider Input Container (STACKED) */
 .slider-inputs {
   display: flex;
-  flex-direction: column; /* Keeps sliders stacked */
+  flex-direction: column;
+  /* Keeps sliders stacked */
   align-items: center;
   width: 100%;
-  gap: 8px; /* Space between sliders */
+  gap: 8px;
+  /* Space between sliders */
   margin: 5px auto;
 }
 
@@ -206,8 +343,10 @@ html, body {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  max-width: 5in; /* Matches search bar */
-  min-width: 2.5in; /* Ensures usability */
+  max-width: 5in;
+  /* Matches search bar */
+  min-width: 2.5in;
+  /* Ensures usability */
   height: 10px;
   background: var(--grey-medium);
   border: 2px solid var(--grey-darkest);
@@ -283,7 +422,8 @@ html, body {
 }
 
 .filter-group input[type="checkbox"]:checked::after {
-  content: "✕"; /* Custom 'X' checkmark */
+  content: "✕";
+  /* Custom 'X' checkmark */
   color: var(--grey-darkest);
   font-size: 16px;
   font-weight: bold;
@@ -291,8 +431,6 @@ html, body {
   text-align: center;
   line-height: 20px;
 }
-
-
 
 
 /* Navigation */
@@ -332,7 +470,8 @@ html, body {
   border: 1px solid var(--grey-dark);
   border-radius: 5px;
   padding: 10px;
-  margin: -7px auto 0; /* Overlaps the previous card */
+  margin: -7px auto 0;
+  /* Overlaps the previous card */
   width: 90%;
   max-width: 5in;
   transition: transform 0.1s, box-shadow 0.1s;
@@ -347,7 +486,8 @@ html, body {
 
 /* Expanded Card Effect */
 .card.expanded {
-  background: var(--grey-lighter); /* Lighter background for expanded state */
+  background: var(--grey-lighter);
+  /* Lighter background for expanded state */
   transition: background-color 0.1s ease-out, transform 0.1s ease-out;
   box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.2);
   padding: 10px;
@@ -363,7 +503,8 @@ html, body {
   color: var(--grey-darkest);
   font-weight: bold;
   text-transform: uppercase;
-  border-bottom: 1px solid crimson;
+  min-height: 35px;
+  border-bottom: 1px solid var(--red);
   margin-bottom: 15px;
   padding-bottom: 5px;
 }
@@ -385,8 +526,7 @@ html, body {
   margin-right: 5px;
 }
 
-.card-favorite-title
-{
+.card-favorite-title {
   display: flex;
   align-items: center;
 }
@@ -397,7 +537,8 @@ html, body {
 }
 
 .flavor-text {
-  margin-top: 0; /* Remove extra top spacing */
+  margin-top: 0;
+  /* Remove extra top spacing */
   margin-bottom: 5px;
   font-size: 1em;
   font-style: italic;
@@ -405,7 +546,8 @@ html, body {
 }
 
 /* Stats Table Layout */
-.stats-table, .traits-table {
+.stats-table,
+.traits-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
@@ -414,24 +556,29 @@ html, body {
   margin: 10px;
 }
 
-.stats-table th, .traits-table th {
+.stats-table th,
+.traits-table th {
   font-weight: bold;
   color: var(--grey-darkest);
   text-transform: uppercase;
 }
 
-.stats-table td, .traits-table td {
+.stats-table td,
+.traits-table td {
   font-weight: bold;
 }
 
 /* Attacks & Abilities */
-.attacks, .abilities, .spell-description {
+.attacks,
+.abilities,
+.spell-description {
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
 
-.attacks p, .abilities p {
+.attacks p,
+.abilities p {
   font-size: 1em;
   margin: 0;
   padding: 2px 0;
@@ -439,10 +586,12 @@ html, body {
 }
 
 .abilities {
-  margin-bottom: 30px; /* Add space at the bottom */
+  margin-bottom: 30px;
+  /* Add space at the bottom */
 }
 
-.attacks p strong, .abilities p strong {
+.attacks p strong,
+.abilities p strong {
   font-weight: bold;
 }
 
@@ -468,7 +617,8 @@ html, body {
   margin: 0;
   padding: 2px 0;
   line-height: 1.2;
-  margin-bottom: 30px; /* Matches the abilities bottom spacing */
+  margin-bottom: 30px;
+  /* Matches the abilities bottom spacing */
 }
 
 /* Dividers */
@@ -479,7 +629,8 @@ html, body {
   margin: 5px auto;
 }
 
-.card:hover .divider, .card.expanded .divider {
+.card:hover .divider,
+.card.expanded .divider {
   background-color: var(--blue-light);
 }
 
@@ -488,13 +639,16 @@ html, body {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease-out, padding 0.3s ease-out;
-  padding: 0 10px; /* Maintain horizontal padding */
+  padding: 0 10px;
+  /* Maintain horizontal padding */
   margin-bottom: -20px;
 }
 
 .card.expanded .card-body {
-  max-height: 1000px; /* Ensure full expansion */
-  padding-bottom: 10px; /* Add bottom padding */
+  max-height: 1000px;
+  /* Ensure full expansion */
+  padding-bottom: 10px;
+  /* Add bottom padding */
 }
 
 /* Prevents extra space from appearing when collapsed */
@@ -520,13 +674,27 @@ html, body {
 }
 
 @keyframes expandCard {
-  0% { max-height: 0; opacity: 0; }
-  100% { max-height: 1000px; opacity: 1; }
+  0% {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  100% {
+    max-height: 1000px;
+    opacity: 1;
+  }
 }
 
 @keyframes contractCard {
-  0% { max-height: 1000px; opacity: 1; }
-  100% { max-height: 0; opacity: 0; }
+  0% {
+    max-height: 1000px;
+    opacity: 1;
+  }
+
+  100% {
+    max-height: 0;
+    opacity: 0;
+  }
 }
 
 .duplicate-card {
@@ -540,33 +708,53 @@ html, body {
 /* Paragraph Styling for Cards */
 
 .card-button {
-  display: block; /* Ensures full width control */
-  width: fit-content; /* Keeps it from stretching */
-  margin: 10px auto; /* Centers the button */
-  padding: 8px 30px; /* Comfortable padding */
-  background-color: var(--grey-darkest); /* Matches site’s theme */
-  color: var(--grey-lightest); /* Contrasts for readability */
+  display: block;
+  /* Ensures full width control */
+  width: fit-content;
+  /* Keeps it from stretching */
+  margin: 10px auto;
+  /* Centers the button */
+  padding: 8px 30px;
+  /* Comfortable padding */
+  background-color: var(--grey-lighter);
+  /* Matches site’s theme */
+  color: var(--grey-darkest);
+  /* Contrasts for readability */
   font-weight: bold;
   text-transform: uppercase;
-  border-radius: 5px; /* Softens edges */
-  text-decoration: none; /* Removes default link underline */
+  border-radius: 5px;
+  /* Softens edges */
+  text-decoration: none;
+  /* Removes default link underline */
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-button:hover {
-  transform: translateY(-4px); /* Gives a lifted effect */
-  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.3); /* Adds some depth */
+  transform: translateY(-4px);
+  /* Gives a lifted effect */
+  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.3);
+  /* Adds some depth */
 }
 
 .card-button:active {
-  transform: translateY(1px); /* Slight press-in effect */
+  transform: translateY(1px);
+  /* Slight press-in effect */
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
+
 .share-icon {
-  width: 275px;  /* Makes the image 200px wide */
-  height: auto;  /* Keeps aspect ratio */
-  display: block; /* Ensures it behaves like a block element */
-  margin: 20px auto; /* Centers the image horizontally */
+  width: 275px;
+  /* Makes the image 200px wide */
+  height: auto;
+  /* Keeps aspect ratio */
+  display: block;
+  /* Ensures it behaves like a block element */
+  margin: 20px auto;
+  /* Centers the image horizontally */
   margin-top: 30px;
 }
 
+#spell-favorites-list {
+  border-bottom: 2px solid var(--red);
+  padding-bottom: 30px;
+}
