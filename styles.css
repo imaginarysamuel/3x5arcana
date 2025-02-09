@@ -109,9 +109,8 @@ body {
 }
 
 .menu-close-icon {
-  font-size: 1.9em;
+  font-size: 1.5em;
   color: var(--red);
-  font-weight: bold;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
