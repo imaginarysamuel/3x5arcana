@@ -132,6 +132,7 @@ body {
   border: 1px solid var(--grey-dark);
   border-radius: 5px;
   text-transform: uppercase;
+  text-align: center; !important
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -707,25 +708,20 @@ body {
 
 /* Paragraph Styling for Cards */
 
-.card-button {
+.card-button { /*matches .menu-content a*/
   display: block;
-  /* Ensures full width control */
-  width: fit-content;
-  /* Keeps it from stretching */
-  margin: 10px auto;
-  /* Centers the button */
-  padding: 8px 30px;
-  /* Comfortable padding */
-  background-color: var(--grey-lighter);
-  /* Matches site’s theme */
-  color: var(--grey-darkest);
-  /* Contrasts for readability */
+  font-size: 1.1em;
   font-weight: bold;
-  text-transform: uppercase;
-  border-radius: 5px;
-  /* Softens edges */
+  color: var(--grey-darkest);
   text-decoration: none;
-  /* Removes default link underline */
+  margin: 10px auto;
+  padding: 8px 30px;
+  max-width: 3in;
+  background-color: var(--grey-lighter);
+  border: 1px solid var(--grey-dark);
+  border-radius: 5px;
+  text-transform: uppercase;
+  text-align: center; !important
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
