@@ -622,6 +622,11 @@ body {
   /* Matches the abilities bottom spacing */
 }
 
+.card-bottom-padding {
+  margin-bottom: 30px;
+  /* Matches the abilities bottom spacing */
+}
+
 /* Dividers */
 .divider {
   width: 100%;
@@ -750,7 +755,7 @@ body {
   margin-top: 30px;
 }
 
-#spell-favorites-list {
+#spell-favorites-list, #monster-favorites-list, #magic-items-favorites-list {
   border-bottom: 2px solid var(--red);
   padding-bottom: 30px;
 }
