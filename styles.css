@@ -200,7 +200,7 @@ body {
   color: var(--text-muted);
 }
 
-#search-bar:focus {
+#search-bar:focus, #search-bar:hover {
   outline: none;
   /* Remove the default orange focus ring */
   border-color: var(--blue-dark);
