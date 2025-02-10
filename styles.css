@@ -137,7 +137,7 @@ body {
 }
 
 .menu-content a:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.3);
 }
 
@@ -731,7 +731,7 @@ body {
 }
 
 .card-button:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   /* Gives a lifted effect */
   box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.3);
   /* Adds some depth */
