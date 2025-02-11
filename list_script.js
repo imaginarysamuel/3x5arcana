@@ -65,11 +65,15 @@ function toggleCard(id) {
 
 // Toggle favorite card
 function toggleFavorite(id) {
+  const card = document.querySelector(`[data-id="card-${id}"]`);
+  const favoriteIcon = card.querySelector(".favorite-icon");
   const index = favoritesIdList.indexOf(id);
   if (index > -1) {
     favoritesIdList.splice(index, 1);
+    favoriteIcon.classList.remove("favorited");
   } else {
     favoritesIdList.push(id);
+    favoriteIcon.classList.add("favorited");
   }
   displayFavorites();
 }
