@@ -492,8 +492,8 @@ body {
   font-weight: bold;
   text-transform: uppercase;
   border-bottom: 1px solid var(--red);
-  margin-bottom: 9px;
-  padding-bottom: 4px;
+  margin-bottom: 12px;
+  padding-bottom: 1px;
 }
 
 .favorite-icon {
