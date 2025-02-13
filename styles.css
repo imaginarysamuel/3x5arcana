@@ -492,7 +492,7 @@ body {
   font-weight: bold;
   text-transform: uppercase;
   border-bottom: 1px solid var(--red);
-  min-height: 25px;
+  min-height: 30px;
   margin-bottom: 12px;
   padding-bottom: 1px;
 }
