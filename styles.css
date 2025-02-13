@@ -491,10 +491,9 @@ body {
   color: var(--grey-darkest);
   font-weight: bold;
   text-transform: uppercase;
-  min-height: 35px;
   border-bottom: 1px solid var(--red);
-  margin-bottom: 15px;
-  padding-bottom: 5px;
+  margin-bottom: 9px;
+  padding-bottom: 4px;
 }
 
 .favorite-icon {
