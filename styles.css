@@ -755,7 +755,7 @@ body {
   margin-top: 30px;
 }
 
-#spell-favorites-list, #monster-favorites-list, #magic-items-favorites-list {
+#favorites-list {
   border-bottom: 2px solid var(--red);
   padding-bottom: 30px;
 }
