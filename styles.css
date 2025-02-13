@@ -223,19 +223,6 @@ body {
   transition: all 0.3s ease;
 }
 
-#spell-search-bar::placeholder {
-  color: var(--text-muted);
-}
-
-#spell-search-bar:focus {
-  outline: none;
-  /* Remove the default orange focus ring */
-  border-color: var(--blue-dark);
-  /* Custom border color */
-  box-shadow: 0 0 8px var(--blue-light);
-  /* Optional glowing effect */
-}
-
 /* Spell Filter Container */
 #spell-filter-container {
   margin: 10px auto;
@@ -518,7 +505,7 @@ body {
 
 .favorite-icon:hover {
   font-size: 1.5em;
-  color: var(--blue-dark);
+  color: var(--blue-light);
 }
 
 .favorite-icon.favorited {
