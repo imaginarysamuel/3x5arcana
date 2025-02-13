@@ -26,7 +26,7 @@ function getCardInnerHTML(item, itemId) {
   let cardContent = `
     <div class="card-header">
       <div class="card-favorite-title">
-        <div class="favorite-icon" id="${itemId}-favorite-icon">◪</div>
+        <div class="favorite-icon" id="${itemId}-favorite-icon">●</div>
         <div class="card-title">${item["Name"]}</div>
       </div>
     </div>
