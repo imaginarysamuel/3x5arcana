@@ -52,7 +52,7 @@ function getCardInnerHTML(spell, spellId) {
   return `
     <div class="card-header">
       <div class="card-favorite-title">
-        <div class="favorite-icon" id="${spellId}-favorite-icon">◪</div>
+        <div class="favorite-icon" id="${spellId}-favorite-icon">●</div>
         <div class="card-title">${spell["Name"] || "Unknown Spell"}</div>
       </div>
       <div class="spell-tier">${classLabel} ${spell["Tier"] || "?"}</div>
