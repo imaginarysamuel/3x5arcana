@@ -121,7 +121,7 @@ monsterRangeMin.addEventListener("input", function () {
     monsterRangeMax.value = currentMaxLevel;
   }
   updateRangeDisplay();
-  displayMonsterList();
+  displayList();
 });
 
 // Prevent max slider from going below min
@@ -132,7 +132,7 @@ monsterRangeMax.addEventListener("input", function () {
     monsterRangeMin.value = currentMinLevel;
   }
   updateRangeDisplay();
-  displayMonsterList();
+  displayList();
 });
 
 function updateRangeDisplay() {
