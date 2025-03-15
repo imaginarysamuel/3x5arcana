@@ -741,6 +741,12 @@ body {
   /* Centers the image horizontally */
   margin-top: 30px;
 }
+ .character-sheet-img {
+    width: 95%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
 
 #favorites-list {
   border-bottom: 2px solid var(--red);
