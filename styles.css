@@ -708,7 +708,7 @@ body {
   text-decoration: none;
   margin: 30px auto;
   padding: 8px 30px;
-  max-width: 3in;
+  width: 3in;
   background-color: var(--grey-lighter);
   border: 1px solid var(--grey-dark);
   border-radius: 5px;
