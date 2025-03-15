@@ -1,3 +1,4 @@
+// 📌 list_script.js
 // Cache DOM elements
 const searchBar = document.getElementById("search-bar");
 const favoritesListContainer = document.getElementById("favorites-list");
