@@ -1,3 +1,4 @@
+// 📌 spells_script.js
 // 📌 Spell Data Source
 const spellSheetUrl = "https://opensheet.elk.sh/1ZsdxP3KiZZ1YCGcxddqNMKhZH2LOV1uwAhVyYqBlR3E/Spells";
 let data = [];
