@@ -1,3 +1,4 @@
+// 📌 burgermenu_script.js
 // Burger Menu Functionality
 const burgerIcon = document.getElementById("burger-icon");
 const menuOverlay = document.getElementById("menu-overlay");
