@@ -1,3 +1,4 @@
+// 📌 magic_items_script.js
 // Fetch magic item data
 const magicItemSheetUrl = "https://opensheet.elk.sh/1WM6VoP1l_aXr2Z8G45wlTnbwVY87y3qZ_7PgD7HMBj8/Magic_Items";
 let data = [];
