@@ -12,7 +12,9 @@ function getURLParam(name) {
 const expandParam = getURLParam("expand");
 
 if (expandParam === "character-sheet") {
-    const characterSheetCard = document.querySelector(".card-container .card:nth-of-type(4)"); // Adjust index if needed
+   const characterSheetCard = [...document.querySelectorAll(".card")].find(card => 
+    card.querySelector(".card-title")?.textContent.includes("Character Sheet")
+);
     if (characterSheetCard) {
         setTimeout(() => {
             expandCard(characterSheetCard);
