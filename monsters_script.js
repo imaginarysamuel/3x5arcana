@@ -1,3 +1,4 @@
+// 📌 monsters_script.js
 // Fetch monster data
 const monsterSheetUrl = "https://opensheet.elk.sh/1E9c3F3JPCDnxqLE0qVtW0K7PBsgHSd7s5oU8p8qeAAY/All";
 let data = [];
