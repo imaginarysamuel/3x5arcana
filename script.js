@@ -2,33 +2,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // 📌 Select all cards on the page
     const cards = document.querySelectorAll(".card");
 
-// 📌 Function to get URL parameters
-function getURLParam(name) {
-    const params = new URLSearchParams(window.location.search);
-    return params.get(name);
-}
-
-// 📌 Check if the "expand" parameter is set in the URL
-const expandParam = getURLParam("expand");
-
-if (expandParam === "character-sheet") {
-   const characterSheetCard = [...document.querySelectorAll(".card")].find(card => 
-    card.querySelector(".card-title")?.textContent.includes("Character Sheet")
-);
-    if (characterSheetCard) {
-        setTimeout(() => {
-            expandCard(characterSheetCard);
-        }, 50);
-    }
-} else {
-    // Default behavior: Expand the "About" card only on the About page
+    // 📌 Expand the "About" card by default (assuming it's the last one)
     const aboutCard = document.querySelector(".card-container:last-of-type .card");
     if (aboutCard) {
         setTimeout(() => {
             expandCard(aboutCard);
-        }, 50);
+        }, 50); // Delay to ensure styles apply
     }
-}
 
     // 📌 Add click event listener to all cards
     cards.forEach(card => {
