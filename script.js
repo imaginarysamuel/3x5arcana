@@ -1,3 +1,4 @@
+// 📌 script.js
 document.addEventListener("DOMContentLoaded", function () {
     // 📌 Select all cards on the page
     const cards = document.querySelectorAll(".card");
