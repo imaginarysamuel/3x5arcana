@@ -1,16 +1,13 @@
 // 📌 monsters_script.js
-// Fetch monster data
 const monsterSheetUrl = "https://opensheet.elk.sh/1E9c3F3JPCDnxqLE0qVtW0K7PBsgHSd7s5oU8p8qeAAY/All";
 let data = [];
 let currentMinLevel = 0;
 let currentMaxLevel = 30;
 
-// Cache DOM elements
 const monsterRangeDisplay = document.getElementById("range-display");
 const monsterRangeMin = document.getElementById("range-min");
 const monsterRangeMax = document.getElementById("range-max");
 
-// Fetch monster data from spreadsheet
 fetch(monsterSheetUrl)
   .then(response => response.json())
   .then(d => {
@@ -19,8 +16,9 @@ fetch(monsterSheetUrl)
       "Name": "Just Use Bears",
       "Level": "Any",
       "Flavor Text": "Rawr.",
-      "Type": "iframe-only",
-      "Ability 1": "__IFRAME__"
+      "Type": "custom-html",
+      "HTML Path": "just_use_bears.html",
+      "AlwaysInclude": true
     });
     updateRangeDisplay();
     displayList();
@@ -42,31 +40,37 @@ function getFilteredData(sortedData) {
     const nameMatches = monster["Name"].toLowerCase().includes(currentSearchQuery);
     const level = parseFloat(monster["Level"]) || 0;
     const levelMatches = monster["Level"] === "Any" || (level >= currentMinLevel && level <= currentMaxLevel);
-    return nameMatches && levelMatches;
+    return nameMatches && (levelMatches || monster["AlwaysInclude"]);
   });
 }
 
 function getCardInnerHTML(monster, monsterId) {
-  const abilities = [];
+  const isCustomHtml = monster["Type"] === "custom-html" && monster["HTML Path"];
 
+  if (isCustomHtml) {
+    return `
+      <div class="card-header">
+        <div class="card-favorite-title">
+          <div class="favorite-icon" id="${monsterId}-favorite-icon">●</div>
+          <div class="card-title">${monster["Name"]}</div>
+        </div>
+        <div class="monster-level">${monster["Level"] || "?"}</div>
+      </div>
+      <div class="card-body" id="${monsterId}-body">
+        <div class="custom-html-loader" data-html-path="${monster["HTML Path"]}">Loading...</div>
+      </div>
+    `;
+  }
+
+  const abilities = [];
   for (let i = 1; i <= 9; i++) {
     const ability = monster[`Ability ${i}`];
-    if (ability === "__IFRAME__") {
-      abilities.push(`
-        <iframe 
-          src="https://3x5arcana.com/Just_Use_Bears_v1_p1.pdf#toolbar=0"
-          width="100%" 
-          height="600px" 
-          style="border: 1px solid var(--grey-dark); border-radius: 5px;">
-        </iframe>
-      `);
-    } else if (ability) {
+    if (ability) {
       abilities.push(`<p>${formatAbility(ability)}</p>`);
     }
   }
 
   const abilitiesHTML = abilities.length > 0 ? abilities.join("") : "<p>No special abilities.</p>";
-  const isIframeOnly = monster["Type"] === "iframe-only";
 
   return `
     <div class="card-header">
@@ -76,50 +80,39 @@ function getCardInnerHTML(monster, monsterId) {
       </div>
       <div class="monster-level">${monster["Level"] || "?"}</div>
     </div>
-
     <div class="card-body" id="${monsterId}-body">
       <p class="flavor-text">${monster["Flavor Text"] || "No description available."}</p>
-
       <div class="divider"></div>
-
-      ${!isIframeOnly ? `
-        <table class="stats-table">
-          <tr>
-            <th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th>
-          </tr>
-          <tr>
-            <td>${monster["S"] || "-"}</td>
-            <td>${monster["D"] || "-"}</td>
-            <td>${monster["C"] || "-"}</td>
-            <td>${monster["I"] || "-"}</td>
-            <td>${monster["W"] || "-"}</td>
-            <td>${monster["Ch"] || "-"}</td>
-          </tr>
-        </table>
-
-        <div class="divider"></div>
-
-        <table class="traits-table">
-          <tr>
-            <th>AC</th><th>HP</th><th>AL</th><th>MV</th>
-          </tr>
-          <tr>
-            <td>${monster["AC"] || "-"}</td>
-            <td>${monster["HP"] || "-"}</td>
-            <td>${monster["AL"] || "-"}</td>
-            <td>${monster["MV"] || "-"}</td>
-          </tr>
-        </table>
-
-        <div class="divider"></div>
-
-        <div class="attacks">
-          <p><strong>Attack:</strong> ${monster["ATK"] || "None"}</p>
-        </div>
-
-        <div class="divider"></div>
-      ` : ""}
-
+      <table class="stats-table">
+        <tr>
+          <th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th>
+        </tr>
+        <tr>
+          <td>${monster["S"] || "-"}</td>
+          <td>${monster["D"] || "-"}</td>
+          <td>${monster["C"] || "-"}</td>
+          <td>${monster["I"] || "-"}</td>
+          <td>${monster["W"] || "-"}</td>
+          <td>${monster["Ch"] || "-"}</td>
+        </tr>
+      </table>
+      <div class="divider"></div>
+      <table class="traits-table">
+        <tr>
+          <th>AC</th><th>HP</th><th>AL</th><th>MV</th>
+        </tr>
+        <tr>
+          <td>${monster["AC"] || "-"}</td>
+          <td>${monster["HP"] || "-"}</td>
+          <td>${monster["AL"] || "-"}</td>
+          <td>${monster["MV"] || "-"}</td>
+        </tr>
+      </table>
+      <div class="divider"></div>
+      <div class="attacks">
+        <p><strong>Attack:</strong> ${monster["ATK"] || "None"}</p>
+      </div>
+      <div class="divider"></div>
       <div class="abilities">
         ${abilitiesHTML}
       </div>
@@ -127,7 +120,6 @@ function getCardInnerHTML(monster, monsterId) {
   `;
 }
 
-// Utility function to bold the first phrase up to a colon or period
 function formatAbility(ability) {
   const match = ability.match(/^(.*?[.:])/);
   if (match) {
@@ -137,7 +129,6 @@ function formatAbility(ability) {
   return ability;
 }
 
-// Prevent min slider from going above max
 monsterRangeMin.addEventListener("input", function () {
   currentMinLevel = parseInt(this.value);
   if (currentMinLevel > currentMaxLevel) {
@@ -148,7 +139,6 @@ monsterRangeMin.addEventListener("input", function () {
   displayList();
 });
 
-// Prevent max slider from going below min
 monsterRangeMax.addEventListener("input", function () {
   currentMaxLevel = parseInt(this.value);
   if (currentMaxLevel < currentMinLevel) {
@@ -162,3 +152,19 @@ monsterRangeMax.addEventListener("input", function () {
 function updateRangeDisplay() {
   monsterRangeDisplay.textContent = `${currentMinLevel} - ${currentMaxLevel}`;
 }
+
+// Load external HTML into custom-html-loader containers
+window.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".custom-html-loader").forEach(container => {
+    const path = container.getAttribute("data-html-path");
+    fetch(path)
+      .then(res => res.text())
+      .then(html => {
+        container.innerHTML = html;
+      })
+      .catch(err => {
+        container.innerHTML = `<p style="color: red;">Error loading content.</p>`;
+        console.error(`Failed to load ${path}`, err);
+      });
+  });
+});
