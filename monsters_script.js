@@ -63,7 +63,7 @@ function getCardInnerHTML(monster, monsterId) {
         </iframe>
       `);
     } else if (ability) {
-      abilities.push(<p>${formatAbility(ability)}</p>);
+      abilities.push(`<p>${formatAbility(ability)}</p>`);
     }
   }
 
