@@ -15,11 +15,11 @@ function displayList() {
   addCardsToList(filteredData, cardListContainer, "");
 }
 
-function displayFavorites() {
+function displayFavorites(useAlt = false) {
   favoritesListContainer.innerHTML = "";
   let sortedData = getSortedData();
   let favoriteData = sortedData.filter(item => favoritesIdList.includes(item["Name"]));
-  addCardsToList(favoriteData, favoritesListContainer, "-fav");
+  addCardsToList(favoriteData, favoritesListContainer, "-fav", useAlt);
 }
 
 function addCardsToList(list, container, suffix) {
