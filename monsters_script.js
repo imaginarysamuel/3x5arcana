@@ -1,4 +1,4 @@
-// 📌 monsters_script.js
+// 📈 monsters_script.js
 const monsterSheetUrl = "https://opensheet.elk.sh/1E9c3F3JPCDnxqLE0qVtW0K7PBsgHSd7s5oU8p8qeAAY/All";
 let data = [];
 let currentMinLevel = 0;
@@ -12,9 +12,18 @@ fetch(monsterSheetUrl)
   .then(response => response.json())
   .then(d => {
     data = d;
+    data.unshift({
+      "Name": "Just Use Bears",
+      "Level": "Any",
+      "Flavor Text": "Rawr.",
+      "Type": "custom-html",
+      "HTML Path": "just_use_bears.html",
+      "Alt HTML Path": "just_use_bears_card.html",
+      "AlwaysInclude": true
+    });
     updateRangeDisplay();
     displayList();
-    displayFavorites();
+    displayFavorites(true);
     loadCustomHtmlContent();
   })
   .catch(error => console.error("Error loading monster data:", error));
@@ -34,7 +43,7 @@ function getFilteredData(sortedData) {
     const nameMatches = monster["Name"].toLowerCase().includes(currentSearchQuery);
     const level = parseFloat(monster["Level"]) || 0;
     const levelMatches = monster["Level"] === "Any" || (level >= currentMinLevel && level <= currentMaxLevel);
-    return nameMatches && levelMatches;
+    return nameMatches && (levelMatches || monster["AlwaysInclude"]);
   });
 }
 
@@ -165,4 +174,4 @@ function loadCustomHtmlContent() {
         console.error(`Failed to load ${path}`, err);
       });
   });
-} 
+}
