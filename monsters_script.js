@@ -52,7 +52,7 @@ function getCardInnerHTML(monster, monsterId) {
   const abilities = [];
 
   for (let i = 1; i <= 9; i++) {
-    const ability = monster[Ability ${i}];
+    const ability = monster[`Ability ${i}`];
     if (ability === "__IFRAME__") {
       abilities.push(
         <iframe 
