@@ -16,12 +16,12 @@ fetch(monsterSheetUrl)
   .then(d => {
     data = d;
     data.unshift({
-  "Name": "Just Use Bears",
-  "Level": "Any",
-  "Flavor Text": "Rawr.",
-  "Type": "iframe-only",
-  "Ability 1": "__IFRAME__"
-});
+      "Name": "Just Use Bears",
+      "Level": "Any",
+      "Flavor Text": "Rawr.",
+      "Type": "iframe-only",
+      "Ability 1": "__IFRAME__"
+    });
     updateRangeDisplay();
     displayList();
   })
@@ -31,19 +31,17 @@ function getSortedData() {
   return data.sort((a, b) => {
     if (a.Name === "Just Use Bears") return -1;
     if (b.Name === "Just Use Bears") return 1;
-
     const aLevel = parseFloat(a["Level"]) || 0;
     const bLevel = parseFloat(b["Level"]) || 0;
     return aLevel - bLevel || a["Name"].localeCompare(b["Name"]);
   });
 }
 
-
 function getFilteredData(sortedData) {
   return sortedData.filter(monster => {
     const nameMatches = monster["Name"].toLowerCase().includes(currentSearchQuery);
     const level = parseFloat(monster["Level"]) || 0;
-    const levelMatches = level >= currentMinLevel && level <= currentMaxLevel;
+    const levelMatches = monster["Level"] === "Any" || (level >= currentMinLevel && level <= currentMaxLevel);
     return nameMatches && levelMatches;
   });
 }
@@ -70,7 +68,7 @@ function getCardInnerHTML(monster, monsterId) {
   const abilitiesHTML = abilities.length > 0 ? abilities.join("") : "<p>No special abilities.</p>";
   const isIframeOnly = monster["Type"] === "iframe-only";
 
-  return 
+  return `
     <div class="card-header">
       <div class="card-favorite-title">
         <div class="favorite-icon" id="${monsterId}-favorite-icon">●</div>
@@ -84,7 +82,7 @@ function getCardInnerHTML(monster, monsterId) {
 
       <div class="divider"></div>
 
-      ${!isIframeOnly ? 
+      ${!isIframeOnly ? `
         <table class="stats-table">
           <tr>
             <th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th>
@@ -120,21 +118,20 @@ function getCardInnerHTML(monster, monsterId) {
         </div>
 
         <div class="divider"></div>
-       : ""}
+      ` : ""}
 
       <div class="abilities">
         ${abilitiesHTML}
       </div>
     </div>
-  ;
+  `;
 }
-
 
 // Utility function to bold the first phrase up to a colon or period
 function formatAbility(ability) {
   const match = ability.match(/^(.*?[.:])/);
   if (match) {
-    const bolded = <strong>${match[1]}</strong>;
+    const bolded = `<strong>${match[1]}</strong>`;
     return ability.replace(match[1], bolded);
   }
   return ability;
@@ -163,5 +160,5 @@ monsterRangeMax.addEventListener("input", function () {
 });
 
 function updateRangeDisplay() {
-  monsterRangeDisplay.textContent = ${currentMinLevel} - ${currentMaxLevel};
+  monsterRangeDisplay.textContent = `${currentMinLevel} - ${currentMaxLevel}`;
 }
