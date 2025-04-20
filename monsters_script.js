@@ -12,15 +12,6 @@ fetch(monsterSheetUrl)
   .then(response => response.json())
   .then(d => {
     data = d;
-    data.unshift({
-      "Name": "Just Use Bears",
-      "Level": "Any",
-      "Flavor Text": "Rawr.",
-      "Type": "custom-html",
-      "HTML Path": "just_use_bears.html",
-      "Alt HTML Path": "just_use_bears_card.html",
-      "AlwaysInclude": true
-    });
     updateRangeDisplay();
     displayList();
     displayFavorites();
@@ -43,7 +34,7 @@ function getFilteredData(sortedData) {
     const nameMatches = monster["Name"].toLowerCase().includes(currentSearchQuery);
     const level = parseFloat(monster["Level"]) || 0;
     const levelMatches = monster["Level"] === "Any" || (level >= currentMinLevel && level <= currentMaxLevel);
-    return nameMatches && (levelMatches || monster["AlwaysInclude"]);
+    return nameMatches && levelMatches;
   });
 }
 
@@ -141,7 +132,7 @@ monsterRangeMin.addEventListener("input", function () {
   }
   updateRangeDisplay();
   displayList();
-  displayFavorites();
+  displayFavorites(true);
   loadCustomHtmlContent();
 });
 
@@ -153,7 +144,7 @@ monsterRangeMax.addEventListener("input", function () {
   }
   updateRangeDisplay();
   displayList();
-  displayFavorites();
+  displayFavorites(true);
   loadCustomHtmlContent();
 });
 
@@ -174,4 +165,4 @@ function loadCustomHtmlContent() {
         console.error(`Failed to load ${path}`, err);
       });
   });
-}
+} 
