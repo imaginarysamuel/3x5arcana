@@ -22,6 +22,7 @@ fetch(monsterSheetUrl)
     });
     updateRangeDisplay();
     displayList();
+    loadCustomHtmlContent();
   })
   .catch(error => console.error("Error loading monster data:", error));
 
@@ -137,6 +138,7 @@ monsterRangeMin.addEventListener("input", function () {
   }
   updateRangeDisplay();
   displayList();
+  loadCustomHtmlContent();
 });
 
 monsterRangeMax.addEventListener("input", function () {
@@ -147,14 +149,14 @@ monsterRangeMax.addEventListener("input", function () {
   }
   updateRangeDisplay();
   displayList();
+  loadCustomHtmlContent();
 });
 
 function updateRangeDisplay() {
   monsterRangeDisplay.textContent = `${currentMinLevel} - ${currentMaxLevel}`;
 }
 
-// Load external HTML into custom-html-loader containers
-window.addEventListener("DOMContentLoaded", () => {
+function loadCustomHtmlContent() {
   document.querySelectorAll(".custom-html-loader").forEach(container => {
     const path = container.getAttribute("data-html-path");
     fetch(path)
@@ -167,4 +169,4 @@ window.addEventListener("DOMContentLoaded", () => {
         console.error(`Failed to load ${path}`, err);
       });
   });
-});
+}
