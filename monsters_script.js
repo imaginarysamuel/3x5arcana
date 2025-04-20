@@ -18,10 +18,12 @@ fetch(monsterSheetUrl)
       "Flavor Text": "Rawr.",
       "Type": "custom-html",
       "HTML Path": "just_use_bears.html",
+      "Alt HTML Path": "just_use_bears_card.html",
       "AlwaysInclude": true
     });
     updateRangeDisplay();
     displayList();
+    displayFavorites();
     loadCustomHtmlContent();
   })
   .catch(error => console.error("Error loading monster data:", error));
@@ -45,10 +47,11 @@ function getFilteredData(sortedData) {
   });
 }
 
-function getCardInnerHTML(monster, monsterId) {
+function getCardInnerHTML(monster, monsterId, useAlt = false) {
   const isCustomHtml = monster["Type"] === "custom-html" && monster["HTML Path"];
 
   if (isCustomHtml) {
+    const htmlPath = useAlt && monster["Alt HTML Path"] ? monster["Alt HTML Path"] : monster["HTML Path"];
     return `
       <div class="card-header">
         <div class="card-favorite-title">
@@ -58,7 +61,7 @@ function getCardInnerHTML(monster, monsterId) {
         <div class="monster-level">${monster["Level"] || "?"}</div>
       </div>
       <div class="card-body" id="${monsterId}-body">
-        <div class="custom-html-loader" data-html-path="${monster["HTML Path"]}">Loading...</div>
+        <div class="custom-html-loader" data-html-path="${htmlPath}">Loading...</div>
       </div>
     `;
   }
@@ -138,6 +141,7 @@ monsterRangeMin.addEventListener("input", function () {
   }
   updateRangeDisplay();
   displayList();
+  displayFavorites();
   loadCustomHtmlContent();
 });
 
@@ -149,6 +153,7 @@ monsterRangeMax.addEventListener("input", function () {
   }
   updateRangeDisplay();
   displayList();
+  displayFavorites();
   loadCustomHtmlContent();
 });
 
