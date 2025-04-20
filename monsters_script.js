@@ -54,7 +54,7 @@ function getCardInnerHTML(monster, monsterId) {
     if (ability === "__IFRAME__") {
       abilities.push(`
         <iframe 
-          src="https://imaginarysamuel.github.io/3x5arcana/Just_Use_Bears_v1_p1.pdf#toolbar=0"
+          src="https://3x5arcana.com/Just_Use_Bears_v1_p1.pdf#toolbar=0"
           width="100%" 
           height="600px" 
           style="border: 1px solid var(--grey-dark); border-radius: 5px;">
