@@ -15,6 +15,13 @@ fetch(monsterSheetUrl)
   .then(response => response.json())
   .then(d => {
     data = d;
+    data.unshift({
+  "Name": "Just Use Bears",
+  "Level": "Any",
+  "Flavor Text": "Rawr.",
+  "Type": "iframe-only",
+  "Ability 1": "__IFRAME__"
+});
     updateRangeDisplay();
     displayList();
   })
@@ -22,11 +29,15 @@ fetch(monsterSheetUrl)
 
 function getSortedData() {
   return data.sort((a, b) => {
+    if (a.Name === "Just Use Bears") return -1;
+    if (b.Name === "Just Use Bears") return 1;
+
     const aLevel = parseFloat(a["Level"]) || 0;
     const bLevel = parseFloat(b["Level"]) || 0;
     return aLevel - bLevel || a["Name"].localeCompare(b["Name"]);
   });
 }
+
 
 function getFilteredData(sortedData) {
   return sortedData.filter(monster => {
@@ -38,16 +49,28 @@ function getFilteredData(sortedData) {
 }
 
 function getCardInnerHTML(monster, monsterId) {
-  // Gather abilities from columns P-X (Ability 1 - Ability 9)
   const abilities = [];
+
   for (let i = 1; i <= 9; i++) {
-    if (monster[`Ability ${i}`]) {
-      abilities.push(`<p>${formatAbility(monster[`Ability ${i}`])}</p>`);
+    const ability = monster[Ability ${i}];
+    if (ability === "__IFRAME__") {
+      abilities.push(
+        <iframe 
+          src="https://imaginarysamuel.github.io/3x5arcana/Just_Use_Bears_v1_p1.pdf#toolbar=0"
+          width="100%" 
+          height="600px" 
+          style="border: 1px solid var(--grey-dark); border-radius: 5px;">
+        </iframe>
+      );
+    } else if (ability) {
+      abilities.push(<p>${formatAbility(ability)}</p>);
     }
   }
-  const abilitiesHTML = abilities.length > 0 ? abilities.join("") : "<p>No special abilities.</p>";
 
-  return `
+  const abilitiesHTML = abilities.length > 0 ? abilities.join("") : "<p>No special abilities.</p>";
+  const isIframeOnly = monster["Type"] === "iframe-only";
+
+  return 
     <div class="card-header">
       <div class="card-favorite-title">
         <div class="favorite-icon" id="${monsterId}-favorite-icon">●</div>
@@ -58,57 +81,60 @@ function getCardInnerHTML(monster, monsterId) {
 
     <div class="card-body" id="${monsterId}-body">
       <p class="flavor-text">${monster["Flavor Text"] || "No description available."}</p>
-      
-      <div class="divider"></div>
-      
-      <table class="stats-table">
-        <tr>
-          <th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th>
-        </tr>
-        <tr>
-          <td>${monster["S"] || "-"}</td>
-          <td>${monster["D"] || "-"}</td>
-          <td>${monster["C"] || "-"}</td>
-          <td>${monster["I"] || "-"}</td>
-          <td>${monster["W"] || "-"}</td>
-          <td>${monster["Ch"] || "-"}</td>
-        </tr>
-      </table>
 
       <div class="divider"></div>
 
-      <table class="traits-table">
-        <tr>
-          <th>AC</th><th>HP</th><th>AL</th><th>MV</th>
-        </tr>
-        <tr>
-          <td>${monster["AC"] || "-"}</td>
-          <td>${monster["HP"] || "-"}</td>
-          <td>${monster["AL"] || "-"}</td>
-          <td>${monster["MV"] || "-"}</td>
-        </tr>
-      </table>
+      ${!isIframeOnly ? 
+        <table class="stats-table">
+          <tr>
+            <th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th>
+          </tr>
+          <tr>
+            <td>${monster["S"] || "-"}</td>
+            <td>${monster["D"] || "-"}</td>
+            <td>${monster["C"] || "-"}</td>
+            <td>${monster["I"] || "-"}</td>
+            <td>${monster["W"] || "-"}</td>
+            <td>${monster["Ch"] || "-"}</td>
+          </tr>
+        </table>
 
-      <div class="divider"></div>
+        <div class="divider"></div>
 
-      <div class="attacks">
-        <p><strong>Attack:</strong> ${monster["ATK"] || "None"}</p>
-      </div>
+        <table class="traits-table">
+          <tr>
+            <th>AC</th><th>HP</th><th>AL</th><th>MV</th>
+          </tr>
+          <tr>
+            <td>${monster["AC"] || "-"}</td>
+            <td>${monster["HP"] || "-"}</td>
+            <td>${monster["AL"] || "-"}</td>
+            <td>${monster["MV"] || "-"}</td>
+          </tr>
+        </table>
 
-      <div class="divider"></div>
+        <div class="divider"></div>
+
+        <div class="attacks">
+          <p><strong>Attack:</strong> ${monster["ATK"] || "None"}</p>
+        </div>
+
+        <div class="divider"></div>
+       : ""}
 
       <div class="abilities">
         ${abilitiesHTML}
       </div>
     </div>
-  `;
+  ;
 }
+
 
 // Utility function to bold the first phrase up to a colon or period
 function formatAbility(ability) {
   const match = ability.match(/^(.*?[.:])/);
   if (match) {
-    const bolded = `<strong>${match[1]}</strong>`;
+    const bolded = <strong>${match[1]}</strong>;
     return ability.replace(match[1], bolded);
   }
   return ability;
@@ -137,5 +163,5 @@ monsterRangeMax.addEventListener("input", function () {
 });
 
 function updateRangeDisplay() {
-  monsterRangeDisplay.textContent = `${currentMinLevel} - ${currentMaxLevel}`;
+  monsterRangeDisplay.textContent = ${currentMinLevel} - ${currentMaxLevel};
 }
