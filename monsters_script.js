@@ -54,14 +54,14 @@ function getCardInnerHTML(monster, monsterId) {
   for (let i = 1; i <= 9; i++) {
     const ability = monster[`Ability ${i}`];
     if (ability === "__IFRAME__") {
-      abilities.push(
+      abilities.push(`
         <iframe 
           src="https://imaginarysamuel.github.io/3x5arcana/Just_Use_Bears_v1_p1.pdf#toolbar=0"
           width="100%" 
           height="600px" 
           style="border: 1px solid var(--grey-dark); border-radius: 5px;">
         </iframe>
-      );
+      `);
     } else if (ability) {
       abilities.push(<p>${formatAbility(ability)}</p>);
     }
