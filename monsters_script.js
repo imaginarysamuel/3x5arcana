@@ -1,37 +1,27 @@
-// 📈 monsters_script.js
+// 📌 monsters_script.js
+// Fetch monster data
 const monsterSheetUrl = "https://opensheet.elk.sh/1E9c3F3JPCDnxqLE0qVtW0K7PBsgHSd7s5oU8p8qeAAY/All";
 let data = [];
 let currentMinLevel = 0;
 let currentMaxLevel = 30;
 
+// Cache DOM elements
 const monsterRangeDisplay = document.getElementById("range-display");
 const monsterRangeMin = document.getElementById("range-min");
 const monsterRangeMax = document.getElementById("range-max");
 
+// Fetch monster data from spreadsheet
 fetch(monsterSheetUrl)
   .then(response => response.json())
   .then(d => {
     data = d;
-    data.unshift({
-      "Name": "Just Use Bears",
-      "Level": "Any",
-      "Flavor Text": "Rawr.",
-      "Type": "custom-html",
-      "HTML Path": "just_use_bears.html",
-      "Alt HTML Path": "just_use_bears_card.html",
-      "AlwaysInclude": true
-    });
     updateRangeDisplay();
     displayList();
-    displayFavorites(true);
-    loadCustomHtmlContent();
   })
   .catch(error => console.error("Error loading monster data:", error));
 
 function getSortedData() {
   return data.sort((a, b) => {
-    if (a.Name === "Just Use Bears") return -1;
-    if (b.Name === "Just Use Bears") return 1;
     const aLevel = parseFloat(a["Level"]) || 0;
     const bLevel = parseFloat(b["Level"]) || 0;
     return aLevel - bLevel || a["Name"].localeCompare(b["Name"]);
@@ -42,38 +32,19 @@ function getFilteredData(sortedData) {
   return sortedData.filter(monster => {
     const nameMatches = monster["Name"].toLowerCase().includes(currentSearchQuery);
     const level = parseFloat(monster["Level"]) || 0;
-    const levelMatches = monster["Level"] === "Any" || (level >= currentMinLevel && level <= currentMaxLevel);
-    return nameMatches && (levelMatches || monster["AlwaysInclude"]);
+    const levelMatches = level >= currentMinLevel && level <= currentMaxLevel;
+    return nameMatches && levelMatches;
   });
 }
 
-function getCardInnerHTML(monster, monsterId, useAlt = false) {
-  const isCustomHtml = monster["Type"] === "custom-html" && monster["HTML Path"];
-
-  if (isCustomHtml) {
-    const htmlPath = useAlt && monster["Alt HTML Path"] ? monster["Alt HTML Path"] : monster["HTML Path"];
-    return `
-      <div class="card-header">
-        <div class="card-favorite-title">
-          <div class="favorite-icon" id="${monsterId}-favorite-icon">●</div>
-          <div class="card-title">${monster["Name"]}</div>
-        </div>
-        <div class="monster-level">${monster["Level"] || "?"}</div>
-      </div>
-      <div class="card-body" id="${monsterId}-body">
-        <div class="custom-html-loader" data-html-path="${htmlPath}">Loading...</div>
-      </div>
-    `;
-  }
-
+function getCardInnerHTML(monster, monsterId) {
+  // Gather abilities from columns P-X (Ability 1 - Ability 9)
   const abilities = [];
   for (let i = 1; i <= 9; i++) {
-    const ability = monster[`Ability ${i}`];
-    if (ability) {
-      abilities.push(`<p>${formatAbility(ability)}</p>`);
+    if (monster[`Ability ${i}`]) {
+      abilities.push(`<p>${formatAbility(monster[`Ability ${i}`])}</p>`);
     }
   }
-
   const abilitiesHTML = abilities.length > 0 ? abilities.join("") : "<p>No special abilities.</p>";
 
   return `
@@ -84,9 +55,12 @@ function getCardInnerHTML(monster, monsterId, useAlt = false) {
       </div>
       <div class="monster-level">${monster["Level"] || "?"}</div>
     </div>
+
     <div class="card-body" id="${monsterId}-body">
       <p class="flavor-text">${monster["Flavor Text"] || "No description available."}</p>
+      
       <div class="divider"></div>
+      
       <table class="stats-table">
         <tr>
           <th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th>
@@ -100,7 +74,9 @@ function getCardInnerHTML(monster, monsterId, useAlt = false) {
           <td>${monster["Ch"] || "-"}</td>
         </tr>
       </table>
+
       <div class="divider"></div>
+
       <table class="traits-table">
         <tr>
           <th>AC</th><th>HP</th><th>AL</th><th>MV</th>
@@ -112,11 +88,15 @@ function getCardInnerHTML(monster, monsterId, useAlt = false) {
           <td>${monster["MV"] || "-"}</td>
         </tr>
       </table>
+
       <div class="divider"></div>
+
       <div class="attacks">
         <p><strong>Attack:</strong> ${monster["ATK"] || "None"}</p>
       </div>
+
       <div class="divider"></div>
+
       <div class="abilities">
         ${abilitiesHTML}
       </div>
@@ -124,6 +104,7 @@ function getCardInnerHTML(monster, monsterId, useAlt = false) {
   `;
 }
 
+// Utility function to bold the first phrase up to a colon or period
 function formatAbility(ability) {
   const match = ability.match(/^(.*?[.:])/);
   if (match) {
@@ -133,6 +114,7 @@ function formatAbility(ability) {
   return ability;
 }
 
+// Prevent min slider from going above max
 monsterRangeMin.addEventListener("input", function () {
   currentMinLevel = parseInt(this.value);
   if (currentMinLevel > currentMaxLevel) {
@@ -141,10 +123,9 @@ monsterRangeMin.addEventListener("input", function () {
   }
   updateRangeDisplay();
   displayList();
-  displayFavorites(true);
-  loadCustomHtmlContent();
 });
 
+// Prevent max slider from going below min
 monsterRangeMax.addEventListener("input", function () {
   currentMaxLevel = parseInt(this.value);
   if (currentMaxLevel < currentMinLevel) {
@@ -153,25 +134,8 @@ monsterRangeMax.addEventListener("input", function () {
   }
   updateRangeDisplay();
   displayList();
-  displayFavorites(true);
-  loadCustomHtmlContent();
 });
 
 function updateRangeDisplay() {
   monsterRangeDisplay.textContent = `${currentMinLevel} - ${currentMaxLevel}`;
-}
-
-function loadCustomHtmlContent() {
-  document.querySelectorAll(".custom-html-loader").forEach(container => {
-    const path = container.getAttribute("data-html-path");
-    fetch(path)
-      .then(res => res.text())
-      .then(html => {
-        container.innerHTML = html;
-      })
-      .catch(err => {
-        container.innerHTML = `<p style="color: red;">Error loading content.</p>`;
-        console.error(`Failed to load ${path}`, err);
-      });
-  });
 }
