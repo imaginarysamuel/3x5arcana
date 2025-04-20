@@ -77,6 +77,7 @@ function toggleFavorite(id) {
     favoriteIcon.classList.add("favorited");
   }
   displayFavorites();
+  loadCustomHtmlContent();
 }
 
 // Add search functionality with debounce
