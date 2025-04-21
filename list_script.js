@@ -9,10 +9,10 @@ let currentSearchQuery = "";
 
 // Display card lists
 function displayList() {
-  cardListContainer.innerHTML = ""; 
+  cardListContainer.innerHTML = "";
   let sortedData = getSortedData();
   let filteredData = getFilteredData(sortedData);
-  addCardsToList(filteredData, cardListContainer, "");
+  addCardsToList(filteredData, cardListContainer, "", false); // 🧼 Shared version: default view, not alt
 }
 
 function displayFavorites(useAlt = false) {
@@ -22,26 +22,26 @@ function displayFavorites(useAlt = false) {
   addCardsToList(favoriteData, favoritesListContainer, "-fav", useAlt);
 }
 
-function addCardsToList(list, container, suffix) {
+function addCardsToList(list, container, suffix, useAlt = false) {
   list.forEach((item, index) => {
-    const cardId = `card-${item["Name"]+suffix}`;
+    const cardId = `card-${item["Name"] + suffix}`;
     const card = document.createElement("div");
     card.classList.add("card", "collapsed");
     card.setAttribute("data-id", cardId);
     card.addEventListener("click", () => toggleCard(cardId));
 
-    card.innerHTML = getCardInnerHTML(item, cardId);
+    card.innerHTML = getCardInnerHTML(item, cardId, useAlt);
 
     const favoriteIcon = card.querySelector(".favorite-icon");
     if (favoritesIdList.includes(item["Name"])) {
       favoriteIcon.classList.add("favorited");
     }
-  
+
     favoriteIcon.addEventListener("click", (e) => {
       e.stopPropagation();
       toggleFavorite(item["Name"]);
     });
-  
+
     container.appendChild(card);
   });
 }
@@ -50,11 +50,11 @@ function addCardsToList(list, container, suffix) {
 function toggleCard(id) {
   const card = document.querySelector(`[data-id="${id}"]`);
   const body = document.getElementById(`${id}-body`);
-  
+
   if (!card || !body) return;
-  
+
   const isExpanded = card.classList.contains("expanded");
-  
+
   if (isExpanded) {
     body.style.maxHeight = null;
     card.classList.remove("expanded");
@@ -76,8 +76,7 @@ function toggleFavorite(id) {
     favoritesIdList.push(id);
     favoriteIcon.classList.add("favorited");
   }
-  displayFavorites();
-  loadCustomHtmlContent();
+  displayFavorites(true); // 🧼 Render alternate view in favorites when applicable
 }
 
 // Add search functionality with debounce
@@ -88,8 +87,8 @@ function debounce(func, delay) {
     timeout = setTimeout(() => func.apply(this, args), delay);
   };
 }
-  
+
 searchBar.addEventListener("input", debounce(function () {
-    currentSearchQuery = this.value.toLowerCase();
-    displayList();
-  }, 300));
+  currentSearchQuery = this.value.toLowerCase();
+  displayList();
+}, 300));
