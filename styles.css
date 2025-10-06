@@ -184,6 +184,9 @@ body {
   text-transform: uppercase;
   letter-spacing: 2px;
 }
+p.header-area {
+  color: var(--gret-lightest);
+}
 
 /* Search Bar */
 #search-bar {
