@@ -185,7 +185,7 @@ body {
   letter-spacing: 2px;
 }
 p.header-area {
-  color: var(--gret-lightest);
+  color: var(--grey-lightest);
 }
 
 /* Search Bar */
