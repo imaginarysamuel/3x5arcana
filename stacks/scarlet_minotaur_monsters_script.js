@@ -44,18 +44,7 @@ function displayList() {
 }
 
 function getSortedData() {
-  return data.sort((a, b) => {
-    const aLevel = parseFloat(a["Level"]);
-    const bLevel = parseFloat(b["Level"]);
-    const validA = isFinite(aLevel);
-    const validB = isFinite(bLevel);
-
-    if (!validA && validB) return 1;
-    if (validA && !validB) return -1;
-    if (!validA && !validB) return a["Name"].localeCompare(b["Name"]);
-
-    return aLevel - bLevel || a["Name"].localeCompare(b["Name"]);
-  });
+  return data.sort((a, b) => a["Name"].localeCompare(b["Name"]));
 }
 
 function getFilteredData(sortedData) {
