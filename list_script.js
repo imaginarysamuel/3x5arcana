@@ -16,6 +16,7 @@ function displayList() {
 }
 
 function displayFavorites(useAlt = false) {
+  if (!favoritesListContainer) return; // ✅ minimal guard
   favoritesListContainer.innerHTML = "";
   let sortedData = getSortedData();
   let favoriteData = sortedData.filter(item => favoritesIdList.includes(item["Name"]));
@@ -33,14 +34,15 @@ function addCardsToList(list, container, suffix, useAlt = false) {
     card.innerHTML = getCardInnerHTML(item, cardId, useAlt);
 
     const favoriteIcon = card.querySelector(".favorite-icon");
-    if (favoritesIdList.includes(item["Name"])) {
-      favoriteIcon.classList.add("favorited");
+    if (favoriteIcon) { // ✅ minimal guard
+      if (favoritesIdList.includes(item["Name"])) {
+        favoriteIcon.classList.add("favorited");
+      }
+      favoriteIcon.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleFavorite(item["Name"]);
+      });
     }
-
-    favoriteIcon.addEventListener("click", (e) => {
-      e.stopPropagation();
-      toggleFavorite(item["Name"]);
-    });
 
     container.appendChild(card);
   });
@@ -67,14 +69,14 @@ function toggleCard(id) {
 // Toggle favorite card
 function toggleFavorite(id) {
   const card = document.querySelector(`[data-id="card-${id}"]`);
-  const favoriteIcon = card.querySelector(".favorite-icon");
+  const favoriteIcon = card && card.querySelector(".favorite-icon"); // ✅ minimal guard
   const index = favoritesIdList.indexOf(id);
   if (index > -1) {
     favoritesIdList.splice(index, 1);
-    favoriteIcon.classList.remove("favorited");
+    if (favoriteIcon) favoriteIcon.classList.remove("favorited");
   } else {
     favoritesIdList.push(id);
-    favoriteIcon.classList.add("favorited");
+    if (favoriteIcon) favoriteIcon.classList.add("favorited");
   }
   displayFavorites(true); // 🧼 Render alternate view in favorites when applicable
 }
@@ -88,7 +90,11 @@ function debounce(func, delay) {
   };
 }
 
-searchBar.addEventListener("input", debounce(function () {
-  currentSearchQuery = this.value.toLowerCase();
-  displayList();
-}, 300));
+if (searchBar) {
+  searchBar.addEventListener("input", debounce(function () {
+    currentSearchQuery = this.value.toLowerCase();
+    displayList();
+  }, 300));
+} else {
+  currentSearchQuery = ""; // ensure variable still exists
+}
