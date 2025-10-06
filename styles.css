@@ -1,20 +1,18 @@
 /* styles.css */
+/* Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&family=Caprasimo&display=swap');
 
-/* Import Roboto Font */
-/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap'); */
-/* Import National Park (variable) Font */
-/* @importurl(https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&display=swap'); *)
 
 
 /* Color Variables */
 :root {
   --grey-lightest: #f7f7f7;
   --grey-medium: #fff9f5;
-  --grey-lighter: #fffdfc;
+  --grey-lighter: #fffefd;
   --grey-dark: #7d7d7d7d;
   --grey-darkest: #262626;
   --blue-light: #add8e6;
-  --blue-dark: #4EA6C2;
+  --blue-dark: #3fb5cc;
   --red: salmon;
 }
 
@@ -46,9 +44,11 @@ body {
   width: 100%;
   text-align: center;
   padding: 30px;
-  background: var(--grey-darkest);
+  background: var(--red);
   margin-bottom: 30px;
 }
+
+
 
 /* Burger Menu */
 /* Burger Icon */
@@ -86,7 +86,7 @@ body {
 
 .menu-card {
   background-color: var(--grey-lighter);
-  border: 1px solid var(--grey-dark);
+  border: .5px solid var(--blue-light);
   border-radius: 5px;
   padding: 10px;
   width: 90%;
@@ -132,7 +132,7 @@ body {
   padding: 8px 30px;
   max-width: 3in;
   background-color: var(--grey-lighter);
-  border: 1px solid var(--grey-dark);
+  border: .5px solid var(--blue-light);
   border-radius: 5px;
   text-transform: uppercase;
   text-align: center; !important
@@ -206,7 +206,7 @@ body {
 #search-bar:focus, #search-bar:hover {
   outline: none;
   /* Remove the default orange focus ring */
-  border-color: var(--blue-dark);
+  border-color: var(--grey-dark);
   /* Custom border color */
   box-shadow: 0 0 8px var(--blue-light);
   /* Optional glowing effect */
@@ -760,3 +760,4 @@ body {
 #favorites-list .card-header {
   background-color: var(--grey-lighter);
 }
+
