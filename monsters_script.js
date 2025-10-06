@@ -1,6 +1,6 @@
 // 📌 monsters_script.js
 // 🧸 Add custom Just Use Bears monster to the dataset manually
-const monsterSheetUrl = "https://opensheet.elk.sh/1E9c3F3JPCDnxqLE0qVtW0K7PBsgHSd7s5oU8p8qeAAY/All";
+const monsterSheetUrl = "https://opensheet.elk.sh/1IkmsirtMYWIrz0lOfILEaBwQkwJbBCh-dywA0EpouOE/Monsters";
 let data = [];
 let currentMinLevel = 0;
 let currentMaxLevel = 30;
