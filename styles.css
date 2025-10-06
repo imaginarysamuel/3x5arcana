@@ -43,7 +43,7 @@ body {
 .header {
   width: 100%;
   text-align: center;
-  padding: 15px;
+  padding: 30px;
   background: var(--red);
   margin-bottom: 15px;
 }
