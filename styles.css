@@ -1,7 +1,10 @@
 /* styles.css */
 
-/* Import Roboto Font */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+/* Import National Park Font */
+<!-- National Park (variable) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&display=swap" rel="stylesheet">
 
 /* Color Variables */
 :root {
@@ -17,7 +20,7 @@
 
 /* Global Styles */
 * {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'National Park', sans-serif;
   color: var(--grey-darkest);
   box-sizing: border-box;
 }
