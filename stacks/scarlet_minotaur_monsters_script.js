@@ -5,7 +5,7 @@ let data = [];
 let currentMinLevel = 0;
 let currentMaxLevel = 30;
 
-// Cache DOM elements
+// Cache DOM elements (may be absent on stack pages)
 const monsterRangeDisplay = document.getElementById("range-display");
 const monsterRangeMin = document.getElementById("range-min");
 const monsterRangeMax = document.getElementById("range-max");
@@ -70,7 +70,6 @@ function getFilteredData(sortedData) {
 function getCardInnerHTML(monster, monsterId, useAlt = false) {
   // 🧸 Load custom HTML card
   if (monster["Type"] === "custom-html") {
-    // 🧸 Mark placeholder for content load
     setTimeout(() => {
       const path = useAlt ? monster["Alt HTML Path"] : monster["HTML Path"];
       fetch(path)
@@ -94,7 +93,7 @@ function getCardInnerHTML(monster, monsterId, useAlt = false) {
     `;
   }
 
-  // ✨ Default card generation continues here...
+  // ✨ Default card generation
   const abilities = [];
   for (let i = 1; i <= 9; i++) {
     if (monster[`Ability ${i}`]) {
@@ -154,26 +153,31 @@ function formatAbility(ability) {
   return ability;
 }
 
-monsterRangeMin.addEventListener("input", function () {
-  currentMinLevel = parseInt(this.value);
-  if (currentMinLevel > currentMaxLevel) {
-    currentMaxLevel = currentMinLevel;
-    monsterRangeMax.value = currentMaxLevel;
-  }
-  updateRangeDisplay();
-  displayList();
-});
+// ✅ Only add listeners if sliders exist on this page
+if (monsterRangeMin && monsterRangeMax) {
+  monsterRangeMin.addEventListener("input", function () {
+    currentMinLevel = parseInt(this.value);
+    if (currentMinLevel > currentMaxLevel) {
+      currentMaxLevel = currentMinLevel;
+      monsterRangeMax.value = currentMaxLevel;
+    }
+    updateRangeDisplay();
+    displayList();
+  });
 
-monsterRangeMax.addEventListener("input", function () {
-  currentMaxLevel = parseInt(this.value);
-  if (currentMaxLevel < currentMinLevel) {
-    currentMinLevel = currentMaxLevel;
-    monsterRangeMin.value = currentMinLevel;
-  }
-  updateRangeDisplay();
-  displayList();
-});
+  monsterRangeMax.addEventListener("input", function () {
+    currentMaxLevel = parseInt(this.value);
+    if (currentMaxLevel < currentMinLevel) {
+      currentMinLevel = currentMaxLevel;
+      monsterRangeMin.value = currentMinLevel;
+    }
+    updateRangeDisplay();
+    displayList();
+  });
+}
 
 function updateRangeDisplay() {
-  monsterRangeDisplay.textContent = `${currentMinLevel} - ${currentMaxLevel}`;
+  if (monsterRangeDisplay) {
+    monsterRangeDisplay.textContent = `${currentMinLevel} - ${currentMaxLevel}`;
+  }
 }
