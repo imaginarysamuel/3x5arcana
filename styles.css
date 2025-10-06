@@ -755,3 +755,8 @@ body {
   border-bottom: 2px solid var(--red);
   padding-bottom: 30px;
 }
+#favorites-list .card,
+#favorites-list .card.expanded,
+#favorites-list .card-header {
+  background-color: var(--grey-lighter);
+}
