@@ -1,18 +1,18 @@
 /* styles.css */
 
-/* Import National Park Font */
-<!-- National Park (variable) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&display=swap" rel="stylesheet">
+/* Import Roboto Font */
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap'); */
+/* Import National Park (variable) Font */
+/* @importurl(https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&display=swap'); *)
+
 
 /* Color Variables */
 :root {
-  --grey-lightest: #f2f2f2;
-  --grey-lighter: #fff8f4;
-  --grey-medium: #ebebeb;
+  --grey-lightest: #f7f7f7;
+  --grey-medium: #f0f0f0;
+  --grey-lighter: #fffcfb;
   --grey-dark: #7d7d7d7d;
-  --grey-darkest: #282828;
+  --grey-darkest: #262626;
   --blue-light: #add8e6;
   --blue-dark: #4EA6C2;
   --red: salmon;
@@ -436,7 +436,7 @@ body {
 
 .card-clickable {
   background-color: var(--grey-medium);
-  border: 1px solid var(--grey-darkest);
+  border: .25px solid var(--blue-light);
   border-radius: 10px;
   padding: 10px;
   font-size: 1.1em;
@@ -458,7 +458,7 @@ body {
 /* Card Styles */
 .card {
   background-color: var(--grey-medium);
-  border: 1px solid var(--grey-dark);
+  border: .25px solid var(--blue-light);
   border-radius: 5px;
   padding: 10px;
   margin: -7px auto 0;
@@ -713,7 +713,7 @@ body {
   padding: 8px 30px;
   width: 3in;
   background-color: var(--grey-lighter);
-  border: 1px solid var(--grey-dark);
+  border: .25px solid var(--blue-light);
   border-radius: 5px;
   text-transform: uppercase;
   text-align: center; !important
