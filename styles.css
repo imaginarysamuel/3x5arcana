@@ -1,10 +1,13 @@
-/* styles.css */
+/* ==========================================================
+   3x5 Arcana – styles.css (cleaned, complete)
+   ========================================================== */
+
 /* Import Fonts */
 @import url('https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&family=Caprasimo&display=swap');
 
-
-
-/* Color Variables */
+/* ----------------------------------------------------------
+   Color Variables
+---------------------------------------------------------- */
 :root {
   --grey-lightest: #f7f7f7;
   --grey-medium: #fff9f5;
@@ -16,7 +19,9 @@
   --red: salmon;
 }
 
-/* Global Styles */
+/* ----------------------------------------------------------
+   Global Styles
+---------------------------------------------------------- */
 * {
   font-family: 'National Park', sans-serif;
   color: var(--grey-darkest);
@@ -32,26 +37,38 @@ body {
     linear-gradient(to right, rgba(173, 216, 230, 0.5) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(173, 216, 230, 0.5) 1px, transparent 1px);
   background-size: 20px 20px;
-  /* Adjust for grid spacing */
 }
 
 .spacer {
   margin: 30px;
 }
 
-/* Header Styles */
+/* ----------------------------------------------------------
+   Header
+---------------------------------------------------------- */
 .header {
   width: 100%;
   text-align: center;
   padding: 10px;
   background: var(--red);
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
+.main-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: var(--grey-lightest);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
 
+p.header-area {
+  color: var(--grey-lightest);
+}
 
-/* Burger Menu */
-/* Burger Icon */
+/* ----------------------------------------------------------
+   Burger Menu
+---------------------------------------------------------- */
 .burger-icon {
   font-size: 2rem;
   cursor: pointer;
@@ -65,7 +82,6 @@ body {
   transform: translateY(-4px);
 }
 
-/* Menu Overlay */
 .menu-overlay {
   position: fixed;
   top: 0;
@@ -73,7 +89,6 @@ body {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  /* Semi-transparent background */
   display: none;
   justify-content: center;
   align-items: center;
@@ -86,7 +101,7 @@ body {
 
 .menu-card {
   background-color: var(--grey-lighter);
-  border: .5px solid var(--blue-light);
+  border: 0.5px solid var(--blue-light);
   border-radius: 5px;
   padding: 10px;
   width: 90%;
@@ -132,10 +147,10 @@ body {
   padding: 8px 30px;
   max-width: 3in;
   background-color: var(--grey-lighter);
-  border: .5px solid var(--blue-light);
+  border: 0.5px solid var(--blue-light);
   border-radius: 5px;
   text-transform: uppercase;
-  text-align: center; !important;
+  text-align: center !important;
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -144,51 +159,31 @@ body {
   box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* Drop-Down Animation opening the menu */
 @keyframes dropDown {
   0% {
     transform: translateY(-100%);
     opacity: 0;
   }
-
   100% {
     transform: translateY(0);
     opacity: 1;
   }
 }
 
-/* Slide-Up Animation (for closing) */
 @keyframes slideUp {
   0% {
     transform: translateY(0);
     opacity: 1;
   }
-
   100% {
     transform: translateY(-100%);
     opacity: 0;
   }
 }
 
-
-/* Ensure all text inside the spell filter container is light grey */
-#spell-filter-container,
-#spell-filter-container * {
-  color: var(--grey-lightest) !important;
-}
-
-.main-title {
-  font-size: 1.5em;
-  font-weight: bold;
-  color: var(--grey-lightest);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-p.header-area {
-  color: var(--grey-lightest);
-}
-
-/* Search Bar */
+/* ----------------------------------------------------------
+   Search Bars
+---------------------------------------------------------- */
 #search-bar {
   padding: 8px;
   border: none;
@@ -206,162 +201,90 @@ p.header-area {
   color: var(--text-muted);
 }
 
-#search-bar:focus, #search-bar:hover {
+#search-bar:focus,
+#search-bar:hover {
   outline: none;
-  /* Remove the default orange focus ring */
   border-color: var(--grey-dark);
-  /* Custom border color */
   box-shadow: 0 0 8px var(--blue-light);
-  /* Optional glowing effect */
 }
 
 #spell-search-bar {
   padding: 8px;
   border: none;
-  ;
   border-radius: 5px;
   width: 100%;
   max-width: 5in;
   font-size: 1em;
   text-align: center;
   background: var(--grey-lighter);
-  margin-bottom: 10px;
   transition: all 0.3s ease;
+  margin-bottom: 10px;
 }
 
-/* Spell Filter Container */
-#spell-filter-container {
-  margin: 10px auto;
-  text-align: center;
-  max-width: 5in;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-/* Tier Label */
-.slider-label {
-  color: var(--grey-lightest);
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
-}
-
-/* Range Display */
-#spell-range-display {
-  color: var(--grey-lightest);
-  font-weight: bold;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  display: block;
-}
-
-#range-display {
+/* ----------------------------------------------------------
+   Filters & Sliders (shared across spells & monsters)
+---------------------------------------------------------- */
+#spell-filter-container,
+#spell-filter-container * {
   color: var(--grey-lightest) !important;
 }
 
-/* Slider Track */
-.slider-inputs input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  max-width: 5in;
-  /* Matches spell search bar */
-  min-width: 2.5in;
-  /* Ensures usability */
-  height: 10px;
-  background: var(--grey-medium);
-  border: 2px solid var(--grey-darkest);
-  border-radius: 5px;
-  outline: none;
-  margin: 10px;
-  padding: 0;
-  display: block;
-}
-
-/* Slider Thumbs */
-
-.slider-inputs input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  background: var(--grey-darkest);
-  border: 2px solid var(--grey-lightest);
-  border-radius: 5px;
-  cursor: pointer;
-  position: relative;
-  z-index: 2;
-}
-
-/* Slider Container */
-#slider-container {
+#spell-filter-container,
+#slider-container,
+#monster-filter-container,
+.spell-range-container {
   text-align: center;
-  max-width: 5in;
+}
+
+#slider-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 5in;
 }
 
-/* Slider Label */
-.slider-label {
-  color: var(--grey-lightest);
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
-}
-
-/* Range Display */
+.slider-label,
 #slider-display {
   color: var(--grey-lightest);
   font-weight: bold;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
   display: block;
 }
 
-/* Slider Input Container (STACKED) */
 .slider-inputs {
   display: flex;
   flex-direction: column;
-  /* Keeps sliders stacked */
   align-items: center;
   width: 100%;
   gap: 8px;
-  /* Space between sliders */
   margin: 5px auto;
 }
 
-/* Slider Track */
 .slider-inputs input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
   max-width: 5in;
-  /* Matches search bar */
   min-width: 2.5in;
-  /* Ensures usability */
   height: 10px;
   background: var(--grey-medium);
   border: 2px solid var(--grey-darkest);
   border-radius: 5px;
   outline: none;
   padding: 0;
-  display: block;
+  cursor: pointer;
 }
 
-/* Slider Thumbs */
 .slider-inputs input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  appearance: none;
   width: 20px;
   height: 20px;
   background: var(--grey-darkest);
   border: 2px solid var(--grey-lightest);
   border-radius: 5px;
-  cursor: pointer;
   position: relative;
   z-index: 2;
+  cursor: pointer;
 }
 
 .slider-inputs input[type="range"]::-moz-range-thumb {
@@ -370,12 +293,40 @@ p.header-area {
   background: var(--grey-darkest);
   border: 2px solid var(--grey-lightest);
   border-radius: 50%;
-  cursor: pointer;
   position: relative;
   z-index: 2;
+  cursor: pointer;
 }
 
-/* Checkbox Filter Group */
+/* One-line label + numeric display */
+#spell-filter-container .slider-label,
+#spell-filter-container #spell-range-display,
+#slider-container .slider-label,
+#slider-container #range-display,
+#monster-filter-container .slider-label,
+#monster-filter-container #range-display,
+.spell-range-container .slider-label,
+.spell-range-container #range-display {
+  display: inline-block;
+  margin: 0 6px;
+  vertical-align: middle;
+}
+
+#range-display,
+#spell-range-display {
+  color: var(--grey-lightest);
+}
+
+/* Normalize range number weights (no bold) */
+#spell-filter-container #spell-range-display,
+#monster-filter-container #range-display,
+#slider-container #range-display {
+  font-weight: 400 !important;
+}
+
+/* ----------------------------------------------------------
+   Checkboxes
+---------------------------------------------------------- */
 .filter-group {
   display: flex;
   align-items: center;
@@ -386,7 +337,6 @@ p.header-area {
   margin: 10px auto;
 }
 
-/* Checkbox Labels */
 .filter-group label {
   display: flex;
   align-items: center;
@@ -397,7 +347,6 @@ p.header-area {
   cursor: pointer;
 }
 
-/* Checkbox Base */
 .filter-group input[type="checkbox"] {
   appearance: none;
   width: 20px;
@@ -410,14 +359,12 @@ p.header-area {
   position: relative;
 }
 
-/* Checkbox Checked State */
 .filter-group input[type="checkbox"]:checked {
   background-color: var(--grey-lightest);
 }
 
 .filter-group input[type="checkbox"]:checked::after {
   content: "✕";
-  /* Custom 'X' checkmark */
   color: var(--grey-darkest);
   font-size: 16px;
   font-weight: bold;
@@ -426,8 +373,9 @@ p.header-area {
   line-height: 20px;
 }
 
-
-/* Navigation */
+/* ----------------------------------------------------------
+   Navigation Links
+---------------------------------------------------------- */
 .navigation-container {
   display: flex;
   flex-direction: column;
@@ -439,7 +387,7 @@ p.header-area {
 
 .card-clickable {
   background-color: var(--grey-medium);
-  border: .25px solid var(--blue-light);
+  border: 0.25px solid var(--blue-light);
   border-radius: 10px;
   padding: 10px;
   font-size: 1.1em;
@@ -458,14 +406,15 @@ p.header-area {
   box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Card Styles */
+/* ----------------------------------------------------------
+   Cards
+---------------------------------------------------------- */
 .card {
   background-color: var(--grey-medium);
-  border: .25px solid var(--blue-light);
+  border: 0.25px solid var(--blue-light);
   border-radius: 5px;
   padding: 10px;
   margin: -7px auto 0;
-  /* Overlaps the previous card */
   width: 90%;
   max-width: 5in;
   transition: transform 0.1s, box-shadow 0.1s;
@@ -478,14 +427,12 @@ p.header-area {
   box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Expanded Card Effect */
 .card.expanded {
   background: var(--grey-lighter);
-  /* Lighter background for expanded state */
   transition: background-color 0.1s ease-out, transform 0.1s ease-out;
   box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.2);
   padding: 10px;
-  transform: translateX(2%) translatey(-2%);
+  transform: translateX(2%) translateY(-2%);
   margin-bottom: 15px;
 }
 
@@ -503,6 +450,11 @@ p.header-area {
   padding-bottom: 1px;
 }
 
+.card-favorite-title {
+  display: flex;
+  align-items: center;
+}
+
 .favorite-icon {
   font-size: 1.5em;
   color: var(--grey-dark);
@@ -510,19 +462,11 @@ p.header-area {
 }
 
 .favorite-icon:hover {
-  font-size: 1.5em;
   color: var(--blue-light);
 }
 
 .favorite-icon.favorited {
-  font-size: 1.5em;
   color: var(--blue-dark);
-  margin-right: 5px;
-}
-
-.card-favorite-title {
-  display: flex;
-  align-items: center;
 }
 
 .card-title {
@@ -532,14 +476,15 @@ p.header-area {
 
 .flavor-text {
   margin-top: 0;
-  /* Remove extra top spacing */
   margin-bottom: 5px;
   font-size: 1em;
   font-style: italic;
-  color: var(--grey-darkest)
+  color: var(--grey-darkest);
 }
 
-/* Stats Table Layout */
+/* ----------------------------------------------------------
+   Card Body - Tables & Content
+---------------------------------------------------------- */
 .stats-table,
 .traits-table {
   width: 100%;
@@ -562,7 +507,6 @@ p.header-area {
   font-weight: bold;
 }
 
-/* Attacks & Abilities */
 .attacks,
 .abilities,
 .spell-description {
@@ -579,17 +523,15 @@ p.header-area {
   line-height: 1.2;
 }
 
-.abilities {
-  margin-bottom: 30px;
-  /* Add space at the bottom */
-}
-
 .attacks p strong,
 .abilities p strong {
   font-weight: bold;
 }
 
-/* Spell Stats */
+.abilities {
+  margin-bottom: 30px;
+}
+
 .spell-stats {
   display: flex;
   flex-direction: column;
@@ -612,15 +554,12 @@ p.header-area {
   padding: 2px 0;
   line-height: 1.2;
   margin-bottom: 30px;
-  /* Matches the abilities bottom spacing */
 }
 
 .card-bottom-padding {
   margin-bottom: 30px;
-  /* Matches the abilities bottom spacing */
 }
 
-/* Dividers */
 .divider {
   width: 100%;
   height: 1px;
@@ -633,30 +572,28 @@ p.header-area {
   background-color: var(--blue-light);
 }
 
-/* Collapsing & Expanding Card Body */
+/* Card Collapse/Expand */
 .card-body {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease-out, padding 0.3s ease-out;
   padding: 0 10px;
-  /* Maintain horizontal padding */
   margin-bottom: -20px;
 }
 
 .card.expanded .card-body {
   max-height: 1000px;
-  /* Ensure full expansion */
   padding-bottom: 10px;
-  /* Add bottom padding */
 }
 
-/* Prevents extra space from appearing when collapsed */
 .card.collapsed .card-body {
   max-height: 0;
   padding: 0;
 }
 
-/* Duplicate Card Styling */
+/* ----------------------------------------------------------
+   Duplicate Card Styling
+---------------------------------------------------------- */
 .duplicate-card {
   width: 100%;
   max-width: 5in;
@@ -670,6 +607,11 @@ p.header-area {
   margin-bottom: 5px;
   border: 2px solid var(--blue-dark);
   transform: translateX(10px);
+  animation: expandCard 0.3s ease-out forwards;
+}
+
+.duplicate-card.removing {
+  animation: contractCard 0.3s ease-out forwards;
 }
 
 @keyframes expandCard {
@@ -677,7 +619,6 @@ p.header-area {
     max-height: 0;
     opacity: 0;
   }
-
   100% {
     max-height: 1000px;
     opacity: 1;
@@ -689,24 +630,16 @@ p.header-area {
     max-height: 1000px;
     opacity: 1;
   }
-
   100% {
     max-height: 0;
     opacity: 0;
   }
 }
 
-.duplicate-card {
-  animation: expandCard 0.3s ease-out forwards;
-}
-
-.duplicate-card.removing {
-  animation: contractCard 0.3s ease-out forwards;
-}
-
-/* Paragraph Styling for Cards */
-
-.card-button { /*matches .menu-content a*/
+/* ----------------------------------------------------------
+   Buttons & Images
+---------------------------------------------------------- */
+.card-button {
   display: block;
   font-size: 1.1em;
   font-weight: bold;
@@ -716,51 +649,48 @@ p.header-area {
   padding: 8px 30px;
   width: 3in;
   background-color: var(--grey-lighter);
-  border: .25px solid var(--blue-light);
+  border: 0.25px solid var(--blue-light);
   border-radius: 5px;
   text-transform: uppercase;
-  text-align: center; !important
+  text-align: center !important;
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-button:hover {
   transform: translateY(-2px);
-  /* Gives a lifted effect */
   box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.3);
-  /* Adds some depth */
 }
 
 .card-button:active {
   transform: translateY(1px);
-  /* Slight press-in effect */
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .share-icon {
   width: 275px;
-  /* Makes the image 200px wide */
   height: auto;
-  /* Keeps aspect ratio */
   display: block;
-  /* Ensures it behaves like a block element */
   margin: 20px auto;
-  /* Centers the image horizontally */
   margin-top: 30px;
 }
- .character-sheet-img {
-    width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-  }
 
+.character-sheet-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* ----------------------------------------------------------
+   Favorites Section
+---------------------------------------------------------- */
 #favorites-list {
   border-bottom: 2px solid var(--red);
   padding-bottom: 30px;
 }
+
 #favorites-list .card,
 #favorites-list .card.expanded,
 #favorites-list .card-header {
   background-color: var(--grey-lighter);
 }
-
