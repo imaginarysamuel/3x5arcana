@@ -23,6 +23,23 @@ function saveFavorites() {
   localStorage.setItem('favoritesIdList', JSON.stringify(favoritesIdList));
 }
 
+// Show loading state
+function showLoading(message = "Loading...") {
+  if (cardListContainer) {
+    cardListContainer.innerHTML = '<div class="loading-message">' + message + '</div>';
+  }
+  if (favoritesListContainer) {
+    favoritesListContainer.innerHTML = '';
+  }
+}
+
+// Show error state
+function showError(message = "Failed to load data. Please refresh.") {
+  if (cardListContainer) {
+    cardListContainer.innerHTML = '<div class="error-message">' + message + '</div>';
+  }
+}
+
 // Display card lists
 function displayList() {
   cardListContainer.innerHTML = "";
