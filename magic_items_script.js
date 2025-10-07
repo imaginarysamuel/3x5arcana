@@ -3,14 +3,21 @@
 const magicItemSheetUrl = "https://opensheet.elk.sh/1WM6VoP1l_aXr2Z8G45wlTnbwVY87y3qZ_7PgD7HMBj8/Magic_Items";
 let data = [];
 
+showLoading("Loading...");
+
 // Fetch magic item data from spreadsheet
 fetch(magicItemSheetUrl)
   .then(response => response.json())
   .then(d => {
     data = d;
+    loadFavorites(); // ← Add this
     displayList();
+    displayFavorites(true); // ← Add this
   })
-  .catch(error => console.error("Error loading magic item data:", error));
+  .catch(error => {
+    console.error("Error loading magic item data:", error);
+    showError("Failed to load magic items. Please refresh."); // ← Add this
+  });
 
 function getSortedData() {
   return data.filter(item => {
