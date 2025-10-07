@@ -65,13 +65,15 @@ function getSortedData() {
   });
 }
 
-
 function getFilteredData(sortedData) {
   return sortedData.filter(monster => {
     const nameMatches = monster["Name"].toLowerCase().includes(currentSearchQuery);
     const levelRaw = monster["Level"];
+    // Check for * first, before any parsing
+    if (levelRaw === "*") return nameMatches;
+    
     const level = parseFloat(levelRaw) || 0;
-    const levelMatches = levelRaw === "*" || (level >= currentMinLevel && level <= currentMaxLevel);
+    const levelMatches = level >= currentMinLevel && level <= currentMaxLevel;
     return nameMatches && levelMatches;
   });
 }
