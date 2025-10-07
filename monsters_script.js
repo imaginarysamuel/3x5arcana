@@ -69,8 +69,9 @@ function getSortedData() {
 function getFilteredData(sortedData) {
   return sortedData.filter(monster => {
     const nameMatches = monster["Name"].toLowerCase().includes(currentSearchQuery);
-    const level = parseFloat(monster["Level"]) || 0;
-    const levelMatches = level >= currentMinLevel && level <= currentMaxLevel;
+    const levelRaw = monster["Level"];
+    const level = parseFloat(levelRaw) || 0;
+    const levelMatches = levelRaw === "*" || (level >= currentMinLevel && level <= currentMaxLevel);
     return nameMatches && levelMatches;
   });
 }
