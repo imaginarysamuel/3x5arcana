@@ -225,25 +225,17 @@ p.header-area {
 /* ----------------------------------------------------------
    Filters & Sliders (shared across spells & monsters)
 ---------------------------------------------------------- */
+
+/* Force light text in spell filter */
 #spell-filter-container,
 #spell-filter-container * {
   color: var(--grey-lightest) !important;
 }
 
+/* Container styling */
 #spell-filter-container,
 #slider-container,
 #monster-filter-container,
-.spell-range-container {
-  text-align: center;
-}
-
-#slider-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 5in;
-}
-
 .spell-range-container {
   display: flex;
   flex-direction: column;
@@ -253,14 +245,28 @@ p.header-area {
   text-align: center;
 }
 
+/* Label styling */
 .slider-label,
 #slider-display {
   color: var(--grey-lightest);
   font-weight: bold;
-  margin-bottom: 5px;
-  display: block;
+  display: inline-block;
+  margin: 0 6px;
+  vertical-align: middle;
 }
 
+/* Range display styling */
+#range-display,
+#spell-range-display,
+#slider-display {
+  color: var(--grey-lightest);
+  font-weight: 400;
+  display: inline-block;
+  margin: 0 6px;
+  vertical-align: middle;
+}
+
+/* Slider inputs container */
 .slider-inputs {
   display: flex;
   flex-direction: column;
@@ -270,6 +276,7 @@ p.header-area {
   margin: 5px auto;
 }
 
+/* Range input styling */
 .slider-inputs input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -285,6 +292,7 @@ p.header-area {
   cursor: pointer;
 }
 
+/* Webkit slider thumb */
 .slider-inputs input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 20px;
@@ -292,47 +300,19 @@ p.header-area {
   background: var(--grey-darkest);
   border: 2px solid var(--grey-lightest);
   border-radius: 5px;
-  position: relative;
-  z-index: 2;
   cursor: pointer;
 }
 
+/* Firefox slider thumb */
 .slider-inputs input[type="range"]::-moz-range-thumb {
   width: 20px;
   height: 20px;
   background: var(--grey-darkest);
   border: 2px solid var(--grey-lightest);
   border-radius: 50%;
-  position: relative;
-  z-index: 2;
   cursor: pointer;
 }
 
-/* One-line label + numeric display */
-#spell-filter-container .slider-label,
-#spell-filter-container #spell-range-display,
-#slider-container .slider-label,
-#slider-container #range-display,
-#monster-filter-container .slider-label,
-#monster-filter-container #range-display,
-.spell-range-container .slider-label,
-.spell-range-container #range-display {
-  display: inline-block;
-  margin: 0 6px;
-  vertical-align: middle;
-}
-
-#range-display,
-#spell-range-display {
-  color: var(--grey-lightest);
-}
-
-/* Normalize range number weights (no bold) */
-#spell-filter-container #spell-range-display,
-#monster-filter-container #range-display,
-#slider-container #range-display {
-  font-weight: 400 !important;
-}
 
 /* ----------------------------------------------------------
    Checkboxes
