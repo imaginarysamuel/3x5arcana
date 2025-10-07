@@ -44,7 +44,8 @@ function displayList() {
 }
 
 function getSortedData() {
-  return data.sort((a, b) => a["Name"].localeCompare(b["Name"]));
+  const arr = data.slice(); // don't mutate original
+  return arr.sort((a, b) => (a["Name"] || "").localeCompare(b["Name"] || ""));
 }
 
 function getFilteredData(sortedData) {
