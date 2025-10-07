@@ -42,7 +42,19 @@
     <input type="text" id="search-bar" placeholder="Search Spells...">
 
     <!-- Filter Container -->
-    <div id="spell-filter-container">
+  <div id="sort-group" class="sort-group">
+  <label class="sort-option">
+    <input type="radio" name="sort-mode" value="level" checked>
+    <span class="dot"></span>
+    <span class="label-text">Level → A–Z</span>
+  </label>
+
+  <label class="sort-option">
+    <input type="radio" name="sort-mode" value="alpha">
+    <span class="dot"></span>
+    <span class="label-text">A–Z</span>
+  </label>
+</div>  <div id="spell-filter-container">
         <div id="slider-container">
         <div class="slider-range-container">
           <label class="slider-label" for="slider-min">Tier:</label>
