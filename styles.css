@@ -192,7 +192,7 @@ p.header-area {
   max-width: 5in;
   font-size: 1em;
   text-align: center;
-  background: #f1f1f1;
+  background: var(--grey-medium);
   transition: all 0.3s ease;
   margin-bottom: 8px;
 }
@@ -206,6 +206,7 @@ p.header-area {
   outline: none;
   border-color: var(--grey-dark);
   box-shadow: 0 0 8px var(--blue-light);
+  background: var(--grey-lighter);
 }
 
 #spell-search-bar {
