@@ -90,6 +90,21 @@ function debounce(func, delay) {
   };
 }
 
+// Sorting mode: 'level' (Level) or 'alpha' (A–Z only)
+window.sortMode = window.sortMode || 'level';
+
+// Bind radios if present
+const sortRadios = document.querySelectorAll('input[name="sort-mode"]');
+if (sortRadios.length) {
+  sortRadios.forEach(r => {
+    r.addEventListener('change', (e) => {
+      window.sortMode = e.target.value;  // 'level' or 'alpha'
+      displayList();
+      displayFavorites(true);
+    });
+  });
+}
+
 if (searchBar) {
   searchBar.addEventListener("input", debounce(function () {
     currentSearchQuery = this.value.toLowerCase();
