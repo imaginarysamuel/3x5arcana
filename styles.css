@@ -243,6 +243,15 @@ p.header-area {
   max-width: 5in;
 }
 
+.spell-range-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 5in;
+  margin: 0 auto;
+  text-align: center;
+}
+
 .slider-label,
 #slider-display {
   color: var(--grey-lightest);
