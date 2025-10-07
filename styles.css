@@ -309,7 +309,7 @@ p.header-area {
   height: 20px;
   background: var(--grey-darkest);
   border: 2px solid var(--grey-lightest);
-  border-radius: 50%;
+  border-radius: 5px;
   cursor: pointer;
 }
 
