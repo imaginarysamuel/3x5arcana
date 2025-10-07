@@ -32,16 +32,18 @@ function getSortedData() {
     return arr.sort((a, b) => (a["Name"] || "").localeCompare(b["Name"] || ""));
   }
 
-  // 'level' mode: Level → Name, with NaN-safe handling
+  // "level" mode for spells actually means Tier → Name
   return arr.sort((a, b) => {
-    const aLevel = parseFloat(a["Level"]);
-    const bLevel = parseFloat(b["Level"]);
-    const aValid = Number.isFinite(aLevel);
-    const bValid = Number.isFinite(bLevel);
+    const aTier = parseFloat(a["Tier"]);
+    const bTier = parseFloat(b["Tier"]);
+    const aValid = Number.isFinite(aTier);
+    const bValid = Number.isFinite(bTier);
+
     if (!aValid && bValid) return 1;
     if (aValid && !bValid) return -1;
     if (!aValid && !bValid) return (a["Name"] || "").localeCompare(b["Name"] || "");
-    return aLevel - bLevel || (a["Name"] || "").localeCompare(b["Name"] || "");
+
+    return aTier - bTier || (a["Name"] || "").localeCompare(b["Name"] || "");
   });
 }
 
