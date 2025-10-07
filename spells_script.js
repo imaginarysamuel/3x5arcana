@@ -14,17 +14,26 @@ const spellRangeMax = document.getElementById("slider-max");
 const filterWizardCheckbox = document.getElementById("filter-wizard");
 const filterPriestCheckbox = document.getElementById("filter-priest");
 
+// Show loading state
+showLoading("Loading...");
+
 // 📌 Fetch spell data from Google Sheet
 fetch(spellSheetUrl)
   .then(response => response.json())
   .then(d => {
-    console.log("✅ Fetched Spell Data:", d); // Debugging check
+    console.log("✅ Fetched Spell Data:", d);
     data = d;
+    loadFavorites(); // ← Add this
     updateRangeDisplay();
     displayList();
+    displayFavorites(true); // ← Add this
   })
-  .catch(error => console.error("❌ Error loading spell data:", error));
+  .catch(error => {
+    console.error("❌ Error loading spell data:", error);
+    showError("Failed to load spells. Please refresh."); // ← Add this
+  });
 
+// getting sorted data 
 function getSortedData() {
   const arr = data.slice(); // don’t mutate original
 
