@@ -4,8 +4,24 @@ const searchBar = document.getElementById("search-bar");
 const favoritesListContainer = document.getElementById("favorites-list");
 const cardListContainer = document.getElementById("cards-list");
 let favoritesIdList = [];
-
 let currentSearchQuery = "";
+
+// 💾 Load favorites from localStorage
+function loadFavorites() {
+  const saved = localStorage.getItem('favoritesIdList');
+  if (saved) {
+    try {
+      favoritesIdList = JSON.parse(saved);
+    } catch (e) {
+      favoritesIdList = [];
+    }
+  }
+}
+
+// 💾 Save favorites to localStorage
+function saveFavorites() {
+  localStorage.setItem('favoritesIdList', JSON.stringify(favoritesIdList));
+}
 
 // Display card lists
 function displayList() {
@@ -30,9 +46,7 @@ function addCardsToList(list, container, suffix, useAlt = false) {
     card.classList.add("card", "collapsed");
     card.setAttribute("data-id", cardId);
     card.addEventListener("click", () => toggleCard(cardId));
-
     card.innerHTML = getCardInnerHTML(item, cardId, useAlt);
-
     const favoriteIcon = card.querySelector(".favorite-icon");
     if (favoriteIcon) { // ✅ minimal guard
       if (favoritesIdList.includes(item["Name"])) {
@@ -43,7 +57,6 @@ function addCardsToList(list, container, suffix, useAlt = false) {
         toggleFavorite(item["Name"]);
       });
     }
-
     container.appendChild(card);
   });
 }
@@ -52,11 +65,8 @@ function addCardsToList(list, container, suffix, useAlt = false) {
 function toggleCard(id) {
   const card = document.querySelector(`[data-id="${id}"]`);
   const body = document.getElementById(`${id}-body`);
-
   if (!card || !body) return;
-
   const isExpanded = card.classList.contains("expanded");
-
   if (isExpanded) {
     body.style.maxHeight = null;
     card.classList.remove("expanded");
@@ -68,16 +78,22 @@ function toggleCard(id) {
 
 // Toggle favorite card
 function toggleFavorite(id) {
-  const card = document.querySelector(`[data-id="card-${id}"]`);
-  const favoriteIcon = card && card.querySelector(".favorite-icon"); // ✅ minimal guard
-  const index = favoritesIdList.indexOf(id);
-  if (index > -1) {
-    favoritesIdList.splice(index, 1);
-    if (favoriteIcon) favoriteIcon.classList.remove("favorited");
-  } else {
+  const idx = favoritesIdList.indexOf(id);
+  const isNowFav = idx === -1;
+  
+  if (isNowFav) {
     favoritesIdList.push(id);
-    if (favoriteIcon) favoriteIcon.classList.add("favorited");
+  } else {
+    favoritesIdList.splice(idx, 1);
   }
+
+  // Sync icons in both main and fav cards instantly
+  [`card-${id}`, `card-${id}-fav`].forEach(cid => {
+    const icon = document.querySelector(`[data-id="${cid}"] .favorite-icon`);
+    if (icon) icon.classList.toggle('favorited', isNowFav);
+  });
+
+  saveFavorites(); // 💾 Save to localStorage
   displayFavorites(true); // 🧼 Render alternate view in favorites when applicable
 }
 
