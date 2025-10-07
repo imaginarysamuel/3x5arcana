@@ -305,6 +305,7 @@ p.header-area {
 
 /* Firefox slider thumb */
 .slider-inputs input[type="range"]::-moz-range-thumb {
+  -moz-appearance: none; 
   width: 20px;
   height: 20px;
   background: var(--grey-darkest);
