@@ -10,6 +10,9 @@ const monsterRangeDisplay = document.getElementById("range-display");
 const monsterRangeMin = document.getElementById("range-min");
 const monsterRangeMax = document.getElementById("range-max");
 
+// Show loading state
+showLoading("Loading monsters...");
+
 fetch(monsterSheetUrl)
   .then(response => response.json())
   .then(d => {
@@ -25,10 +28,15 @@ fetch(monsterSheetUrl)
     };
     data.unshift(justUseBears);
 
+    loadFavorites(); // 💾 Load saved favorites
     updateRangeDisplay();
     displayList();
+    displayFavorites(true); // Render favorites list
   })
-  .catch(error => console.error("Error loading monster data:", error));
+  .catch(error => {
+    console.error("Error loading monster data:", error);
+    showError("Failed to load monsters. Please refresh.");
+  });
 
 function displayList() {
   cardListContainer.innerHTML = "";
@@ -44,7 +52,7 @@ function displayList() {
 }
 
 function getSortedData() {
-  const arr = data.slice(); // don’t mutate original
+  const arr = data.slice(); // don't mutate original
 
   if (window.sortMode === 'alpha') {
     return arr.sort((a, b) => (a["Name"] || "").localeCompare(b["Name"] || ""));
