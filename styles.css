@@ -1,4 +1,4 @@
-/* ==========================================================
+    /* ==========================================================
    3x5 Arcana – styles.css (cleaned, complete)
    ========================================================== */
 
@@ -237,7 +237,7 @@ p.header-area {
 #slider-container,
 #monster-filter-container,
 .spell-range-container {
-  display: flex;
+  display: block;
   flex-direction: column;
   align-items: center;
   max-width: 5in;
@@ -282,13 +282,13 @@ p.header-area {
   appearance: none;
   width: 100%;
   max-width: 5in;
-  min-width: 2.5in;
+  min-width: 3in;
   height: 10px;
   background: var(--grey-medium);
   border: 2px solid var(--grey-darkest);
   border-radius: 5px;
   outline: none;
-  padding: 0;
+  padding: 10px;
   cursor: pointer;
 }
 
