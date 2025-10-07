@@ -11,7 +11,7 @@ const monsterRangeMin = document.getElementById("range-min");
 const monsterRangeMax = document.getElementById("range-max");
 
 // Show loading state
-showLoading("Loading monsters...");
+showLoading("Loading...");
 
 fetch(monsterSheetUrl)
   .then(response => response.json())
