@@ -47,6 +47,7 @@ function getSortedData() {
   });
 }
 
+
 function getFilteredData(sortedData) {
   return sortedData.filter(spell => {
     const nameMatches = spell["Name"]?.toLowerCase().includes(currentSearchQuery);
