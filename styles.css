@@ -381,6 +381,71 @@ p.header-area {
   text-align: center;
   line-height: 20px;
 }
+/* ----------------------------------------------------------
+   Radio Button Group
+---------------------------------------------------------- */
+    
+    /* Sort radio group (matches filter-group vibe) */
+.sort-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 5in;
+  margin: 10px auto;
+}
+
+.sort-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--grey-lightest);
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 4px 6px;
+}
+
+/* Base radio (hidden native, custom dot shown) */
+.sort-option input[type="radio"] {
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The dot */
+.sort-option .dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--grey-darkest);
+  border: 2px solid var(--grey-lightest);
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Checked inner bullet */
+.sort-option input[type="radio"]:checked + .dot::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--grey-lightest);
+}
+
+/* Hover pop just like your other controls */
+.sort-option:hover .dot {
+  box-shadow: 0 0 0 3px rgba(173, 216, 230, 0.25);
+}
+
+.sort-option .label-text {
+  color: var(--grey-lightest);
+}
+
 
 /* ----------------------------------------------------------
    Navigation Links
