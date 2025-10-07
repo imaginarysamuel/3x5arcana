@@ -26,7 +26,23 @@ fetch(spellSheetUrl)
   .catch(error => console.error("❌ Error loading spell data:", error));
 
 function getSortedData() {
-  return data.sort((a, b) => a["Tier"] - b["Tier"] || a["Name"].localeCompare(b["Name"]));
+  const arr = data.slice(); // don’t mutate original
+
+  if (window.sortMode === 'alpha') {
+    return arr.sort((a, b) => (a["Name"] || "").localeCompare(b["Name"] || ""));
+  }
+
+  // 'level' mode: Level → Name, with NaN-safe handling
+  return arr.sort((a, b) => {
+    const aLevel = parseFloat(a["Level"]);
+    const bLevel = parseFloat(b["Level"]);
+    const aValid = Number.isFinite(aLevel);
+    const bValid = Number.isFinite(bLevel);
+    if (!aValid && bValid) return 1;
+    if (aValid && !bValid) return -1;
+    if (!aValid && !bValid) return (a["Name"] || "").localeCompare(b["Name"] || "");
+    return aLevel - bLevel || (a["Name"] || "").localeCompare(b["Name"] || "");
+  });
 }
 
 function getFilteredData(sortedData) {
