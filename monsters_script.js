@@ -44,19 +44,27 @@ function displayList() {
 }
 
 function getSortedData() {
-  return data.sort((a, b) => {
+  const arr = data.slice(); // don’t mutate original
+
+  if (window.sortMode === 'alpha') {
+    return arr.sort((a, b) => (a["Name"] || "").localeCompare(b["Name"] || ""));
+  }
+
+  // 'level' mode for monsters = Level → Name (NaN-safe)
+  return arr.sort((a, b) => {
     const aLevel = parseFloat(a["Level"]);
     const bLevel = parseFloat(b["Level"]);
-    const validA = isFinite(aLevel);
-    const validB = isFinite(bLevel);
+    const aValid = Number.isFinite(aLevel);
+    const bValid = Number.isFinite(bLevel);
 
-    if (!validA && validB) return 1;
-    if (validA && !validB) return -1;
-    if (!validA && !validB) return a["Name"].localeCompare(b["Name"]);
+    if (!aValid && bValid) return 1;
+    if (aValid && !bValid) return -1;
+    if (!aValid && !bValid) return (a["Name"] || "").localeCompare(b["Name"] || "");
 
-    return aLevel - bLevel || a["Name"].localeCompare(b["Name"]);
+    return aLevel - bLevel || (a["Name"] || "").localeCompare(b["Name"] || "");
   });
 }
+
 
 function getFilteredData(sortedData) {
   return sortedData.filter(monster => {
