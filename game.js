@@ -1,48 +1,32 @@
-// 📌 Game.js
+// 📌 Game.js (Rules)
 // 📌 Game Data Source
 const spellSheetUrl = "https://opensheet.elk.sh/1GSQ87L3gNGsL1PxMmPuOmKh4PUuOXwBLOpN9OLo7pNY/Rules";
 let data = [];
-let currentSearchQuery = "";
+let currentMinTier = 1;
+let currentMaxTier = 5;
+let filterWizard = true;
+let filterPriest = true;
 
 // 📌 Cache DOM elements
-const searchBar = document.getElementById("search-bar");
-const cardsList = document.getElementById("cards-list");
-
-// Helper functions
-function showLoading(message) {
-  if (cardsList) {
-    cardsList.innerHTML = `<div class="loading">${message}</div>`;
-  }
-}
-
-function showError(message) {
-  if (cardsList) {
-    cardsList.innerHTML = `<div class="error">${message}</div>`;
-  }
-}
+const spellRangeDisplay = document.getElementById("spell-range-display");
+const spellRangeMin = document.getElementById("slider-min");
+const spellRangeMax = document.getElementById("slider-max");
+const filterWizardCheckbox = document.getElementById("filter-wizard");
+const filterPriestCheckbox = document.getElementById("filter-priest");
 
 // Show loading state
 showLoading("Loading...");
 
 // 📌 Fetch data from Google Sheet
 fetch(spellSheetUrl)
-  .then(response => {
-    console.log("Response status:", response.status);
-    console.log("Response headers:", response.headers.get('content-type'));
-    return response.text(); // Get as text first to see what we're getting
-  })
-  .then(text => {
-    console.log("Raw response (first 500 chars):", text.substring(0, 500));
-    try {
-      const d = JSON.parse(text);
-      console.log("✅ Fetched Data:", d);
-      data = d;
-      displayList();
-    } catch (parseError) {
-      console.error("❌ JSON Parse Error:", parseError);
-      console.log("Full response:", text);
-      showError("Failed to parse data. Check console for details.");
-    }
+  .then(response => response.json())
+  .then(d => {
+    console.log("✅ Fetched Data:", d);
+    data = d;
+    loadFavorites();
+    if (spellRangeDisplay) updateRangeDisplay();
+    displayList();
+    displayFavorites(true);
   })
   .catch(error => {
     console.error("❌ Error loading data:", error);
@@ -57,7 +41,7 @@ function getSortedData() {
     return arr.sort((a, b) => (a["Title"] || "").localeCompare(b["Title"] || ""));
   }
 
-  // Default: keep original order
+  // Default: keep original order (seems intentional for rules)
   return arr;
 }
 
@@ -73,6 +57,7 @@ function getCardInnerHTML(rule, ruleId) {
   return `
     <div class="card-header">
       <div class="card-favorite-title">
+        <div class="favorite-icon" id="${ruleId}-favorite-icon">●</div>
         <div class="card-title">${rule["Title"] || "Unknown Rule"}</div>
       </div>
     </div>
@@ -83,39 +68,48 @@ function getCardInnerHTML(rule, ruleId) {
   `;
 }
 
-function displayList() {
-  if (!cardsList || !data.length) return;
-  
-  const sortedData = getSortedData();
-  const filteredData = getFilteredData(sortedData);
-  
-  if (filteredData.length === 0) {
-    cardsList.innerHTML = '<p class="no-results">No rules found.</p>';
-    return;
+// 📌 Update Slider Range Display (if sliders exist)
+function updateRangeDisplay() {
+  if (spellRangeDisplay) {
+    spellRangeDisplay.textContent = `${currentMinTier} - ${currentMaxTier}`;
   }
-  
-  cardsList.innerHTML = filteredData.map((rule, index) => {
-    const ruleId = `rule-${index}`;
-    return `<div class="card" id="${ruleId}">${getCardInnerHTML(rule, ruleId)}</div>`;
-  }).join('');
 }
 
-// 📌 Event Listeners
-if (searchBar) {
-  searchBar.addEventListener("input", function () {
-    currentSearchQuery = this.value.toLowerCase();
+// 📌 Event Listeners (only if elements exist)
+if (spellRangeMin) {
+  spellRangeMin.addEventListener("input", function () {
+    currentMinTier = parseInt(this.value);
+    if (currentMinTier > currentMaxTier) {
+      currentMaxTier = currentMinTier;
+      spellRangeMax.value = currentMaxTier;
+    }
+    updateRangeDisplay();
     displayList();
   });
 }
 
-// Sort mode handling
-const sortRadios = document.querySelectorAll('input[name="sort-mode"]');
-sortRadios.forEach(radio => {
-  radio.addEventListener('change', function() {
-    window.sortMode = this.value;
+if (spellRangeMax) {
+  spellRangeMax.addEventListener("input", function () {
+    currentMaxTier = parseInt(this.value);
+    if (currentMaxTier < currentMinTier) {
+      currentMinTier = currentMaxTier;
+      spellRangeMin.value = currentMinTier;
+    }
+    updateRangeDisplay();
     displayList();
   });
-});
+}
 
-// Initialize sort mode
-window.sortMode = 'level';
+if (filterWizardCheckbox) {
+  filterWizardCheckbox.addEventListener("change", function () {
+    filterWizard = this.checked;
+    displayList();
+  });
+}
+
+if (filterPriestCheckbox) {
+  filterPriestCheckbox.addEventListener("change", function () {
+    filterPriest = this.checked;
+    displayList();
+  });
+}
