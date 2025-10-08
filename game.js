@@ -1,5 +1,5 @@
-// 📌 spells_script.js
-// 📌 Spell Data Source
+// 📌 Game.js
+// 📌 Game Data Source
 const spellSheetUrl = "https://opensheet.elk.sh/1GSQ87L3gNGsL1PxMmPuOmKh4PUuOXwBLOpN9OLo7pNY/Rules";
 let data = [];
 let currentMinTier = 1;
