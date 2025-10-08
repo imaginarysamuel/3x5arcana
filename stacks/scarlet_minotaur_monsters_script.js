@@ -1,6 +1,6 @@
 // 📌 stacks_scarlet_minotaur_monsters_script.js
 // 🧸 load monster database
-const monsterSheetUrl = "https://opensheet.elk.sh/1IkmsirtMYWIrz0lOfILEaBwQkwJbBCh-dywA0EpouOE/Monsters";
+const monsterSheetUrl = "https://opensheet.elk.sh/1IkmsirtMYWIrz0lOfILEaBwQkwJbBCh-dywA0EpouOE/Scarlet-Minotaur-Monsters";
 let data = [];
 let currentMinLevel = 0;
 let currentMaxLevel = 30;
