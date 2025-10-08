@@ -1,25 +1,12 @@
-// ===============================
-// 3x5 Arcana — Rules (game.js)
-// ===============================
+// game.js
 
 // 📌 Data source (Google Sheet via OpenSheet)
 const spellSheetUrl = "https://opensheet.elk.sh/1GSQ87L3gNGsL1PxMmPuOmKh4PUuOXwBLOpN9OLo7pNY/Rules";
 
-// 📦 State (some are legacy hooks for shared UI; harmless if unused on Rules page)
+// 📦 State
 let data = [];
-let currentMinTier = 1;
-let currentMaxTier = 5;
-let filterWizard = true;
-let filterPriest = true;
 
-// 🧩 DOM (may not exist on Rules page; we guard all usage)
-const spellRangeDisplay = document.getElementById("spell-range-display");
-const spellRangeMin = document.getElementById("slider-min");
-const spellRangeMax = document.getElementById("slider-max");
-const filterWizardCheckbox = document.getElementById("filter-wizard");
-const filterPriestCheckbox = document.getElementById("filter-priest");
-
-// ⏳ UX: show loading if provided by list_script.js
+// ⏳ UX: show loading
 if (typeof showLoading === "function") showLoading("Loading...");
 
 // 🔄 Fetch rules
@@ -30,11 +17,8 @@ fetch(spellSheetUrl)
     data = d;
 
     if (typeof loadFavorites === "function") loadFavorites();
-    if (spellRangeDisplay) updateRangeDisplay();
-
     if (typeof displayList === "function") displayList();
     if (typeof displayFavorites === "function") displayFavorites(true);
-
     if (typeof showDone === "function") showDone();
   })
   .catch(err => {
@@ -43,14 +27,14 @@ fetch(spellSheetUrl)
   });
 
 // ===============================
-// Helpers the list renderer calls
+// Helpers for list rendering
 // ===============================
 
 // 🧠 Gather numbered columns ("1", "2", "3", etc.) as rule text
 function getRuleChunks(row) {
   const chunks = Object.keys(row)
-    .filter(k => /^\d+$/.test(k) && row[k] != null)    // only pure numbers with values
-    .sort((a, b) => parseInt(a, 10) - parseInt(b, 10)) // numeric order
+    .filter(k => /^\d+$/.test(k) && row[k] != null)
+    .sort((a, b) => parseInt(a, 10) - parseInt(b, 10))
     .map(k => String(row[k]).trim())
     .filter(Boolean);
 
@@ -72,7 +56,7 @@ function getSortedData() {
   return arr;
 }
 
-// Filter — hits Name and any numbered column
+// Filter — searches Name and any numbered column
 function getFilteredData(sortedData) {
   const q = (typeof currentSearchQuery === "string" ? currentSearchQuery : "").toLowerCase();
   if (!q) return sortedData;
@@ -84,8 +68,8 @@ function getFilteredData(sortedData) {
   });
 }
 
-// 🧱 Build the card HTML
-function getCardInnerHTML(rule, ruleId) {
+// 🧱 Build the card HTML (now handles useAlt parameter from list_script.js)
+function getCardInnerHTML(rule, ruleId, useAlt = false) {
   const paragraphs = getRuleChunks(rule)
     .map(text => `<p>${text}</p>`)
     .join("");
@@ -103,52 +87,7 @@ function getCardInnerHTML(rule, ruleId) {
   `;
 }
 
-// ===============================
-// Optional UI hooks (sliders/filters)
-// ===============================
-function updateRangeDisplay() {
-  if (spellRangeDisplay) {
-    spellRangeDisplay.textContent = `${currentMinTier} - ${currentMaxTier}`;
-  }
-}
-
-if (spellRangeMin && spellRangeMax) {
-  spellRangeMin.addEventListener("input", function () {
-    currentMinTier = parseInt(this.value, 10);
-    if (currentMinTier > currentMaxTier) {
-      currentMaxTier = currentMinTier;
-      spellRangeMax.value = currentMaxTier;
-    }
-    updateRangeDisplay();
-    if (typeof displayList === "function") displayList();
-  });
-
-  spellRangeMax.addEventListener("input", function () {
-    currentMaxTier = parseInt(this.value, 10);
-    if (currentMaxTier < currentMinTier) {
-      currentMinTier = currentMaxTier;
-      spellRangeMin.value = currentMinTier;
-    }
-    updateRangeDisplay();
-    if (typeof displayList === "function") displayList();
-  });
-}
-
-if (filterWizardCheckbox) {
-  filterWizardCheckbox.addEventListener("change", function () {
-    filterWizard = this.checked;
-    if (typeof displayList === "function") displayList();
-  });
-}
-
-if (filterPriestCheckbox) {
-  filterPriestCheckbox.addEventListener("change", function () {
-    filterPriest = this.checked;
-    if (typeof displayList === "function") displayList();
-  });
-}
-
-// Expose for list_script.js if it expects them on window (defensive)
+// Expose for list_script.js
 window.getSortedData = getSortedData;
 window.getFilteredData = getFilteredData;
 window.getCardInnerHTML = getCardInnerHTML;
