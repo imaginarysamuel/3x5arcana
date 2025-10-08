@@ -38,7 +38,7 @@ function getSortedData() {
   const arr = data.slice();
 
   if (window.sortMode === 'alpha') {
-    return arr.sort((a, b) => (a["Title"] || "").localeCompare(b["Title"] || ""));
+    return arr.sort((a, b) => (a["Name"] || "").localeCompare(b["Name"] || ""));
   }
 
   // Default: keep original order (seems intentional for rules)
@@ -47,7 +47,7 @@ function getSortedData() {
 
 function getFilteredData(sortedData) {
   return sortedData.filter(rule => {
-    const titleMatches = rule["Title"]?.toLowerCase().includes(currentSearchQuery);
+    const titleMatches = rule["Name"]?.toLowerCase().includes(currentSearchQuery);
     const ruleMatches = rule["Rule"]?.toLowerCase().includes(currentSearchQuery);
     return titleMatches || ruleMatches;
   });
@@ -58,7 +58,7 @@ function getCardInnerHTML(rule, ruleId) {
     <div class="card-header">
       <div class="card-favorite-title">
         <div class="favorite-icon" id="${ruleId}-favorite-icon">●</div>
-        <div class="card-title">${rule["Title"] || "Unknown Rule"}</div>
+        <div class="card-title">${rule["Name"] || "Unknown Rule"}</div>
       </div>
     </div>
 
