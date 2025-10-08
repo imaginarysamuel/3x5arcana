@@ -1,15 +1,11 @@
 // game.js
 
-// 📌 Data source (Google Sheet via OpenSheet)
 const spellSheetUrl = "https://opensheet.elk.sh/1GSQ87L3gNGsL1PxMmPuOmKh4PUuOXwBLOpN9OLo7pNY/Rules";
 
-// 📦 State
 let data = [];
 
-// ⏳ UX: show loading
 if (typeof showLoading === "function") showLoading("Loading...");
 
-// 🔄 Fetch rules
 fetch(spellSheetUrl)
   .then(r => r.json())
   .then(d => {
@@ -36,21 +32,20 @@ function getRuleChunks(row) {
     .filter(k => /^\d+$/.test(k) && row[k] != null)
     .sort((a, b) => parseInt(a, 10) - parseInt(b, 10))
     .map(k => String(row[k]).trim())
-    .filter(Boolean);
+    .filter(s => s.length > 0);
 
   // Fallback: single "Rule" column, if present
   if (chunks.length === 0 && row.Rule) {
     const t = String(row.Rule).trim();
     if (t) chunks.push(t);
   }
-
   return chunks;
 }
 
 // Sort data — default keeps sheet order; 'alpha' sorts by Name
 function getSortedData() {
   const arr = data.slice();
-  if (window.sortMode === "alpha") {
+  if (typeof window !== "undefined" && window.sortMode === "alpha") {
     return arr.sort((a, b) => (a.Name || "").localeCompare(b.Name || ""));
   }
   return arr;
@@ -68,7 +63,7 @@ function getFilteredData(sortedData) {
   });
 }
 
-// 🧱 Build the card HTML (now handles useAlt parameter from list_script.js)
+// 🧱 Build the card HTML (useAlt param retained for API parity)
 function getCardInnerHTML(rule, ruleId, useAlt = false) {
   const paragraphs = getRuleChunks(rule)
     .map(text => `<p>${text}</p>`)
@@ -91,3 +86,6 @@ function getCardInnerHTML(rule, ruleId, useAlt = false) {
 window.getSortedData = getSortedData;
 window.getFilteredData = getFilteredData;
 window.getCardInnerHTML = getCardInnerHTML;
+
+// Optional dev nicety
+window.__rulesData = () => data; // call in console to inspect
