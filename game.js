@@ -1,92 +1,109 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PFMKRV8VBN"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-PFMKRV8VBN');
-</script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3x5 Arcana</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <!-- HEADER -->
-   <header class="header">
-    <div class="burger-menu">
-      <div class="burger-icon" id="burger-icon">☰</div>
-      <div class="menu-overlay" id="menu-overlay">
-        <div class="menu-card">
-          <div class="menu-card-header">
-            <div class="menu-close-icon" id="menu-close-icon">✖︎</div>
-          </div>
-          <div class="menu-content">
-            <a href="spells.html" target="_blank">Spells</a>
-            <a href="monsters.html" target="_blank">Monsters</a>
-            <a href="magic-items.html" target="_blank">Magic Items</a>
-            <a href="index.html" target="_blank">About</a>
-          </div>
-        </div>
+// 📌 Game.js
+// 📌 Game Data Source
+const spellSheetUrl = "https://opensheet.elk.sh/1GSQ87L3gNGsL1PxMmPuOmKh4PUuOXwBLOpN9OLo7pNY/Rules";
+let data = [];
+let currentSearchQuery = "";
+
+// 📌 Cache DOM elements
+const searchBar = document.getElementById("search-bar");
+const cardsList = document.getElementById("cards-list");
+
+// Helper functions
+function showLoading(message) {
+  if (cardsList) {
+    cardsList.innerHTML = `<div class="loading">${message}</div>`;
+  }
+}
+
+function showError(message) {
+  if (cardsList) {
+    cardsList.innerHTML = `<div class="error">${message}</div>`;
+  }
+}
+
+// Show loading state
+showLoading("Loading...");
+
+// 📌 Fetch data from Google Sheet
+fetch(spellSheetUrl)
+  .then(response => response.json())
+  .then(d => {
+    console.log("✅ Fetched Data:", d);
+    data = d;
+    displayList();
+  })
+  .catch(error => {
+    console.error("❌ Error loading data:", error);
+    showError("Failed to load rules. Please refresh.");
+  });
+
+// getting sorted data 
+function getSortedData() {
+  const arr = data.slice();
+
+  if (window.sortMode === 'alpha') {
+    return arr.sort((a, b) => (a["Title"] || "").localeCompare(b["Title"] || ""));
+  }
+
+  // Default: keep original order (seems intentional for rules)
+  return arr;
+}
+
+function getFilteredData(sortedData) {
+  return sortedData.filter(rule => {
+    const titleMatches = rule["Title"]?.toLowerCase().includes(currentSearchQuery);
+    const ruleMatches = rule["Rule"]?.toLowerCase().includes(currentSearchQuery);
+    return titleMatches || ruleMatches;
+  });
+}
+
+function getCardInnerHTML(rule, ruleId) {
+  return `
+    <div class="card-header">
+      <div class="card-favorite-title">
+        <div class="card-title">${rule["Title"] || "Unknown Rule"}</div>
       </div>
     </div>
-    <h1 class="main-title">3x5 Arcana: Rules</h1>
-    
-    <!-- Search Bar -->
-    <input type="text" id="search-bar" placeholder="Search Rules...">
-    
-    <!-- Radio Buttons -->
-    <div id="sort-group" class="sort-group">
-      <label class="sort-option">
-        <input type="radio" name="sort-mode" value="level" checked>
-        <span class="dot"></span>
-        <span class="label-text">Tier</span>
-      </label>
-      <label class="sort-option">
-        <input type="radio" name="sort-mode" value="alpha">
-        <span class="dot"></span>
-        <span class="label-text">A–Z</span>
-      </label>
+
+    <div class="card-body" id="${ruleId}-body">
+      <p class="spell-description">${rule["Rule"] || "No description available."}</p>
     </div>
-    
-    <!-- Filter Container -->
-    <div id="spell-filter-container">
-      <div class="spell-range-container">
-        <label class="slider-label" for="slider-min">Tier:</label>
-        <span id="spell-range-display">1 - 5</span>
-        <div class="slider-inputs">
-          <input type="range" id="slider-min" value="1" step="1" min="1" max="5">
-          <input type="range" id="slider-max" value="5" step="1" min="1" max="5">
-        </div>
-      </div>
-    </div>
-    
-    <!-- Class Filters -->
-    <div class="filter-group">
-      <label><input type="checkbox" id="filter-wizard" checked> Wizard</label>
-      <label><input type="checkbox" id="filter-priest" checked> Priest</label>
-    </div>
-  </header>
+  `;
+}
+
+function displayList() {
+  if (!cardsList || !data.length) return;
   
-  <!-- Spacer for Proper Header Positioning -->
-  <div class="spacer"></div>
-  <!-- Spell List Container -->
-  <div class="spacer"></div>
-  <div id="favorites-list"></div>
-  <div class="spacer"></div>
-  <div id="cards-list"></div>
-  <div class="spacer"></div>
-   <!-- Logo Image -->
-  <img src="https://raw.githubusercontent.com/imaginarysamuel/3x5arcana/5a2de5d4ce31e098d9eb2db0d63524d457749e0b/designed-for-use-with_SDRPG-black-transparent.png" 
-     alt="Designed for use with Shadowdark Logo" 
-     class="share-icon">
-     <div class="spacer"></div>
-  <!-- JavaScript -->
-  <script src="burgermenu_script.js"></script>
-  <script src="list_script.js"></script>
-  <script src="game.js"></script>
-</body>
-</html>
+  const sortedData = getSortedData();
+  const filteredData = getFilteredData(sortedData);
+  
+  if (filteredData.length === 0) {
+    cardsList.innerHTML = '<p class="no-results">No rules found.</p>';
+    return;
+  }
+  
+  cardsList.innerHTML = filteredData.map((rule, index) => {
+    const ruleId = `rule-${index}`;
+    return `<div class="card" id="${ruleId}">${getCardInnerHTML(rule, ruleId)}</div>`;
+  }).join('');
+}
+
+// 📌 Event Listeners
+if (searchBar) {
+  searchBar.addEventListener("input", function () {
+    currentSearchQuery = this.value.toLowerCase();
+    displayList();
+  });
+}
+
+// Sort mode handling
+const sortRadios = document.querySelectorAll('input[name="sort-mode"]');
+sortRadios.forEach(radio => {
+  radio.addEventListener('change', function() {
+    window.sortMode = this.value;
+    displayList();
+  });
+});
+
+// Initialize sort mode
+window.sortMode = 'level';
