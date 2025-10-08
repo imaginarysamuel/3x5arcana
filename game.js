@@ -29,11 +29,9 @@ fetch(spellSheetUrl)
     console.log("✅ Fetched Rules:", d);
     data = d;
 
-    // Favorites & UI hooks if present
     if (typeof loadFavorites === "function") loadFavorites();
     if (spellRangeDisplay) updateRangeDisplay();
 
-    // Kick render (provided by list_script.js)
     if (typeof displayList === "function") displayList();
     if (typeof displayFavorites === "function") displayFavorites(true);
 
@@ -48,18 +46,20 @@ fetch(spellSheetUrl)
 // Helpers the list renderer calls
 // ===============================
 
-// Collect Rule chunks: Rule1, Rule2, Rule3... in numeric order
-function getRuleChunks(rule) {
-  const chunks = Object.keys(rule)
-    .filter(k => /^Rule\d+$/i.test(k) && rule[k])
-    .sort((a, b) => parseInt(a.replace(/\D/g, ""), 10) - parseInt(b.replace(/\D/g, ""), 10))
-    .map(k => String(rule[k]).trim())
+// 🧠 Gather numbered columns ("1", "2", "3", etc.) as rule text
+function getRuleChunks(row) {
+  const chunks = Object.keys(row)
+    .filter(k => /^\d+$/.test(k) && row[k] != null)    // only pure numbers with values
+    .sort((a, b) => parseInt(a, 10) - parseInt(b, 10)) // numeric order
+    .map(k => String(row[k]).trim())
     .filter(Boolean);
 
-  // Fallback: if a row only has a single "Rule" column
-  if (chunks.length === 0 && rule.Rule) {
-    chunks.push(String(rule.Rule).trim());
+  // Fallback: single "Rule" column, if present
+  if (chunks.length === 0 && row.Rule) {
+    const t = String(row.Rule).trim();
+    if (t) chunks.push(t);
   }
+
   return chunks;
 }
 
@@ -72,7 +72,7 @@ function getSortedData() {
   return arr;
 }
 
-// Filter — hits Name and any Rule* column
+// Filter — hits Name and any numbered column
 function getFilteredData(sortedData) {
   const q = (typeof currentSearchQuery === "string" ? currentSearchQuery : "").toLowerCase();
   if (!q) return sortedData;
@@ -84,9 +84,11 @@ function getFilteredData(sortedData) {
   });
 }
 
-// Card HTML — each Rule* becomes its own <p>
+// 🧱 Build the card HTML
 function getCardInnerHTML(rule, ruleId) {
-  const paragraphs = getRuleChunks(rule).map(text => `<p>${text}</p>`).join("");
+  const paragraphs = getRuleChunks(rule)
+    .map(text => `<p>${text}</p>`)
+    .join("");
 
   return `
     <div class="card-header">
@@ -104,7 +106,6 @@ function getCardInnerHTML(rule, ruleId) {
 // ===============================
 // Optional UI hooks (sliders/filters)
 // ===============================
-
 function updateRangeDisplay() {
   if (spellRangeDisplay) {
     spellRangeDisplay.textContent = `${currentMinTier} - ${currentMaxTier}`;
