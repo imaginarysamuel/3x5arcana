@@ -1,4 +1,6 @@
-// game.js
+// ===============================
+// 3x5 Arcana — Rules (game.js)
+// ===============================
 
 const spellSheetUrl = "https://opensheet.elk.sh/1GSQ87L3gNGsL1PxMmPuOmKh4PUuOXwBLOpN9OLo7pNY/Rules";
 
@@ -63,10 +65,20 @@ function getFilteredData(sortedData) {
   });
 }
 
+// 🎨 Simple markdown parser (inline only: bold, italic, inline code)
+function parseMarkdown(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')  // **bold**
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')              // *italic*
+    .replace(/__(.+?)__/g, '<strong>$1</strong>')      // __bold__
+    .replace(/_(.+?)_/g, '<em>$1</em>')                // _italic_
+    .replace(/`(.+?)`/g, '<code>$1</code>');           // `code`
+}
+
 // 🧱 Build the card HTML (useAlt param retained for API parity)
 function getCardInnerHTML(rule, ruleId, useAlt = false) {
   const paragraphs = getRuleChunks(rule)
-    .map(text => `<p>${text}</p>`)
+    .map(text => `<p>${parseMarkdown(text)}</p>`)
     .join("");
 
   return `
