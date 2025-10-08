@@ -1,136 +1,92 @@
-// 📌 Game.js
-// 📌 Game Data Source
-const spellSheetUrl = "https://opensheet.elk.sh/1GSQ87L3gNGsL1PxMmPuOmKh4PUuOXwBLOpN9OLo7pNY/Rules";
-let data = [];
-let currentMinTier = 1;
-let currentMaxTier = 5;
-let filterWizard = true;
-let filterPriest = true;
-
-// 📌 Cache DOM elements
-const spellRangeDisplay = document.getElementById("spell-range-display");
-const spellRangeMin = document.getElementById("slider-min");
-const spellRangeMax = document.getElementById("slider-max");
-const filterWizardCheckbox = document.getElementById("filter-wizard");
-const filterPriestCheckbox = document.getElementById("filter-priest");
-
-// Show loading state
-showLoading("Loading...");
-
-// 📌 Fetch spell data from Google Sheet
-fetch(spellSheetUrl)
-  .then(response => response.json())
-  .then(d => {
-    console.log("✅ Fetched Spell Data:", d);
-    data = d;
-    loadFavorites(); // ← Add this
-    updateRangeDisplay();
-    displayList();
-    displayFavorites(true); // ← Add this
-  })
-  .catch(error => {
-    console.error("❌ Error loading spell data:", error);
-    showError("Failed to load spells. Please refresh."); // ← Add this
-  });
-
-// getting sorted data 
-function getSortedData() {
-  const arr = data.slice(); // don’t mutate original
-
-  if (window.sortMode === 'alpha') {
-    return arr.sort((a, b) => (a["Name"] || "").localeCompare(b["Name"] || ""));
-  }
-
-  // "level" mode for spells actually means Tier → Name
-  return arr.sort((a, b) => {
-    const aTier = parseFloat(a["Tier"]);
-    const bTier = parseFloat(b["Tier"]);
-    const aValid = Number.isFinite(aTier);
-    const bValid = Number.isFinite(bTier);
-
-    if (!aValid && bValid) return 1;
-    if (aValid && !bValid) return -1;
-    if (!aValid && !bValid) return (a["Name"] || "").localeCompare(b["Name"] || "");
-
-    return aTier - bTier || (a["Name"] || "").localeCompare(b["Name"] || "");
-  });
-}
-
-
-function getFilteredData(sortedData) {
-  return sortedData.filter(spell => {
-    const nameMatches = spell["Name"]?.toLowerCase().includes(currentSearchQuery);
-    const tierMatches = spell["Tier"] >= currentMinTier && spell["Tier"] <= currentMaxTier;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PFMKRV8VBN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PFMKRV8VBN');
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3x5 Arcana</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- HEADER -->
+   <header class="header">
+    <div class="burger-menu">
+      <div class="burger-icon" id="burger-icon">☰</div>
+      <div class="menu-overlay" id="menu-overlay">
+        <div class="menu-card">
+          <div class="menu-card-header">
+            <div class="menu-close-icon" id="menu-close-icon">✖︎</div>
+          </div>
+          <div class="menu-content">
+            <a href="spells.html" target="_blank">Spells</a>
+            <a href="monsters.html" target="_blank">Monsters</a>
+            <a href="magic-items.html" target="_blank">Magic Items</a>
+            <a href="index.html" target="_blank">About</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h1 class="main-title">3x5 Arcana: Rules</h1>
     
-    const spellClass = spell["Class"]?.trim().toLowerCase();  // Ensure class is trimmed and lowercase for comparison
-    const classMatches =
-      (filterWizard && spellClass.includes("wizard")) ||
-      (filterPriest && spellClass.includes("priest"));
-
-    return nameMatches && tierMatches && classMatches;
-  });
-}
-
-function getCardInnerHTML(spell, spellId) {
-  let classLabel = spell["Class"].includes("Wizard") && spell["Class"].includes("Priest")
-    ? "W/P"
-    : spell["Class"].includes("Wizard")
-    ? "W"
-    : "P";
-
-  return `
-    <div class="card-header">
-      <div class="card-favorite-title">
-        <div class="favorite-icon" id="${spellId}-favorite-icon">●</div>
-        <div class="card-title">${spell["Name"] || "Unknown Spell"}</div>
-      </div>
-      <div class="spell-tier">${classLabel} ${spell["Tier"] || "?"}</div>
+    <!-- Search Bar -->
+    <input type="text" id="search-bar" placeholder="Search Rules...">
+    
+    <!-- Radio Buttons -->
+    <div id="sort-group" class="sort-group">
+      <label class="sort-option">
+        <input type="radio" name="sort-mode" value="level" checked>
+        <span class="dot"></span>
+        <span class="label-text">Tier</span>
+      </label>
+      <label class="sort-option">
+        <input type="radio" name="sort-mode" value="alpha">
+        <span class="dot"></span>
+        <span class="label-text">A–Z</span>
+      </label>
     </div>
-
-    <div class="card-body" id="${spellId}-body">
-      <div class="spell-stats">
-        <p><strong>Class:</strong> ${spell["Class"] || "Unknown"}</p>
-        <p><strong>Range:</strong> ${spell["Range"] || "N/A"}</p>
-        <p><strong>Duration:</strong> ${spell["Duration"] || "N/A"}</p>
+    
+    <!-- Filter Container -->
+    <div id="spell-filter-container">
+      <div class="spell-range-container">
+        <label class="slider-label" for="slider-min">Tier:</label>
+        <span id="spell-range-display">1 - 5</span>
+        <div class="slider-inputs">
+          <input type="range" id="slider-min" value="1" step="1" min="1" max="5">
+          <input type="range" id="slider-max" value="5" step="1" min="1" max="5">
+        </div>
       </div>
-      <div class="divider"></div>
-      <p class="spell-description">${spell["Description"] || "No description available."}</p>
     </div>
-  `;
-}
-
-// 📌 Update Slider Range Display
-function updateRangeDisplay() {
-  spellRangeDisplay.textContent = `${currentMinTier} - ${currentMaxTier}`;
-}
-
-// 📌 Event Listener
-spellRangeMin.addEventListener("input", function () {
-  currentMinTier = parseInt(this.value);
-  if (currentMinTier > currentMaxTier) {
-    currentMaxTier = currentMinTier;
-    spellRangeMax.value = currentMaxTier;
-  }
-  updateRangeDisplay();
-  displayList();
-});
-
-spellRangeMax.addEventListener("input", function () {
-  currentMaxTier = parseInt(this.value);
-  if (currentMaxTier < currentMinTier) {
-    currentMinTier = currentMaxTier;
-    spellRangeMin.value = currentMinTier;
-  }
-  updateRangeDisplay();
-  displayList();
-});
-
-filterWizardCheckbox.addEventListener("change", function () {
-  filterWizard = this.checked;
-  displayList();
-});
-
-filterPriestCheckbox.addEventListener("change", function () {
-  filterPriest = this.checked;
-  displayList();
-});
+    
+    <!-- Class Filters -->
+    <div class="filter-group">
+      <label><input type="checkbox" id="filter-wizard" checked> Wizard</label>
+      <label><input type="checkbox" id="filter-priest" checked> Priest</label>
+    </div>
+  </header>
+  
+  <!-- Spacer for Proper Header Positioning -->
+  <div class="spacer"></div>
+  <!-- Spell List Container -->
+  <div class="spacer"></div>
+  <div id="favorites-list"></div>
+  <div class="spacer"></div>
+  <div id="cards-list"></div>
+  <div class="spacer"></div>
+   <!-- Logo Image -->
+  <img src="https://raw.githubusercontent.com/imaginarysamuel/3x5arcana/5a2de5d4ce31e098d9eb2db0d63524d457749e0b/designed-for-use-with_SDRPG-black-transparent.png" 
+     alt="Designed for use with Shadowdark Logo" 
+     class="share-icon">
+     <div class="spacer"></div>
+  <!-- JavaScript -->
+  <script src="burgermenu_script.js"></script>
+  <script src="list_script.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
