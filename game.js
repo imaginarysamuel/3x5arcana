@@ -26,11 +26,23 @@ showLoading("Loading...");
 
 // 📌 Fetch data from Google Sheet
 fetch(spellSheetUrl)
-  .then(response => response.json())
-  .then(d => {
-    console.log("✅ Fetched Data:", d);
-    data = d;
-    displayList();
+  .then(response => {
+    console.log("Response status:", response.status);
+    console.log("Response headers:", response.headers.get('content-type'));
+    return response.text(); // Get as text first to see what we're getting
+  })
+  .then(text => {
+    console.log("Raw response (first 500 chars):", text.substring(0, 500));
+    try {
+      const d = JSON.parse(text);
+      console.log("✅ Fetched Data:", d);
+      data = d;
+      displayList();
+    } catch (parseError) {
+      console.error("❌ JSON Parse Error:", parseError);
+      console.log("Full response:", text);
+      showError("Failed to parse data. Check console for details.");
+    }
   })
   .catch(error => {
     console.error("❌ Error loading data:", error);
@@ -45,7 +57,7 @@ function getSortedData() {
     return arr.sort((a, b) => (a["Title"] || "").localeCompare(b["Title"] || ""));
   }
 
-  // Default: keep original order (seems intentional for rules)
+  // Default: keep original order
   return arr;
 }
 
