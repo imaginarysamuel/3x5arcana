@@ -41,14 +41,14 @@ function detectCardType(item) {
   // Divider (highest priority)
   if (item.Name && item.Name.startsWith("★")) return "divider";
   
-  // Monster (has combat stats)
+  // Monster (has combat stats: AC, HP, STR/S)
   if (item.AC || item.HP || item.STR || item.S) return "monster";
   
-  // Spell (has magic properties)
-  if (item.School || item.Range || item.Duration) return "spell";
+  // Spell (has Class, Tier, Duration, Range)
+  if (item.Class || item.Tier || item.Duration || item.Range) return "spell";
   
-  // Item (has rarity/attunement)
-  if (item.Rarity || item.Attunement) return "item";
+  // Item (has Description, Bonus, Benefit, Curse, Personality, Reference)
+  if (item.Bonus || item.Benefit || item.Curse || item.Personality || item.Reference) return "item";
   
   // Generic (numbered columns or fallback)
   return "generic";
@@ -95,12 +95,12 @@ function renderMonster(item, cardId, useAlt = false) {
       <table class="stats-table">
         <tr><th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th></tr>
         <tr>
-          <td>${item.S || item.STR || "-"}</td>
-          <td>${item.D || item.DEX || "-"}</td>
-          <td>${item.C || item.CON || "-"}</td>
-          <td>${item.I || item.INT || "-"}</td>
-          <td>${item.W || item.WIS || "-"}</td>
-          <td>${item.Ch || item.CHA || "-"}</td>
+          <td>${item.S || "-"}</td>
+          <td>${item.D || "-"}</td>
+          <td>${item.C || "-"}</td>
+          <td>${item.I || "-"}</td>
+          <td>${item.W || "-"}</td>
+          <td>${item.Ch || "-"}</td>
         </tr>
       </table>
       <div class="divider"></div>
@@ -131,17 +131,16 @@ function renderSpell(item, cardId, useAlt = false) {
         <div class="favorite-icon" id="${cardId}-favorite-icon">●</div>
         <div class="card-title">${item.Name || "Unknown Spell"}</div>
       </div>
-      <div class="spell-level">${item.Level || "?"}</div>
+      <div class="spell-level">${item.Tier || "?"}</div>
     </div>
     <div class="card-body" id="${cardId}-body">
-      <p class="spell-school">${item.School || "Unknown School"}</p>
+      <p class="spell-school">${item.Class || "Unknown Class"}</p>
       <div class="divider"></div>
       <table class="spell-details">
-        <tr><th>Range</th><th>Duration</th><th>Casting Time</th></tr>
+        <tr><th>Range</th><th>Duration</th></tr>
         <tr>
           <td>${item.Range || "-"}</td>
           <td>${item.Duration || "-"}</td>
-          <td>${item["Casting Time"] || "-"}</td>
         </tr>
       </table>
       <div class="divider"></div>
@@ -152,19 +151,41 @@ function renderSpell(item, cardId, useAlt = false) {
 
 // 🗡️ Render Magic Item
 function renderItem(item, cardId, useAlt = false) {
+  // Build sections based on what exists
+  const sections = [];
+  
+  if (item.Description) {
+    sections.push(`<p class="item-description">${item.Description}</p>`);
+  }
+  
+  if (item.Bonus) {
+    sections.push(`<p><strong>Bonus:</strong> ${item.Bonus}</p>`);
+  }
+  
+  if (item.Benefit) {
+    sections.push(`<p><strong>Benefit:</strong> ${item.Benefit}</p>`);
+  }
+  
+  if (item.Curse) {
+    sections.push(`<p><strong>Curse:</strong> ${item.Curse}</p>`);
+  }
+  
+  if (item.Personality) {
+    sections.push(`<p><strong>Personality:</strong> ${item.Personality}</p>`);
+  }
+  
+  const content = sections.length > 0 ? sections.join('<div class="divider"></div>') : "<p>No description available.</p>";
+  
   return `
     <div class="card-header">
       <div class="card-favorite-title">
         <div class="favorite-icon" id="${cardId}-favorite-icon">●</div>
         <div class="card-title">${item.Name || "Unknown Item"}</div>
       </div>
-      <div class="item-rarity">${item.Rarity || "?"}</div>
+      ${item.Reference ? `<div class="item-reference">${item.Reference}</div>` : ""}
     </div>
     <div class="card-body" id="${cardId}-body">
-      <p class="item-type">${item.Type || "Item"}</p>
-      ${item.Attunement ? `<p class="item-attunement">Requires Attunement</p>` : ""}
-      <div class="divider"></div>
-      <p class="item-description">${item.Description || "No description available."}</p>
+      ${content}
     </div>
   `;
 }
@@ -267,9 +288,10 @@ function getFilteredData(sortedData) {
     // Search in type-specific fields
     const monsterHit = (item["Flavor Text"] || "").toLowerCase().includes(q);
     const spellHit = (item.Description || "").toLowerCase().includes(q) || 
-                     (item.School || "").toLowerCase().includes(q);
+                     (item.Class || "").toLowerCase().includes(q);
     const itemHit = (item.Description || "").toLowerCase().includes(q) ||
-                    (item.Type || "").toLowerCase().includes(q);
+                    (item.Benefit || "").toLowerCase().includes(q) ||
+                    (item.Bonus || "").toLowerCase().includes(q);
     
     return nameHit || contentHit || monsterHit || spellHit || itemHit;
   });
