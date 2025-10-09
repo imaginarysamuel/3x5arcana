@@ -541,27 +541,47 @@ p.header-area {
 /* ----------------------------------------------------------
    Card Bookmarks
 ---------------------------------------------------------- */
+
 .card.bookmark {
   background-color: var(--red);
   color: var(--grey-lightest);
-  transform: translateX(-20px); /* jog it left */
+  margin-left: -20px;            /* jog left but stay in flow */
+  box-shadow: none;
   cursor: default;
-  pointer-events: none; /* optional: makes them non-clickable */
+  pointer-events: none;          /* inert: not clickable */
+  transform: none;               /* cancel 3D stack transforms */
+  z-index: auto;
 }
 
-/* Keep header and text readable */
+/* match card geometry */
+.card.bookmark {
+  margin-top: var(--card-margin, 12px);
+  margin-bottom: var(--card-margin, 12px);
+  padding: var(--card-padding, 10px);
+  border-radius: var(--card-radius, 6px);
+  width: auto;                   /* match normal card width */
+}
+
+/* header + title: no lines, no underline */
 .card.bookmark .card-header,
 .card.bookmark .card-title {
   color: var(--grey-lightest);
-  border-bottom: 1px solid var(--grey-lightest);
+  border: none;
+  text-decoration: none;
 }
 
-/* Disable hover effects */
+/* nuke any pseudo rules or divider lines */
+.card.bookmark .card-header::after,
+.card.bookmark .divider {
+  display: none !important;
+}
+
+/* stay flat on hover / active */
 .card.bookmark:hover,
 .card.bookmark:active {
   background-color: var(--red);
-  transform: translateX(-20px);
   box-shadow: none;
+  transform: none;
 }
 
 /* ----------------------------------------------------------
