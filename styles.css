@@ -539,21 +539,28 @@ p.header-area {
 }
 
 /* ----------------------------------------------------------
-   Card Dividers 
+   Card Bookmarks
 ---------------------------------------------------------- */
-.card.divider {
-  transform: translateX(-20px);  /* Shift left without breaking centering */
+.card.bookmark {
   background-color: var(--red);
   color: var(--grey-lightest);
+  transform: translateX(-20px); /* jog it left */
   cursor: default;
+  pointer-events: none; /* optional: makes them non-clickable */
 }
 
-.card.divider .card-body {
-  display: none;
-}
-
-.card.divider .card-title {
+/* Keep header and text readable */
+.card.bookmark .card-header,
+.card.bookmark .card-title {
   color: var(--grey-lightest);
+  border-bottom: 1px solid var(--grey-lightest);
+}
+
+/* Disable hover effects */
+.card.bookmark:hover {
+  background-color: var(--red);
+  box-shadow: none;
+  transform: translateX(-20px);
 }
 
 /* ----------------------------------------------------------
