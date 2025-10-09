@@ -1,7 +1,7 @@
 // ===============================
 // 🃏 stacks.js - Smart Stack Renderer
 // ===============================
-// Detects and renders multiple card types: dividers, monsters, spells, items, generic
+// Detects and renders multiple card types: bookmarks, monsters, spells, items, generic
 // Expects STACK_DATA_URL to be defined in HTML before this script loads
 
 let data = [];
@@ -41,8 +41,8 @@ if (typeof STACK_DATA_URL === "undefined") {
 // 🧠 Card Type Detection
 // ===============================
 function detectCardType(item) {
-  // Divider (highest priority)
-  if (item.Name && item.Name.startsWith("★")) return "divider";
+  // bookmark (highest priority)
+  if (item.Name && item.Name.startsWith("★")) return "bookmark";
   
   // Monster (has combat stats: AC, HP, STR/S)
   if (item.AC || item.HP || item.STR || item.S) return "monster";
@@ -61,8 +61,8 @@ function detectCardType(item) {
 // 🎨 Rendering Functions
 // ===============================
 
-// 🎯 Render Divider
-function renderDivider(item, cardId) {
+// 🎯 Render Bookmark
+function renderBookmark(item, cardId) {
   const displayName = item.Name.substring(1).trim(); // Strip ★
   return `
     <div class="card-header">
@@ -254,8 +254,8 @@ function getCardInnerHTML(item, cardId, useAlt = false) {
   const type = detectCardType(item);
   
   switch(type) {
-    case "divider":
-      return renderDivider(item, cardId);
+    case "bookmark":
+      return renderBookmark(item, cardId);
     case "monster":
       return renderMonster(item, cardId, useAlt);
     case "spell":
