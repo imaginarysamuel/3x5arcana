@@ -506,18 +506,6 @@ p.header-area {
   padding-bottom: 1px;
 }
 
-/* Index card dividers */
-.card.divider {
-  margin-left: -20px;
-  background-color: salmon;
-  color: var(--lightest-grey);
-  cursor: default;
-}
-
-.card.divider .card-body {
-  display: none;
-}
-
 .card-favorite-title {
   display: flex;
   align-items: center;
@@ -548,6 +536,24 @@ p.header-area {
   font-size: 1em;
   font-style: italic;
   color: var(--grey-darkest);
+}
+
+/* ----------------------------------------------------------
+   Card Dividers 
+---------------------------------------------------------- */
+.card.divider {
+  transform: translateX(-20px);  /* Shift left without breaking centering */
+  background-color: var(--red);
+  color: var(--grey-lightest);
+  cursor: default;
+}
+
+.card.divider .card-body {
+  display: none;
+}
+
+.card.divider .card-title {
+  color: var(--grey-lightest);
 }
 
 /* ----------------------------------------------------------
