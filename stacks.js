@@ -16,12 +16,15 @@ if (typeof STACK_DATA_URL === "undefined") {
     showError("Configuration error. Please check the page setup.");
   }
 } else {
-  // Fetch the data
-  fetch(STACK_DATA_URL)
-    .then(r => r.json())
-    .then(d => {
-      console.log("✅ Fetched stack data:", d);
-      data = d;
+  // Support both single URL and array of URLs
+  const urls = Array.isArray(STACK_DATA_URL) ? STACK_DATA_URL : [STACK_DATA_URL];
+  
+  // Fetch all URLs and combine the data
+  Promise.all(urls.map(url => fetch(url).then(r => r.json())))
+    .then(results => {
+      // Flatten all results into single array
+      data = results.flat();
+      console.log(`✅ Fetched stack data from ${urls.length} source(s):`, data);
       if (typeof loadFavorites === "function") loadFavorites();
       if (typeof displayList === "function") displayList();
       if (typeof displayFavorites === "function") displayFavorites(true);
