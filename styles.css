@@ -1,4 +1,13 @@
-    /* ==========================================================
+/* ==UserStyle==
+@name           3x5arcana.com
+@namespace      github.com/openstyles/stylus
+@version        1.0.0
+@description    A new userstyle
+@author         Me
+==/UserStyle== */
+
+@-moz-document domain("3x5arcana.com") {
+       /* ==========================================================
    3x5 Arcana – styles.css (cleaned, complete)
    ========================================================== */
 
@@ -543,47 +552,17 @@ p.header-area {
 ---------------------------------------------------------- */
 
 .card.bookmark {
-  background-color: var(--red);
-  color: var(--grey-lightest);
-  margin-left: -20px;            /* jog left but stay in flow */
-  box-shadow: none;
-  cursor: default;
-  pointer-events: none;          /* inert: not clickable */
-  transform: none;               /* cancel 3D stack transforms */
-  z-index: auto;
+  border: 0.25px solid var(--blue-light);
+  border-radius: 5px;
+  padding: 10px;
+  margin: 7px auto 4px;
+  width: 90%;
+  max-width: 5.25in;
+  max-height: .5in;
+  transition: transform 0.1s, box-shadow 0.1s;
+  cursor: pointer;
+  transform: translateX(-.125in);
 }
-
-/* match card geometry */
-.card.bookmark {
-  margin-top: var(--card-margin, 12px);
-  margin-bottom: var(--card-margin, 12px);
-  padding: var(--card-padding, 10px);
-  border-radius: var(--card-radius, 6px);
-  width: auto;                   /* match normal card width */
-}
-
-/* header + title: no lines, no underline */
-.card.bookmark .card-header,
-.card.bookmark .card-title {
-  color: var(--grey-lightest);
-  border: none;
-  text-decoration: none;
-}
-
-/* nuke any pseudo rules or divider lines */
-.card.bookmark .card-header::after,
-.card.bookmark .divider {
-  display: none !important;
-}
-
-/* stay flat on hover / active */
-.card.bookmark:hover,
-.card.bookmark:active {
-  background-color: var(--red);
-  box-shadow: none;
-  transform: none;
-}
-
 /* ----------------------------------------------------------
    Card Body - Tables & Content
 ---------------------------------------------------------- */
@@ -795,4 +774,5 @@ p.header-area {
 #favorites-list .card.expanded,
 #favorites-list .card-header {
   background-color: var(--grey-lighter);
+}
 }
