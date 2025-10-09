@@ -506,6 +506,18 @@ p.header-area {
   padding-bottom: 1px;
 }
 
+/* Index card dividers */
+.card.divider {
+  margin-left: -20px;
+  background-color: salmon;
+  color: var(--lightest-grey);
+  cursor: default;
+}
+
+.card.divider .card-body {
+  display: none;
+}
+
 .card-favorite-title {
   display: flex;
   align-items: center;
