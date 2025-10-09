@@ -63,9 +63,18 @@
        2. Update the <title> and <h1> above
        3. Replace ONLY the URL below with your new Google Sheet OpenSheet URL
        4. That's it! stacks.js handles the rest automatically.
+       -> you can use multiple sheets. just format them like this: 
+          const STACK_DATA_URL = [
+            "https://opensheet.elk.sh/YOUR_ID/Monsters",
+            "https://opensheet.elk.sh/YOUR_ID/Spells",
+            "https://opensheet.elk.sh/YOUR_ID/Items",
+            "https://opensheet.elk.sh/YOUR_ID/Rules"
+          ];
        ═══════════════════════════════════════════════════════════════════════════ -->
   <script>
-    const STACK_DATA_URL = "https://opensheet.elk.sh/1IkmsirtMYWIrz0lOfILEaBwQkwJbBCh-dywA0EpouOE/Scarlet-Minotaur-Monsters";
+    const STACK_DATA_URL = [
+      "https://opensheet.elk.sh/1IkmsirtMYWIrz0lOfILEaBwQkwJbBCh-dywA0EpouOE/Scarlet-Minotaur-Monsters"
+    ];
   </script>
   <!-- ═══════════════════════════════════════════════════════════════════════════ -->
   
