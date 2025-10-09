@@ -2,23 +2,21 @@
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PFMKRV8VBN"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-PFMKRV8VBN');
-</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PFMKRV8VBN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PFMKRV8VBN');
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3x5 Arcana</title>
+  <title>3x5 Heartbreaker - 3x5 Arcana</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
   <!-- HEADER -->
-   <header class="header">
+  <header class="header">
     <div class="burger-menu">
       <div class="burger-icon" id="burger-icon">☰</div>
       <div class="menu-overlay" id="menu-overlay">
@@ -35,27 +33,30 @@
         </div>
       </div>
     </div>
-
     <h1 class="main-title">3x5 HEARTBREAKER</h1>
-</header>
-  <div class=card>
-    <img src="https://3x5arcana.com/Character_Card.png" style="width: 100%; border-radius: 5px;"> 
-  </div>
-  <!-- Spacer for Proper Header Positioning -->
-  <div class="spacer"></div>
+  </header>
 
-  <!-- Spell List Container -->
+  <!-- CHARACTER CARD IMAGE -->
+  <div class="card">
+    <img src="https://3x5arcana.com/Character_Card.png" 
+         alt="Character Card Template" 
+         style="width: 100%; border-radius: 5px;"> 
+  </div>
+
+  <!-- CONTENT -->
   <div class="spacer"></div>
   <div id="favorites-list"></div>
   <div class="spacer"></div>
   <div id="cards-list"></div>
   <div class="spacer"></div>
-   <!-- Logo Image -->
-     <div class="spacer"></div>
 
-  <!-- JavaScript -->
+  <!-- SCRIPTS -->
   <script src="burgermenu_script.js"></script>
   <script src="list_script.js"></script>
-  <script src="game.js"></script>
+  <script>
+    // Define data source for this stack
+    const STACK_DATA_URL = "https://opensheet.elk.sh/1GSQ87L3gNGsL1PxMmPuOmKh4PUuOXwBLOpN9OLo7pNY/Rules";
+  </script>
+  <script src="stacks.js"></script>
 </body>
 </html>
