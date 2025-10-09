@@ -6,8 +6,8 @@ const cardListContainer = document.getElementById("cards-list");
 let favoritesIdList = [];
 let currentSearchQuery = "";
 
-// 🎯 Check if item is a divider
-function isDivider(item) {
+// 🎯 Check if item is a Bookmark
+function isBookmark(item) {
   return item["Name"] && item["Name"].startsWith("★");
 }
 
@@ -67,11 +67,11 @@ function addCardsToList(list, container, suffix, useAlt = false) {
     const card = document.createElement("div");
     card.classList.add("card", "collapsed");
     
-    // 🎯 Handle dividers differently
-    if (isDivider(item)) {
-      card.classList.add("divider");
-      // No click listener for dividers
-      // No favorite functionality for dividers
+    // 🎯 Handle bookmarks differently
+    if (isBookmark(item)) {
+      card.classList.add("bookmark");
+      // No click listener for bookmarks
+      // No favorite functionality for bookmarks
     } else {
       // Regular cards get click listener
       card.addEventListener("click", () => toggleCard(cardId));
@@ -80,8 +80,8 @@ function addCardsToList(list, container, suffix, useAlt = false) {
     card.setAttribute("data-id", cardId);
     card.innerHTML = getCardInnerHTML(item, cardId, useAlt);
     
-    // 🎯 Only add favorite functionality to non-divider cards
-    if (!isDivider(item)) {
+    // 🎯 Only add favorite functionality to non-bookmark cards
+    if (!isBookmark(item)) {
       const favoriteIcon = card.querySelector(".favorite-icon");
       if (favoriteIcon) {
         if (favoritesIdList.includes(item["Name"])) {
