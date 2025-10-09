@@ -557,10 +557,11 @@ p.header-area {
 }
 
 /* Disable hover effects */
-.card.bookmark:hover {
+.card.bookmark:hover,
+.card.bookmark:active {
   background-color: var(--red);
-  box-shadow: none;
   transform: translateX(-20px);
+  box-shadow: none;
 }
 
 /* ----------------------------------------------------------
