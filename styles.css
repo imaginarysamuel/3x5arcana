@@ -539,10 +539,14 @@ p.header-area {
 }
 
 .card.divider {
-  margin-left: -20px;
-  background-color:  var(--red)
-  color: var(--grey-lightest); 
+  transform: translateX(-20px);  /* Shift left without breaking centering */
+  background-color: salmon;
+  color: var(--grey-lightest);
   cursor: default;
+}
+
+.card.divider .card-body {
+  display: none;
 }
 
 .card.divider .card-title {
