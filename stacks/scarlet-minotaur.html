@@ -11,12 +11,10 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>3x5 Arcana</title>
-  <!-- NOTE: now relative to stacks/ -->
+  <title>Lost Citadel of the Scarlet Minotaur - 3x5 Arcana</title>
   <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
-
   <!-- HEADER -->
   <header class="header">
     <div class="burger-menu">
@@ -27,7 +25,6 @@
             <div class="menu-close-icon" id="menu-close-icon">✖︎</div>
           </div>
           <div class="menu-content">
-            <!-- NOTE: fix these paths too -->
             <a href="../spells.html" target="_blank">Spells</a>
             <a href="../monsters.html" target="_blank">Monsters</a>
             <a href="../magic-items.html" target="_blank">Magic Items</a>
@@ -36,25 +33,30 @@
         </div>
       </div>
     </div>
-    <h1 class="main-title">Lost Citadel of the Scarlet Minotaur: Monsters</h1>
+    <h1 class="main-title">Lost Citadel of the Scarlet Minotaur</h1>
   </header>
 
+  <!-- CONTENT -->
   <div class="spacer"></div>
   <div id="favorites-list"></div>
   <div class="spacer"></div>
   <div id="cards-list"></div>
-
-  <!-- NOTE: fix script paths -->
-  <script src="../burgermenu_script.js"></script>
-  <script src="../list_script.js"></script>
-  <!-- Your copied monsters script -->
-  <script src="./scarlet_minotaur_monsters_script.js"></script>
-
   <div class="spacer"></div>
+
+  <!-- FOOTER -->
   <img
     src="https://raw.githubusercontent.com/imaginarysamuel/3x5arcana/5a2de5d4ce31e098d9eb2db0d63524d457749e0b/designed-for-use-with_SDRPG-black-transparent.png"
     alt="Designed for use with Shadowdark Logo"
     class="share-icon">
   <div class="spacer"></div>
+
+  <!-- SCRIPTS -->
+  <script src="../burgermenu_script.js"></script>
+  <script src="../list_script.js"></script>
+  <script>
+    // Define data source for this stack
+    const STACK_DATA_URL = "https://opensheet.elk.sh/1IkmsirtMYWIrz0lOfILEaBwQkwJbBCh-dywA0EpouOE/Scarlet-Minotaur-Monsters";
+  </script>
+  <script src="../stacks.js"></script>
 </body>
 </html>
