@@ -6,6 +6,11 @@ const cardListContainer = document.getElementById("cards-list");
 let favoritesIdList = [];
 let currentSearchQuery = "";
 
+// 🎯 Check if item is a divider
+function isDivider(item) {
+  return item["Name"] && item["Name"].startsWith("★");
+}
+
 // 💾 Load favorites from localStorage
 function loadFavorites() {
   const saved = localStorage.getItem('favoritesIdList');
@@ -45,11 +50,11 @@ function displayList() {
   cardListContainer.innerHTML = "";
   let sortedData = getSortedData();
   let filteredData = getFilteredData(sortedData);
-  addCardsToList(filteredData, cardListContainer, "", false); // 🧼 Shared version: default view, not alt
+  addCardsToList(filteredData, cardListContainer, "", false);
 }
 
 function displayFavorites(useAlt = false) {
-  if (!favoritesListContainer) return; // ✅ minimal guard
+  if (!favoritesListContainer) return;
   favoritesListContainer.innerHTML = "";
   let sortedData = getSortedData();
   let favoriteData = sortedData.filter(item => favoritesIdList.includes(item["Name"]));
@@ -61,19 +66,34 @@ function addCardsToList(list, container, suffix, useAlt = false) {
     const cardId = `card-${item["Name"] + suffix}`;
     const card = document.createElement("div");
     card.classList.add("card", "collapsed");
-    card.setAttribute("data-id", cardId);
-    card.addEventListener("click", () => toggleCard(cardId));
-    card.innerHTML = getCardInnerHTML(item, cardId, useAlt);
-    const favoriteIcon = card.querySelector(".favorite-icon");
-    if (favoriteIcon) { // ✅ minimal guard
-      if (favoritesIdList.includes(item["Name"])) {
-        favoriteIcon.classList.add("favorited");
-      }
-      favoriteIcon.addEventListener("click", (e) => {
-        e.stopPropagation();
-        toggleFavorite(item["Name"]);
-      });
+    
+    // 🎯 Handle dividers differently
+    if (isDivider(item)) {
+      card.classList.add("divider");
+      // No click listener for dividers
+      // No favorite functionality for dividers
+    } else {
+      // Regular cards get click listener
+      card.addEventListener("click", () => toggleCard(cardId));
     }
+    
+    card.setAttribute("data-id", cardId);
+    card.innerHTML = getCardInnerHTML(item, cardId, useAlt);
+    
+    // 🎯 Only add favorite functionality to non-divider cards
+    if (!isDivider(item)) {
+      const favoriteIcon = card.querySelector(".favorite-icon");
+      if (favoriteIcon) {
+        if (favoritesIdList.includes(item["Name"])) {
+          favoriteIcon.classList.add("favorited");
+        }
+        favoriteIcon.addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleFavorite(item["Name"]);
+        });
+      }
+    }
+    
     container.appendChild(card);
   });
 }
@@ -110,8 +130,8 @@ function toggleFavorite(id) {
     if (icon) icon.classList.toggle('favorited', isNowFav);
   });
 
-  saveFavorites(); // 💾 Save to localStorage
-  displayFavorites(true); // 🧼 Render alternate view in favorites when applicable
+  saveFavorites();
+  displayFavorites(true);
 }
 
 // Add search functionality with debounce
@@ -131,7 +151,7 @@ const sortRadios = document.querySelectorAll('input[name="sort-mode"]');
 if (sortRadios.length) {
   sortRadios.forEach(r => {
     r.addEventListener('change', (e) => {
-      window.sortMode = e.target.value;  // 'level' or 'alpha'
+      window.sortMode = e.target.value;
       displayList();
       displayFavorites(true);
     });
@@ -144,5 +164,5 @@ if (searchBar) {
     displayList();
   }, 300));
 } else {
-  currentSearchQuery = ""; // ensure variable still exists
+  currentSearchQuery = "";
 }
