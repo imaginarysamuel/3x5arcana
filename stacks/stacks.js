@@ -1,7 +1,7 @@
 // ===============================
-// 🃏 stacks.js - Generic Stack Renderer
+// 🃏 stacks.js - Smart Stack Renderer
 // ===============================
-// Works with any unsorted card stack (rules, adventure modules, etc.)
+// Detects and renders multiple card types: dividers, monsters, spells, items, generic
 // Expects STACK_DATA_URL to be defined in HTML before this script loads
 
 let data = [];
@@ -25,7 +25,6 @@ if (typeof STACK_DATA_URL === "undefined") {
       if (typeof loadFavorites === "function") loadFavorites();
       if (typeof displayList === "function") displayList();
       if (typeof displayFavorites === "function") displayFavorites(true);
-      if (typeof showDone === "function") showDone();
     })
     .catch(err => {
       console.error("❌ Error loading stack data:", err);
@@ -36,10 +35,174 @@ if (typeof STACK_DATA_URL === "undefined") {
 }
 
 // ===============================
-// Helpers for list rendering
+// 🧠 Card Type Detection
+// ===============================
+function detectCardType(item) {
+  // Divider (highest priority)
+  if (item.Name && item.Name.startsWith("★")) return "divider";
+  
+  // Monster (has combat stats)
+  if (item.AC || item.HP || item.STR || item.S) return "monster";
+  
+  // Spell (has magic properties)
+  if (item.School || item.Range || item.Duration) return "spell";
+  
+  // Item (has rarity/attunement)
+  if (item.Rarity || item.Attunement) return "item";
+  
+  // Generic (numbered columns or fallback)
+  return "generic";
+}
+
+// ===============================
+// 🎨 Rendering Functions
 // ===============================
 
-// 🧠 Gather numbered columns ("1", "2", "3", etc.) as content text
+// 🎯 Render Divider
+function renderDivider(item, cardId) {
+  const displayName = item.Name.substring(1).trim(); // Strip ★
+  return `
+    <div class="card-header">
+      <div class="card-favorite-title">
+        <div class="card-title">${displayName || "Divider"}</div>
+      </div>
+    </div>
+  `;
+}
+
+// 👹 Render Monster
+function renderMonster(item, cardId, useAlt = false) {
+  // Format abilities
+  const abilities = [];
+  for (let i = 1; i <= 9; i++) {
+    if (item[`Ability ${i}`]) {
+      abilities.push(`<p>${formatAbility(item[`Ability ${i}`])}</p>`);
+    }
+  }
+  const abilitiesHTML = abilities.length > 0 ? abilities.join("") : "<p>No special abilities.</p>";
+
+  return `
+    <div class="card-header">
+      <div class="card-favorite-title">
+        <div class="favorite-icon" id="${cardId}-favorite-icon">●</div>
+        <div class="card-title">${item.Name || "Unknown Monster"}</div>
+      </div>
+      <div class="monster-level">${item.Level || "?"}</div>
+    </div>
+    <div class="card-body" id="${cardId}-body">
+      <p class="flavor-text">${item["Flavor Text"] || "No description available."}</p>
+      <div class="divider"></div>
+      <table class="stats-table">
+        <tr><th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th></tr>
+        <tr>
+          <td>${item.S || item.STR || "-"}</td>
+          <td>${item.D || item.DEX || "-"}</td>
+          <td>${item.C || item.CON || "-"}</td>
+          <td>${item.I || item.INT || "-"}</td>
+          <td>${item.W || item.WIS || "-"}</td>
+          <td>${item.Ch || item.CHA || "-"}</td>
+        </tr>
+      </table>
+      <div class="divider"></div>
+      <table class="traits-table">
+        <tr><th>AC</th><th>HP</th><th>AL</th><th>MV</th></tr>
+        <tr>
+          <td>${item.AC || "-"}</td>
+          <td>${item.HP || "-"}</td>
+          <td>${item.AL || "-"}</td>
+          <td>${item.MV || "-"}</td>
+        </tr>
+      </table>
+      <div class="divider"></div>
+      <div class="attacks">
+        <p><strong>Attack:</strong> ${item.ATK || "None"}</p>
+      </div>
+      <div class="divider"></div>
+      <div class="abilities">${abilitiesHTML}</div>
+    </div>
+  `;
+}
+
+// ✨ Render Spell
+function renderSpell(item, cardId, useAlt = false) {
+  return `
+    <div class="card-header">
+      <div class="card-favorite-title">
+        <div class="favorite-icon" id="${cardId}-favorite-icon">●</div>
+        <div class="card-title">${item.Name || "Unknown Spell"}</div>
+      </div>
+      <div class="spell-level">${item.Level || "?"}</div>
+    </div>
+    <div class="card-body" id="${cardId}-body">
+      <p class="spell-school">${item.School || "Unknown School"}</p>
+      <div class="divider"></div>
+      <table class="spell-details">
+        <tr><th>Range</th><th>Duration</th><th>Casting Time</th></tr>
+        <tr>
+          <td>${item.Range || "-"}</td>
+          <td>${item.Duration || "-"}</td>
+          <td>${item["Casting Time"] || "-"}</td>
+        </tr>
+      </table>
+      <div class="divider"></div>
+      <p class="spell-description">${item.Description || "No description available."}</p>
+    </div>
+  `;
+}
+
+// 🗡️ Render Magic Item
+function renderItem(item, cardId, useAlt = false) {
+  return `
+    <div class="card-header">
+      <div class="card-favorite-title">
+        <div class="favorite-icon" id="${cardId}-favorite-icon">●</div>
+        <div class="card-title">${item.Name || "Unknown Item"}</div>
+      </div>
+      <div class="item-rarity">${item.Rarity || "?"}</div>
+    </div>
+    <div class="card-body" id="${cardId}-body">
+      <p class="item-type">${item.Type || "Item"}</p>
+      ${item.Attunement ? `<p class="item-attunement">Requires Attunement</p>` : ""}
+      <div class="divider"></div>
+      <p class="item-description">${item.Description || "No description available."}</p>
+    </div>
+  `;
+}
+
+// 📝 Render Generic Card
+function renderGeneric(item, cardId, useAlt = false) {
+  const paragraphs = getContentChunks(item)
+    .map(text => `<p>${parseMarkdown(text)}</p>`)
+    .join("");
+  
+  return `
+    <div class="card-header">
+      <div class="card-favorite-title">
+        <div class="favorite-icon" id="${cardId}-favorite-icon">●</div>
+        <div class="card-title">${item.Name || "Untitled"}</div>
+      </div>
+    </div>
+    <div class="card-body" id="${cardId}-body">
+      ${paragraphs || "<p>No content available.</p>"}
+    </div>
+  `;
+}
+
+// ===============================
+// 🛠️ Helper Functions
+// ===============================
+
+// Format monster abilities (bold first sentence)
+function formatAbility(ability) {
+  const match = ability.match(/^(.*?[.:])/);
+  if (match) {
+    const bolded = `<strong>${match[1]}</strong>`;
+    return ability.replace(match[1], bolded);
+  }
+  return ability;
+}
+
+// Gather numbered columns ("1", "2", "3", etc.) as content text
 function getContentChunks(row) {
   const chunks = Object.keys(row)
     .filter(k => /^\d+$/.test(k) && row[k] != null)
@@ -50,24 +213,7 @@ function getContentChunks(row) {
   return chunks;
 }
 
-// Sort data - stacks preserve spreadsheet order (no sorting)
-function getSortedData() {
-  return data.slice();
-}
-
-// Filter - searches Name and any numbered column
-function getFilteredData(sortedData) {
-  const q = (typeof currentSearchQuery === "string" ? currentSearchQuery : "").toLowerCase();
-  if (!q) return sortedData;
-  
-  return sortedData.filter(item => {
-    const nameHit = (item.Name || "").toLowerCase().includes(q);
-    const contentHit = getContentChunks(item).some(txt => txt.toLowerCase().includes(q));
-    return nameHit || contentHit;
-  });
-}
-
-// 🎨 Simple markdown parser (inline only: bold, italic, inline code)
+// Simple markdown parser (inline only: bold, italic, inline code)
 function parseMarkdown(text) {
   return text
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')  // **bold**
@@ -77,41 +223,61 @@ function parseMarkdown(text) {
     .replace(/`(.+?)`/g, '<code>$1</code>');           // `code`
 }
 
-// 🧱 Build the card HTML
+// ===============================
+// 🔧 Main Rendering Function
+// ===============================
 function getCardInnerHTML(item, cardId, useAlt = false) {
-  const isDivider = item.Name && item.Name.startsWith("★");
-  const displayName = isDivider ? item.Name.substring(1).trim() : item.Name;
+  const type = detectCardType(item);
   
-  // Dividers: no favorite icon, no body
-  if (isDivider) {
-    return `
-      <div class="card-header">
-        <div class="card-favorite-title">
-          <div class="card-title">${displayName || "Divider"}</div>
-        </div>
-      </div>
-    `;
+  switch(type) {
+    case "divider":
+      return renderDivider(item, cardId);
+    case "monster":
+      return renderMonster(item, cardId, useAlt);
+    case "spell":
+      return renderSpell(item, cardId, useAlt);
+    case "item":
+      return renderItem(item, cardId, useAlt);
+    default:
+      return renderGeneric(item, cardId, useAlt);
   }
-  
-  // Regular cards: full rendering
-  const paragraphs = getContentChunks(item)
-    .map(text => `<p>${parseMarkdown(text)}</p>`)
-    .join("");
-  
-  return `
-    <div class="card-header">
-      <div class="card-favorite-title">
-        <div class="favorite-icon" id="${cardId}-favorite-icon">●</div>
-        <div class="card-title">${displayName || "Untitled"}</div>
-      </div>
-    </div>
-    <div class="card-body" id="${cardId}-body">
-      ${paragraphs || "<p>No content available.</p>"}
-    </div>
-  `;
 }
 
-// Expose for list_script.js
+// ===============================
+// 📊 Data Filtering/Sorting
+// ===============================
+
+// Stacks preserve spreadsheet order (no sorting)
+function getSortedData() {
+  return data.slice();
+}
+
+// Filter - searches Name and content across all card types
+function getFilteredData(sortedData) {
+  const q = (typeof currentSearchQuery === "string" ? currentSearchQuery : "").toLowerCase();
+  if (!q) return sortedData;
+  
+  return sortedData.filter(item => {
+    // Search in Name
+    const nameHit = (item.Name || "").toLowerCase().includes(q);
+    
+    // Search in generic content (numbered columns)
+    const contentHit = getContentChunks(item).some(txt => txt.toLowerCase().includes(q));
+    
+    // Search in type-specific fields
+    const monsterHit = (item["Flavor Text"] || "").toLowerCase().includes(q);
+    const spellHit = (item.Description || "").toLowerCase().includes(q) || 
+                     (item.School || "").toLowerCase().includes(q);
+    const itemHit = (item.Description || "").toLowerCase().includes(q) ||
+                    (item.Type || "").toLowerCase().includes(q);
+    
+    return nameHit || contentHit || monsterHit || spellHit || itemHit;
+  });
+}
+
+// ===============================
+// 🌍 Export for list_script.js
+// ===============================
 window.getSortedData = getSortedData;
 window.getFilteredData = getFilteredData;
 window.getCardInnerHTML = getCardInnerHTML;
