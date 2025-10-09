@@ -1,13 +1,4 @@
-/* ==UserStyle==
-@name           3x5arcana.com
-@namespace      github.com/openstyles/stylus
-@version        1.0.0
-@description    A new userstyle
-@author         Me
-==/UserStyle== */
-
-@-moz-document domain("3x5arcana.com") {
-       /* ==========================================================
+  /* ==========================================================
    3x5 Arcana – styles.css (cleaned, complete)
    ========================================================== */
 
@@ -774,5 +765,4 @@ p.header-area {
 #favorites-list .card.expanded,
 #favorites-list .card-header {
   background-color: var(--grey-lighter);
-}
 }
