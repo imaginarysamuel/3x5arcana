@@ -538,6 +538,17 @@ p.header-area {
   color: var(--grey-darkest);
 }
 
+.card.divider {
+  margin-left: -20px;
+  background-color: salmon;
+  color: var(--grey-lightest); 
+  cursor: default;
+}
+
+.card.divider .card-title {
+  color: var(--grey-lightest);
+}
+
 /* ----------------------------------------------------------
    Card Body - Tables & Content
 ---------------------------------------------------------- */
