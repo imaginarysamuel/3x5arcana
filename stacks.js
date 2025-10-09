@@ -67,7 +67,7 @@ function renderBookmark(item, cardId) {
   return `
     <div class="card-header">
       <div class="card-favorite-title">
-        <div class="card-title">${displayName || "Divider"}</div>
+        <div class="card-title">${displayName || "Bookmark"}</div>
       </div>
     </div>
   `;
