@@ -540,7 +540,7 @@ p.header-area {
 
 .card.divider {
   margin-left: -20px;
-  background-color: salmon;
+  background-color:  var(--red)
   color: var(--grey-lightest); 
   cursor: default;
 }
