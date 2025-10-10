@@ -545,6 +545,7 @@ p.header-area {
 .card.bookmark {
   border: 0.25px solid var(--blue-light);
   border-radius: 5px;
+  background-color: var(--red);
   padding: 10px;
   margin: 7px auto 4px;
   width: 90%;
