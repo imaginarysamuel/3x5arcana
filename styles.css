@@ -575,11 +575,6 @@ p.header-area {
   text-transform: uppercase;
 }
 
-.stats-table td,
-.traits-table td {
-  font-weight: bold;
-}
-
 .attacks,
 .abilities,
 .spell-description {
