@@ -771,3 +771,27 @@ p.header-area {
 #favorites-list .card-header {
   background-color: var(--grey-lighter);
 }
+
+/* ----------------------------------------------------------
+   Loading and error message styling
+---------------------------------------------------------- */
+
+.loading-message,
+.error-message {
+  display: block;
+  text-align: center;
+  width: 100%;
+  padding: 2rem;
+  font-family: inherit; /* Uses the site's default font */
+  font-weight: bold;
+}
+
+/* Also style the loading div in custom HTML cards */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  font-family: inherit;
+  text-align: center;
+}
