@@ -500,7 +500,6 @@ p.header-area {
   color: var(--grey-darkest);
   font-weight: bold;
   text-transform: uppercase;
-  border-bottom: 1px solid var(--red);
   min-height: 35px;
   margin-bottom: 12px;
   padding-bottom: 1px;
@@ -657,6 +656,10 @@ p.header-area {
 .card.expanded .card-body {
   max-height: 1000px;
   padding-bottom: 10px;
+}
+
+.card.expanded .card-header {
+  border-bottom: 1px solid var(--red);
 }
 
 .card.collapsed .card-body {
