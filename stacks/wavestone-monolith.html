@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PFMKRV8VBN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PFMKRV8VBN');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <!-- 🔔 ══════════════════════════════ Update the Header Below! ══════════════════════════════ -->
+  <title>Wavestone Monolith - 3x5 Arcana</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="burger-menu">
+      <div class="burger-icon" id="burger-icon">☰</div>
+      <div class="menu-overlay" id="menu-overlay">
+        <div class="menu-card">
+          <div class="menu-card-header">
+            <div class="menu-close-icon" id="menu-close-icon">✖︎</div>
+          </div>
+          <div class="menu-content">
+            <a href="../spells.html" target="_blank">Spells</a>
+            <a href="../monsters.html" target="_blank">Monsters</a>
+            <a href="../magic-items.html" target="_blank">Magic Items</a>
+            <a href="../index.html" target="_blank">About</a>
+          </div>
+        </div>
+      </div>
+    </div>
+          <!-- 🔔 ══════════════════════════════ Update the Header Below! ══════════════════════════════ -->
+    <h1 class="main-title">Wavestone Monolith</h1>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="spacer"></div>
+  <div id="favorites-list"></div>
+  <div class="spacer"></div>
+  <div id="cards-list"></div>
+  <div class="spacer"></div>
+
+  <!-- FOOTER -->
+  <img
+    src="https://raw.githubusercontent.com/imaginarysamuel/3x5arcana/5a2de5d4ce31e098d9eb2db0d63524d457749e0b/designed-for-use-with_SDRPG-black-transparent.png"
+    alt="Designed for use with Shadowdark Logo"
+    class="share-icon">
+  <div class="spacer"></div>
+
+  <!-- SCRIPTS -->
+  <script src="../burgermenu_script.js"></script>
+  <script src="../list_script.js"></script>
+  
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+       🔔 TO ADD A NEW ADVENTURE STACK:
+       ═══════════════════════════════════════════════════════════════════════════
+       1. Copy this HTML file
+       2. Update the <title> and <h1> above
+       3. Replace ONLY the URL below with your new Google Sheet OpenSheet URL
+       4. That's it! stacks.js handles the rest automatically.
+       -> you can use multiple sheets. just format them like this: 
+          const STACK_DATA_URL = [
+            "https://opensheet.elk.sh/YOUR_ID/Monsters",
+            "https://opensheet.elk.sh/YOUR_ID/Spells",
+            "https://opensheet.elk.sh/YOUR_ID/Items",
+            "https://opensheet.elk.sh/YOUR_ID/Rules"
+          ];
+       ═══════════════════════════════════════════════════════════════════════════ -->
+  <script>
+    const STACK_DATA_URL = [
+      "https://opensheet.elk.sh/1IkmsirtMYWIrz0lOfILEaBwQkwJbBCh-dywA0EpouOE/Wavestone-Monolith-Monsters",
+      "https://opensheet.elk.sh/1IkmsirtMYWIrz0lOfILEaBwQkwJbBCh-dywA0EpouOE/Wavestone-Monolith-Items"
+    ];
+  </script>
+  <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+  
+  <script src="../stacks.js"></script>
+</body>
+</html>
