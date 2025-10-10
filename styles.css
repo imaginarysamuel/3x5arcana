@@ -545,7 +545,7 @@ p.header-area {
   border: 0.25px solid var(--blue-light);
   border-radius: 5px;
   background-color: var(--red);
-  color: var(--grey-lightest);
+  color: var(--grey-lightest) !important;
   padding: 10px;
   margin: 7px auto 4px;
   width: 90%;
@@ -555,6 +555,8 @@ p.header-area {
   cursor: pointer;
   transform: translateX(-.125in);
 }
+
+
 /* ----------------------------------------------------------
    Card Body - Tables & Content
 ---------------------------------------------------------- */
