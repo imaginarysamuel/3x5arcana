@@ -2,7 +2,7 @@
 // 3x5 Arcana — Rules (game.js)
 // ===============================
 
-const spellSheetUrl = "https://opensheet.elk.sh/1GSQ87L3gNGsL1PxMmPuOmKh4PUuOXwBLOpN9OLo7pNY/Rules";
+const spellSheetUrl = "https://opensheet.elk.sh/1GSQ87L3gNGsL1PxMmPuOmKh4PUuOXwBLOpN9OLo7pNY/Rules_1.1";
 
 let data = [];
 
