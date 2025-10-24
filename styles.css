@@ -1,4 +1,4 @@
-    /* ==========================================================
+        /* ==========================================================
    3x5 Arcana – styles.css (cleaned, complete)
    ========================================================== */
 
@@ -467,7 +467,7 @@ p.header-area {
 ---------------------------------------------------------- */
 .card {
   background-color: var(--grey-medium);
-  border: 0.25px solid var(--blue-light);
+  border: 1.5px solid var(--grey-dark);
   border-radius: 5px;
   padding: 10px;
   margin: -7px auto 0;
@@ -485,8 +485,9 @@ p.header-area {
 
 .card.expanded {
   background: var(--grey-lighter);
+  border: 1px solid var(--blue-dark);
   transition: background-color 0.1s ease-out, transform 0.1s ease-out;
-  box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   padding: 10px;
   transform: translateX(2%) translateY(-2%);
   margin-bottom: 15px;
