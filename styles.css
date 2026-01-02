@@ -550,9 +550,15 @@ p.header-area {
   width: 90%;
   max-width: 5.25in;
   max-height: .5in;
-  transition: transform 0.1s, box-shadow 0.1s;
-  cursor: pointer;
+  transition: none;
+  cursor: default;
   transform: translateX(-.125in);
+}
+
+.card.bookmark:hover {
+  transform: translateX(-.125in);
+  background: var(--red);
+  box-shadow: none;
 }
 
 .card.bookmark * {
