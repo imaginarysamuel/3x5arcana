@@ -125,20 +125,22 @@ function getCardInnerHTML(monster, monsterId, useAlt = false) {
     ? abilities.join("")
     : "<p>No special abilities.</p>";
 
-  const statLine = [
-    ["AC", monster["AC"]],
-    ["HP", monster["HP"]],
-    ["ATK", monster["ATK"]],
-    ["MV", monster["MV"]],
-    ["S", monster["S"]],
-    ["D", monster["D"]],
-    ["C", monster["C"]],
-    ["I", monster["I"]],
-    ["W", monster["W"]],
-    ["Ch", monster["Ch"]],
-    ["AL", monster["AL"]],
-    ["LV", monster["Level"]],
-  ]
+const statLine = [
+  ["AC", monster["AC"]],
+  ["HP", monster["HP"]],
+  ["ATK", monster["ATK"]],
+  ["MV", monster["MV"]],
+  "<br>",
+  ["S", monster["S"]],
+  ["D", monster["D"]],
+  ["C", monster["C"]],
+  ["I", monster["I"]],
+  ["W", monster["W"]],
+  ["Ch", monster["Ch"]],
+  "<br>",
+  ["AL", monster["AL"]],
+  ["LV", monster["Level"]],
+]
     .filter(([, value]) => value !== undefined && value !== "")
     .map(([label, value]) => `<strong>${label}</strong> ${value}`)
     .join(", ");
