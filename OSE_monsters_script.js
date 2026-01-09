@@ -10,7 +10,6 @@ let currentSortMode = "level"; // "level" or "alpha"
 const monsterRangeDisplay = document.getElementById("range-display");
 const monsterRangeMin = document.getElementById("range-min");
 const monsterRangeMax = document.getElementById("range-max");
-const sortRadios = document.querySelectorAll('input[name="sort-mode"]');
 
 // Load the JSON file
 fetch('OSE-Monsters-JSON.json')
