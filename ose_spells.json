@@ -1,0 +1,1612 @@
+{
+  "Striking": {
+    "type": "3rd LevelCleric Spell",
+    "level": 3,
+    "class": "Cleric",
+    "duration": "1 turn",
+    "range": "30’",
+    "description": "A single weapon is enchanted:",
+    "special_rules": [
+      "Damage:It deals an additional 1d6 damage.",
+      "Treated as magical:It is able to harm monsters which are normally only harmed by magical weapons."
+    ]
+  },
+  "Cause Light Wounds": {
+    "type": "1st LevelCleric Spell",
+    "level": 1,
+    "class": "Cleric",
+    "duration": "Instant",
+    "range": "The caster or a creature touched",
+    "description": "This spell has two usages:\nInflicts 1d6+1 hit points of damage to a touched creature. In combat, a melee attack roll is required."
+  },
+  "Conjure Elemental: Air": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "Permanent (until dismissed or slain)",
+    "range": "240’",
+    "description": "A 16 Hit Diceelemental—a being formed of pure elemental matter—is summoned from an elemental plane of the caster’s choice (air, earth, fire, water) to do the caster’s bidding.\nRestrictions:The caster may summon at most one elemental from each plane in a single day.\nHuge vortexes of whirling air.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV360’ (120’) flying,SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300\nHuge, humanoid figures of earth or stone.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV60’ (20’),SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300\nWhirling columns of fire.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV120’ (40’),SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300\nHuge waves of water.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV60’ (20’) / 180’ (60’) swimming,SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300",
+    "special_rules": [
+      "Materials:The summons requires a large volume of the appropriate element.",
+      "Concentration:Is required to command an elemental.",
+      "Dismissing:While control over the elemental is maintained, the caster may dismiss it at any time, sending it back to its plane of origin.",
+      "Disruption:If the caster moves at more than half speed or their concentration is disturbed, the command over the elemental ends. It is, henceforth, a free-willed entity and will immediately try to kill the caster and any who get in its way.",
+      "Dispelling:A conjured elemental may be dispelled bydispel magicordispel evil.",
+      "1Air Elemental",
+      "2Earth Elemental",
+      "3Fire Elemental",
+      "4Water Elemental",
+      "Size:32’ tall, 8’ across.",
+      "Whirlwind:Creatures with less than 2HD swept aside (save versus death).",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm flying creatures:Inflict extra 1d8 damage.",
+      "Size:16’ tall.",
+      "Blocked by water:Cannot cross a channel wider than own height.",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm creatures on the ground:Inflict extra 1d8 damage.",
+      "Size:16’ tall, 16’ across.",
+      "Blocked by water:Cannot cross a channel wider than own diameter.",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm cold-based creatures:Inflict extra 1d8 damage.",
+      "Size:8’ tall, 32’ across.",
+      "Water-bound:Must remain within 60’ of water.",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm creatures in water:Inflict extra 1d8 damage."
+    ]
+  },
+  "Animate Dead": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "Permanent",
+    "range": "60’",
+    "description": "Causes corpses or skeletons to rise as undeadskeletonsorzombies.\nNumber:The spell animates up to 1 Hit Die of zombies or skeletons per level of the caster:",
+    "special_rules": [
+      "Obedient:Created undead obey the caster’s commands.",
+      "Special abilities:They are unable to use any special abilities (including spell casting) that they possessed in life.",
+      "Duration:The reanimating magic remains active until dispelled or until the undead are slain.",
+      "Skeletons:Have AC 7 [12] and HD equal to those the creature had in life.",
+      "Zombies:Have AC 8 [11] and HD one greater than the creature had in life.",
+      "Classed characters:If a PC or NPC with levels in a class is reanimated by this spell, the levels are not counted as HD. For example, the reanimated corpse of a 5th level fighter would have 2 HD (1 HD as a normal human, +1 for being reanimated as a zombie)."
+    ]
+  },
+  "Transmute Mud to Rock": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "3d6 days / Permanent (transmute mud to rock)",
+    "range": "120’",
+    "description": "Changes an area of rock into thick mud.\nPermanently changes an area of mud—up to 3,000 square feet and up to 10’ deep—into rock.",
+    "special_rules": [
+      "Area:Up to 3,000 square feet, 10’ deep.",
+      "Movement:Creatures in the mud move at 10% of their normal movement rate and may become stuck."
+    ]
+  },
+  "Fly": {
+    "type": "3rd LevelMagic-User Spell",
+    "level": 3,
+    "class": "Magic-User",
+    "duration": "1d6 turns +1 per level",
+    "range": "The caster or a creature touched",
+    "description": "The subject gains the ability to fly through the air.",
+    "special_rules": [
+      "Movement rate:Up to 360’ (120’).",
+      "Free movement:Is possible in any direction, including the ability to levitate and to hover in mid-air."
+    ]
+  },
+  "Protection from Normal Missiles": {
+    "type": "3rd LevelMagic-User Spell",
+    "level": 3,
+    "class": "Magic-User",
+    "duration": "12 turns",
+    "range": "30’",
+    "description": "A single subject in range gains complete immunity to small, non-magical missiles (e.g. no protection is granted against hurled boulders or enchanted missiles)."
+  },
+  "Polymorph Others": {
+    "type": "4th LevelMagic-User Spell",
+    "level": 4,
+    "class": "Magic-User",
+    "duration": "Permanent",
+    "range": "60’",
+    "description": "A living subject is changed into another type of creature, as chosen by the caster:",
+    "special_rules": [
+      "HD:The spell fails if the new form’s HD is more than twice the subject’s HD.",
+      "Hit points:The transformation does not alter the subject’s hit points.",
+      "Abilities:The subject truly becomes the new form: all special abilities are acquired, along with behavioural patterns, tendencies, and intelligence.",
+      "Specific individuals:The spell cannot be used to duplicate a specific individual.",
+      "Reversion:If the subject dies, it returns to its original form.",
+      "An unwilling subject:Maysave versus spellsto negate the effect."
+    ]
+  },
+  "Read Magic": {
+    "type": "1st LevelMagic-User Spell",
+    "level": 1,
+    "class": "Magic-User",
+    "duration": "1 turn",
+    "range": "The caster",
+    "description": "Allows the caster to decipher magical script or runes, as follows:",
+    "special_rules": [
+      "Scrolls:The magical script of a scroll of arcane spells can be understood. The caster is then able to activate the scroll at any time in the future.",
+      "Spell books:Aspell bookwritten by another arcane spell caster can be deciphered.",
+      "Inscriptions:Runes or magical words inscribed on an object or surface can be understood.",
+      "Reading again:Once the caster has used this spell to decipher a magical inscription, they can always understand that script again withoutread magic."
+    ]
+  },
+  "Remove Curse (Curse) (C)": {
+    "type": "3rd LevelCleric Spell",
+    "level": 3,
+    "class": "Cleric",
+    "duration": "Instant / Permanent (curse)",
+    "range": "The caster or a creature touched",
+    "description": "This spell removes a single curse from the subject. It may allow a character to discard a cursed magic item.\nPlaces a deleterious effect upon a creature, if it fails asave versus spells.",
+    "special_rules": [
+      "Effects:The exact form and effects of the curse are determined by the caster.",
+      "Maximum possible effects include:A –2 penalty tosaving throws, a –4 penalty to attack rolls, reducing anability scoreby 50%.",
+      "Multiple curses:May afflict a creature, as long as each has a different effect.",
+      "Referee judgement:Therefereeshould judge the effects of this spell and may turn overly powerful curses back onto the caster!"
+    ]
+  },
+  "Speak with Animals": {
+    "type": "2nd LevelCleric Spell",
+    "level": 2,
+    "class": "Cleric",
+    "duration": "6 turns",
+    "range": "30’",
+    "description": "The caster can communicate with one type of animal within range when the spell is cast.",
+    "special_rules": [
+      "Type of animal:Normal or giant animal species may be selected. Intelligent animals and fantastic monsters may not.",
+      "Services:Animals which are friendly towards the caster may be persuaded to perform a service. The service must be within an animal’s comprehension and capabilities."
+    ]
+  },
+  "Charm Person": {
+    "type": "1st LevelMagic-User Spell",
+    "level": 1,
+    "class": "Magic-User",
+    "duration": "The charm lasts indefinitely, but the subject is allowed to make furthersaves versus spellsat intervals, depending on their INT score. If one of these saves succeeds, the spell ends.",
+    "range": "120’",
+    "description": "A single human, demihuman, or human-like monster (seePersons) mustsave versus spellsor be charmed, as follows:\nRestrictions:Undeadand human-like monsters of greater than 4+1 HD (seeHit point modifiers) are not affected.",
+    "special_rules": [
+      "Friendship:The subject regards the caster as a close friend and will come to the caster’s defence.",
+      "Commands:If they share alanguage, the caster may give the charmed creature commands, which they will obey.",
+      "Subject’s nature:The subject may resist commands that contradict their habits oralignment.",
+      "Suicidal commands:Are always refused.",
+      "INT 3–8:New save once every month.",
+      "INT 9–12:New save each week.",
+      "INT 13–18:New save once every day."
+    ]
+  },
+  "Remove Fear (Cause Fear)": {
+    "type": "1st LevelCleric Spell",
+    "level": 1,
+    "class": "Cleric",
+    "duration": "2 turns",
+    "range": "The caster or a creature touched",
+    "description": "The creature touched is calmed and purged of fear.\nCauses a target within 120’ to flee for the duration unless theysave versus spells.",
+    "special_rules": [
+      "Magically induced fear:Is dispelled if the subject makes asaving throw versus spells, with a +1 bonus per level of the caster."
+    ]
+  },
+  "Hold Person (C)": {
+    "type": "2nd LevelCleric Spell",
+    "level": 2,
+    "class": "Cleric",
+    "duration": "9 turns",
+    "range": "180’",
+    "description": "This spell causes one or more humans, demihumans, or human-like monsters (seePersons) to be paralysed if they fail asaving throw versus spells. It may be cast in two ways:\nRestrictions:Undeadand human-like monsters of greater than 4+1 HD (seeHit point modifiers) are not affected."
+  },
+  "Commune": {
+    "type": "5th LevelCleric Spell",
+    "level": 5,
+    "class": "Cleric",
+    "duration": "3 turns",
+    "range": "The caster",
+    "description": "This spell allows the caster to contact a divine power and ask questions.",
+    "special_rules": [
+      "Questions:The caster may ask three questions per casting. Once per year, the caster may instead ask six questions.",
+      "Answers:Each question receives a simple “yes” or “no” answer.",
+      "Usage limit:Communemay only be cast once per week. If therefereefeels this spell is being overused, its usage may be limited to once per month."
+    ]
+  },
+  "Invisibility 10’ Radius": {
+    "type": "3rd LevelMagic-User Spell",
+    "level": 3,
+    "class": "Magic-User",
+    "duration": "Permanent (but may be broken, see below)",
+    "range": "120’",
+    "description": "A selected creature and all creatures within 10’ of it become invisible:",
+    "special_rules": [
+      "Area:The 10’ radius area of the spell’s effect moves with the chosen creature.",
+      "Exiting the area:Subjects that move more than 10’ away from the chosen creature become visible.",
+      "Entering the area:Creatures that move into the area after the spell is cast do not become invisible.",
+      "Gear:Any gear a subject is carrying is also rendered invisible. Items subsequently put down become visible. Carried light sources become invisible but the emitted light does not.",
+      "Breaking the invisibility:If a subject attacks or casts a spell, the invisibility is broken for that subject."
+    ]
+  },
+  "Conjure Elemental: Water": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "Permanent (until dismissed or slain)",
+    "range": "240’",
+    "description": "A 16 Hit Diceelemental—a being formed of pure elemental matter—is summoned from an elemental plane of the caster’s choice (air, earth, fire, water) to do the caster’s bidding.\nRestrictions:The caster may summon at most one elemental from each plane in a single day.\nHuge vortexes of whirling air.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV360’ (120’) flying,SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300\nHuge, humanoid figures of earth or stone.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV60’ (20’),SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300\nWhirling columns of fire.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV120’ (40’),SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300\nHuge waves of water.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV60’ (20’) / 180’ (60’) swimming,SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300",
+    "special_rules": [
+      "Materials:The summons requires a large volume of the appropriate element.",
+      "Concentration:Is required to command an elemental.",
+      "Dismissing:While control over the elemental is maintained, the caster may dismiss it at any time, sending it back to its plane of origin.",
+      "Disruption:If the caster moves at more than half speed or their concentration is disturbed, the command over the elemental ends. It is, henceforth, a free-willed entity and will immediately try to kill the caster and any who get in its way.",
+      "Dispelling:A conjured elemental may be dispelled bydispel magicordispel evil.",
+      "1Air Elemental",
+      "2Earth Elemental",
+      "3Fire Elemental",
+      "4Water Elemental",
+      "Size:32’ tall, 8’ across.",
+      "Whirlwind:Creatures with less than 2HD swept aside (save versus death).",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm flying creatures:Inflict extra 1d8 damage.",
+      "Size:16’ tall.",
+      "Blocked by water:Cannot cross a channel wider than own height.",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm creatures on the ground:Inflict extra 1d8 damage.",
+      "Size:16’ tall, 16’ across.",
+      "Blocked by water:Cannot cross a channel wider than own diameter.",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm cold-based creatures:Inflict extra 1d8 damage.",
+      "Size:8’ tall, 32’ across.",
+      "Water-bound:Must remain within 60’ of water.",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm creatures in water:Inflict extra 1d8 damage."
+    ]
+  },
+  "Darkness (MU)": {
+    "type": "1st LevelMagic-User Spell",
+    "level": 1,
+    "class": "Magic-User",
+    "duration": "6 turns +1 per level",
+    "range": "120’",
+    "description": "This spell has three usages:\nCreates a 15’ radius area of magical blackness, preventing normal sight (but notinfravision). Likelight, it may alternatively be used to blind creatures or to dispel alightspell."
+  },
+  "Death Spell": {
+    "type": "6th LevelMagic-User Spell",
+    "level": 6,
+    "class": "Magic-User",
+    "duration": "Instant",
+    "range": "240’",
+    "description": "Up to 4d8 Hit Dice of creatures within a 60’ cube area mustsave versus deathor die, instantly.\nRestrictions:Undeadand creatures with greater than 7 Hit Dice are unaffected."
+  },
+  "Ventriloquism": {
+    "type": "1st LevelMagic-User Spell",
+    "level": 1,
+    "class": "Magic-User",
+    "duration": "2 turns",
+    "range": "60’",
+    "description": "Allows the caster to cause their voice to emanate from anywhere within range (e.g. a statue, a tapestry, an animal)."
+  },
+  "Infravision": {
+    "type": "3rd LevelMagic-User Spell",
+    "level": 3,
+    "class": "Magic-User",
+    "duration": "1 day",
+    "range": "The caster or a creature touched",
+    "description": "Grantsinfravisionto 60’."
+  },
+  "Part Water": {
+    "type": "6th LevelMagic-User Spell",
+    "level": 6,
+    "class": "Magic-User",
+    "duration": "6 turns",
+    "range": "120’",
+    "description": "A body of water parts, revealing a pathway across the bottom.",
+    "special_rules": [
+      "Size:The path is 10’ wide and up to 120’ long.",
+      "Dismissing:The caster may end the spell any time they wish."
+    ]
+  },
+  "Floating Disc": {
+    "type": "1st LevelMagic-User Spell",
+    "level": 1,
+    "class": "Magic-User",
+    "duration": "6 turns",
+    "range": "6’",
+    "description": "Conjures an invisible disc of magical force that can be used to carry loads.",
+    "special_rules": [
+      "Dimensions:The disc is shaped like a round shield: around 3 feet across and slightly concave.",
+      "Load:It can hold a maximum load of 5,000 coins (500 pounds).",
+      "Motion:The disc floats at waist height, following the caster as they move.",
+      "End:Anything placed on the disc is dropped when it disappears at the end of the spell’s duration."
+    ]
+  },
+  "Wizard Lock": {
+    "type": "2nd LevelMagic-User Spell",
+    "level": 2,
+    "class": "Magic-User",
+    "duration": "Permanent",
+    "range": "10’",
+    "description": "Awizard lockspell magically locks a door, gate, similar portal, or any item that has a lock. The magical lock is permanent but may be bypassed as follows:",
+    "special_rules": [
+      "The caster:Can freely pass through any portals locked by their own spell.",
+      "Aknockspell:Allows passage.",
+      "Higher level casters:Magic-using characters 3 or more levels higher than the caster ofwizard lockmay pass.",
+      "Temporary:Bypassing does not destroy awizard lock."
+    ]
+  },
+  "Blight": {
+    "type": "2nd LevelCleric Spell",
+    "level": 2,
+    "class": "Cleric",
+    "duration": "6 turns",
+    "range": "60’",
+    "description": "May be used in one of two situations:\nIncurs a -1 penalty to morale checks, attack rolls, and damage rolls of enemies within a 20’ square area. Asave versus spellsis allowed to resist theblight."
+  },
+  "Hold Monster": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "6 turns +1 per level",
+    "range": "120’",
+    "description": "This spell causes one or more creatures to be paralysed if they fail asaving throw versus spells. It may be cast in two ways:\nRestrictions:Undeadare not affected."
+  },
+  "Quest (Remove Quest)": {
+    "type": "5th LevelCleric Spell",
+    "level": 5,
+    "class": "Cleric",
+    "duration": "Until quest is completed / Instant (remove quest)",
+    "range": "30’",
+    "description": "The caster commands a single subject to perform a specific quest or task.\nCan dispel an activequestspell. If the character who cast thequestspell to be nullified is higher level than the character castingremove quest, there is a chance of the spell having no effect. The probability of failure is 5% per level the caster is below the caster ofquest.",
+    "special_rules": [
+      "Examples:Rescuing a prisoner, killing a specific monster, bringing a magic item to the caster, or going on a journey to a holy site.",
+      "Suicidal quests:The prescribed quest must not be obviously suicidal.",
+      "Saving throw:The subject maysave versus spells, with success indicating that thequesthas no effect.",
+      "Refusal:Otherwise, the subject must undertake the quest or fall under a curse (per thecursespell, with the exact nature of the curse determined by thereferee).",
+      "Completion:Once the task is completed, the spell ends."
+    ]
+  },
+  "Growth of Plants": {
+    "type": "4th LevelMagic-User Spell",
+    "level": 4,
+    "class": "Magic-User",
+    "duration": "Permanent",
+    "range": "120’",
+    "description": "A dense, thorny thicket of vines and brambles overwhelms an area of normal woodland or scrub within range.",
+    "special_rules": [
+      "Area:An area of up to 3,000 square feet—selected by the caster—is affected (e.g. 150’ × 20’, 100’ × 30’, etc.).",
+      "Passage:Only very large creatures can force their way through."
+    ]
+  },
+  "Locate Object (MU)": {
+    "type": "2nd LevelMagic-User Spell",
+    "level": 2,
+    "class": "Magic-User",
+    "duration": "2 turns",
+    "range": "60’ +10’ per level",
+    "description": "The caster can sense the direction (but not distance) of an object. One of two types of object may be located:\nRestrictions:This spell cannot be used to locate creatures."
+  },
+  "Magic Jar": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "Special",
+    "range": "The caster",
+    "description": "The caster’s body enters a comatose trance as their life-force is transferred into a receptacle (any inanimate object within 30’), known as amagic jar. From there, the caster may attempt to possess the bodies of other creatures.\nWhen the caster’s life-force is in the magic jar:\nWhen the caster’s life-force is possessing a victim:",
+    "special_rules": [
+      "Possession:The caster may attempt to possess the body of another creature within 120’. The victim maysave versus spellsto resist possession. If the save is successful, the caster may not make another attempt to possess that victim for one turn. If the save fails, the caster’s life-force leaves the magic jar and enters the victim, possessing it.",
+      "Returning:The caster may choose to return to their own body at any time, ending the spell.",
+      "If the magic jar is destroyed:The caster dies.",
+      "If the caster’s own body is destroyed:Their life-force is stranded in the magic jar.",
+      "Control:The caster gains full control over the victim’s body, but is not able to make the victim castspells.",
+      "If the magic jar is destroyed:The spell ends and the caster’s life-force is trapped in the possessed body.",
+      "If the possessed victim is killed:The caster’s life-force returns to the magic jar.",
+      "Dispelling:Dispel evilforces the caster’s life-force back into the magic jar.",
+      "If the caster’s own body is destroyed:Their life-force is stranded in the body of the creature being possessed."
+    ]
+  },
+  "Darkness (C)": {
+    "type": "1st LevelCleric Spell",
+    "level": 1,
+    "class": "Cleric",
+    "duration": "12 turns",
+    "range": "120’",
+    "description": "This spell has three usages:\nCreates a 15’ radius area of magical blackness, preventing normal sight (but notinfravision). Likelight, it may alternatively be used to blind creatures or to dispel alightspell."
+  },
+  "Read Languages": {
+    "type": "1st LevelMagic-User Spell",
+    "level": 1,
+    "class": "Magic-User",
+    "duration": "2 turns",
+    "range": "The caster",
+    "description": "The caster gains the ability to understand written information in anylanguage, including coded messages or symbols (e.g. on treasure maps). No ability tospeakunknown languages is conferred."
+  },
+  "Conjure Elemental: Earth": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "Permanent (until dismissed or slain)",
+    "range": "240’",
+    "description": "A 16 Hit Diceelemental—a being formed of pure elemental matter—is summoned from an elemental plane of the caster’s choice (air, earth, fire, water) to do the caster’s bidding.\nRestrictions:The caster may summon at most one elemental from each plane in a single day.\nHuge vortexes of whirling air.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV360’ (120’) flying,SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300\nHuge, humanoid figures of earth or stone.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV60’ (20’),SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300\nWhirling columns of fire.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV120’ (40’),SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300\nHuge waves of water.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV60’ (20’) / 180’ (60’) swimming,SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300",
+    "special_rules": [
+      "Materials:The summons requires a large volume of the appropriate element.",
+      "Concentration:Is required to command an elemental.",
+      "Dismissing:While control over the elemental is maintained, the caster may dismiss it at any time, sending it back to its plane of origin.",
+      "Disruption:If the caster moves at more than half speed or their concentration is disturbed, the command over the elemental ends. It is, henceforth, a free-willed entity and will immediately try to kill the caster and any who get in its way.",
+      "Dispelling:A conjured elemental may be dispelled bydispel magicordispel evil.",
+      "1Air Elemental",
+      "2Earth Elemental",
+      "3Fire Elemental",
+      "4Water Elemental",
+      "Size:32’ tall, 8’ across.",
+      "Whirlwind:Creatures with less than 2HD swept aside (save versus death).",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm flying creatures:Inflict extra 1d8 damage.",
+      "Size:16’ tall.",
+      "Blocked by water:Cannot cross a channel wider than own height.",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm creatures on the ground:Inflict extra 1d8 damage.",
+      "Size:16’ tall, 16’ across.",
+      "Blocked by water:Cannot cross a channel wider than own diameter.",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm cold-based creatures:Inflict extra 1d8 damage.",
+      "Size:8’ tall, 32’ across.",
+      "Water-bound:Must remain within 60’ of water.",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm creatures in water:Inflict extra 1d8 damage."
+    ]
+  },
+  "Contact Higher Plane": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "One conversation",
+    "range": "The caster",
+    "description": "A channel of communication is opened to a higher plane of existence, allowing the caster to ask powerful, otherworldly beings for advice and knowledge on any subject.\nRestrictions:Castingcontact higher planeis a great and perilous deed.",
+    "special_rules": [
+      "Plane:The caster must choose which plane of existence to contact: communion with beings of the 3rd to 12th planes is possible via this spell. Higher numbered planes are home to more powerful and knowledgeable beings.",
+      "Questions:The caster may then ask a number of simple yes/no questions equal to the number of the plane contacted. Therefereeplays the role of the contacted being, responding to the caster’s questions.",
+      "Answers:For each question asked, there is a chance of the contacted being not knowing the answer or of answering untruthfully: see the table below. It is impossible to detect whether the entity is lying.",
+      "Usage limit:It may be cast at most once per week. (The referee may limit the spell’s usage to even less frequently, if desired.)",
+      "Insanity:Communion with otherworldly beings of great power can shatter the caster’s sanity. The basic chance is shown in the table below. For every level of the caster above 11, this chance is reduced by 5%. If the caster is driven insane as a result of the communion, the recovery time is a number of weeks equal to the number of the plane contacted."
+    ]
+  },
+  "Hallucinatory Terrain": {
+    "type": "4th LevelMagic-User Spell",
+    "level": 4,
+    "class": "Magic-User",
+    "duration": "Until touched",
+    "range": "240’",
+    "description": "Hallucinatory terraineither conjures an illusory terrain feature (e.g. a hill, wood, marsh, etc.) or hides an existing terrain feature.",
+    "special_rules": [
+      "Area:The illusion must fit completely within the spell’s range.",
+      "Touching:If an intelligent being touches the illusion, it vanishes, ending the spell."
+    ]
+  },
+  "Cure Serious Wounds (Cause Serious Wounds)": {
+    "type": "4th LevelCleric Spell",
+    "level": 4,
+    "class": "Cleric",
+    "duration": "Instant",
+    "range": "The caster or a creature touched",
+    "description": "The caster’s touch heals 2d6+2 hit points of damage in one living subject. This cannot raise the subject’s hit points above their normal maximum.\nInflicts 2d6+2 hit points of damage to a touched creature. In combat, a melee attack roll is required."
+  },
+  "Resist Fire": {
+    "type": "2nd LevelCleric Spell",
+    "level": 2,
+    "class": "Cleric",
+    "duration": "2 turns",
+    "range": "30’",
+    "description": "A single creature is bestowed with supernatural resistance to fire, as follows:",
+    "special_rules": [
+      "Normal heat:Unharmed by non-magical heat or fire.",
+      "Save bonus:Gain a +2 bonus to saving throws versus fire-based effects (e.g. magic or breath attacks).",
+      "Fire-based damage:Is reduced by 1 point per damage die rolled. (Each die inflicts a minimum of 1 damage.)"
+    ]
+  },
+  "Shield": {
+    "type": "1st LevelMagic-User Spell",
+    "level": 1,
+    "class": "Magic-User",
+    "duration": "2 turns",
+    "range": "The caster",
+    "description": "Conjures a barrier of magic that gives the caster an improved AC:",
+    "special_rules": [
+      "Against missile attacks:AC 2 [17].",
+      "Against other attacks:AC 4 [15]."
+    ]
+  },
+  "Detect Evil (MU)": {
+    "type": "2nd LevelMagic-User Spell",
+    "level": 2,
+    "class": "Magic-User",
+    "duration": "2 turns",
+    "range": "60’",
+    "description": "Objects under an evil enchantment and living beings with evil intentions are caused to magically glow.",
+    "special_rules": [
+      "Intent only:The caster cannot read the thoughts of creatures with evil intent.",
+      "Definition of evil:Therefereemust judge what is classified as evil. Beings of chaotic alignment do not always have evil intent. Traps and poisons, while potentially harmful, are not evil."
+    ]
+  },
+  "Web": {
+    "type": "2nd LevelMagic-User Spell",
+    "level": 2,
+    "class": "Magic-User",
+    "duration": "48 turns",
+    "range": "10’",
+    "description": "Conjures a volume of sticky webbing, blocking a 10’ cube area.\nBreaking free:Depends on STR:",
+    "special_rules": [
+      "Entanglement:Creatures caught within a web become entangled among the gluey fibres. Entangled creatures can’t move, but can break free depending on their strength (see below).",
+      "Flammable:The web can be destroyed by fire in two rounds. All creatures caught within flaming webs suffer 1d6 damage from the flames.",
+      "Normal human range:The creature can break free in 2d4 turns.",
+      "Magically augmented STR above 18:The creature can break free in 4 rounds.",
+      "Giant strength:The creature can break free in 2 rounds."
+    ]
+  },
+  "Detect Evil (C)": {
+    "type": "1st LevelCleric Spell",
+    "level": 1,
+    "class": "Cleric",
+    "duration": "6 turns",
+    "range": "120’",
+    "description": "Objects under an evil enchantment and living beings with evil intentions are caused to magically glow.",
+    "special_rules": [
+      "Intent only:The caster cannot read the thoughts of creatures with evil intent.",
+      "Definition of evil:Therefereemust judge what is classified as evil. Beings of chaotic alignment do not always have evil intent. Traps and poisons, while potentially harmful, are not evil."
+    ]
+  },
+  "Purify Food and Water": {
+    "type": "1st LevelCleric Spell",
+    "level": 1,
+    "class": "Cleric",
+    "duration": "Permanent",
+    "range": "10’",
+    "description": "Poisoned, rotten, spoiled, or contaminated food and water are purified. One of the following may be affected:",
+    "special_rules": [
+      "Drink:6 quarts.",
+      "Rations:One ration (iron or standard).",
+      "Unpreserved food:A quantity sufficient for 12 people."
+    ]
+  },
+  "Remove Geas": {
+    "type": "6th LevelMagic-User Spell",
+    "level": 6,
+    "class": "Magic-User",
+    "duration": "Permanent / Instant (remove geas)",
+    "range": "30’",
+    "description": "The caster commands a subject to perform or avoid performing a specific action.\nCan dispel an activegeasspell and any incurred penalties. Ageasplaced by a lower level caster is automatically dispelled. Ageascreated by a higher level caster has a 5% chance per level difference of not being dispelled.",
+    "special_rules": [
+      "Examples:Bringing a specific item to the caster, eating or drinking without restraint, keeping a certain fact secret.",
+      "Impossible or deadly tasks:The prescribedgeasmust not be impossible or directly deadly—if such ageasis cast, it affects the caster, instead.",
+      "Saving throw:The subject maysave versus spells, to avoid coming under the spell’s effect.",
+      "If the save fails:The subject must follow the stipulated course of action or suffer gradually increasing (and eventually fatal) penalties determined by thereferee(e.g. penalties to attack,ability scorereductions, inability to memorize spells, physical torment and feebleness, etc.)."
+    ]
+  },
+  "Continual Light (Continual Darkness) (C)": {
+    "type": "3rd LevelCleric Spell",
+    "level": 3,
+    "class": "Cleric",
+    "duration": "Permanent",
+    "range": "120’",
+    "description": "This spell has three usages:\nCreates a 30’ radius area of magical blackness, preventing both normal sight andinfravision. Light sources brought within the area of darkness do not illuminate it. Likecontinual light, it may alternatively be used to blind creatures or to dispel acontinual lightspell."
+  },
+  "Locate Object (C)": {
+    "type": "3rd LevelCleric Spell",
+    "level": 3,
+    "class": "Cleric",
+    "duration": "6 turns",
+    "range": "120’",
+    "description": "The caster can sense the direction (but not distance) of an object. One of two types of object may be located:\nRestrictions:This spell cannot be used to locate creatures.",
+    "special_rules": [
+      "General class:An object of a general class (e.g. a stairway, an altar, etc). In this case, the nearest object of that type is located.",
+      "Specific object:A specific object which the caster can clearly visualise in all aspects."
+    ]
+  },
+  "Create Water": {
+    "type": "4th LevelCleric Spell",
+    "level": 4,
+    "class": "Cleric",
+    "duration": "Permanent",
+    "range": "Touch",
+    "description": "This spell causes a magical fount to spring forth from the ground or a wall.",
+    "special_rules": [
+      "Volume:The fount produces approximately 50 gallons of water—enough to sustain twelve humans and twelve mounts for one day.",
+      "Higher level casters:If the caster is higher than 8th level, water sufficient for an additional twelve humans and mounts is produced for each level beyond 8th."
+    ]
+  },
+  "Detect Invisible": {
+    "type": "2nd LevelMagic-User Spell",
+    "level": 2,
+    "class": "Magic-User",
+    "duration": "6 turns",
+    "range": "10’ per level",
+    "description": "Invisible creatures or items in range are revealed to the caster."
+  },
+  "Protection from Evil (MU)": {
+    "type": "1st LevelMagic-User Spell",
+    "level": 1,
+    "class": "Magic-User",
+    "duration": "6 turns",
+    "range": "The caster",
+    "description": "This spell wards the caster from attacks by creatures of another alignment, as follows:",
+    "special_rules": [
+      "Bonuses:The caster gains a +1 bonus tosaving throwsagainst attacks or special abilities of affected creatures.",
+      "Affected creatures’ attacks:Against the caster are penalised by -1.",
+      "Enchanted, constructed, or summoned creatures:The spell additionally prevents such creatures from attacking the caster in melee, though they may still make ranged attacks. If the caster engages such a creature in melee, this protection is broken (the caster still gains the save and attack bonuses mentioned above)."
+    ]
+  },
+  "Magic Missile": {
+    "type": "1st LevelMagic-User Spell",
+    "level": 1,
+    "class": "Magic-User",
+    "duration": "1 turn",
+    "range": "150’",
+    "description": "This spell conjures a glowing dart of energy that the caster may choose to shoot at a visible target within range.",
+    "special_rules": [
+      "Hit:The missile hits unerringly (no attack roll or saving throw is required).",
+      "Damage:The missile inflicts 1d6+1 damage.",
+      "Higher level casters:May conjure more missiles: two additional missiles are conjured per five experience levels the caster has gained (i.e. three missiles at 6th–10th level, five missiles at 11th–15th level, etc.). Multiple missiles may be directed at a single target."
+    ]
+  },
+  "Invisibility": {
+    "type": "2nd LevelMagic-User Spell",
+    "level": 2,
+    "class": "Magic-User",
+    "duration": "Permanent (but may be broken, see below)",
+    "range": "240’",
+    "description": "The caster or another creature or object within range becomes invisible:",
+    "special_rules": [
+      "If cast on a creature:Any gear the subject is carrying is also rendered invisible (this includes clothing and armour). Items subsequently put down become visible. If the subject attacks or casts a spell, the invisibility is broken, ending the spell.",
+      "If cast on an object:The invisibility is permanent.",
+      "Light sources:If a light source is made invisible (either as part of a creature’s gear or as an individual object), the light it casts is unaffected."
+    ]
+  },
+  "Raise Dead (Finger of Death)": {
+    "type": "5th LevelCleric Spell",
+    "level": 5,
+    "class": "Cleric",
+    "duration": "Instant",
+    "range": "120’",
+    "description": "This spell has two usages:\nRestoring life:When used to restore life, the following stipulations apply:\nDirects a ray of deadly magic at a single target. If the target fails asaving throw versus death, it dies instantly. Castingfinger of deathis a chaotic act; it will only be used by lawful casters in desperate situations.",
+    "special_rules": [
+      "Time limit:The caster can raise a person that has been dead for no longer than four days per level of the caster above 7th. For example, a 10th level caster can revive a character that has been dead for twelve days (three levels above 7th × four days).",
+      "Weakness:Returning from death is an ordeal. Until the subject gets two full weeks of bed rest, they have 1 hit point, move at half the normal rate, cannot carry heavy items, and cannot attack, castspells, or use other class abilities. This period of weakness may not be shortened by any magical healing."
+    ]
+  },
+  "Cause Fear": {
+    "type": "1st LevelCleric Spell",
+    "level": 1,
+    "class": "Cleric",
+    "duration": "2 turns",
+    "range": "The caster or a creature touched",
+    "description": "The creature touched is calmed and purged of fear.\nCauses a target within 120’ to flee for the duration unless theysave versus spells.",
+    "special_rules": [
+      "Magically induced fear:Is dispelled if the subject makes asaving throw versus spells, with a +1 bonus per level of the caster."
+    ]
+  },
+  "Hold Portal": {
+    "type": "1st LevelMagic-User Spell",
+    "level": 1,
+    "class": "Magic-User",
+    "duration": "2d6 turns",
+    "range": "10’",
+    "description": "Magically prevents a portal (e.g. door, gate, etc.) from being opened.",
+    "special_rules": [
+      "Opening by magic:Aknockspell opens the held portal instantly.",
+      "Opening by force:Creatures with at least 3 Hit Dice more than the caster can open the held portal with one round of effort."
+    ]
+  },
+  "Cause Serious Wounds": {
+    "type": "4th LevelCleric Spell",
+    "level": 4,
+    "class": "Cleric",
+    "duration": "Instant",
+    "range": "The caster or a creature touched",
+    "description": "The caster’s touch heals 2d6+2 hit points of damage in one living subject. This cannot raise the subject’s hit points above their normal maximum.\nInflicts 2d6+2 hit points of damage to a touched creature. In combat, a melee attack roll is required."
+  },
+  "Light (Darkness) (C)": {
+    "type": "1st LevelCleric Spell",
+    "level": 1,
+    "class": "Cleric",
+    "duration": "12 turns",
+    "range": "120’",
+    "description": "This spell has three usages:\nCreates a 15’ radius area of magical blackness, preventing normal sight (but notinfravision). Likelight, it may alternatively be used to blind creatures or to dispel alightspell."
+  },
+  "Dimension Door": {
+    "type": "4th LevelMagic-User Spell",
+    "level": 4,
+    "class": "Magic-User",
+    "duration": "1 round",
+    "range": "10’",
+    "description": "The caster or a single creature is instantly transferred to another location up to 360’ distant. The destination may be selected in two ways:\nStipulations:The following apply:",
+    "special_rules": [
+      "Occupied destination:The spell has no effect if the destination is occupied by a solid object.",
+      "If the target is unwilling:It maysave versus spellsto resist the teleportation."
+    ]
+  },
+  "Polymorph Self": {
+    "type": "4th LevelMagic-User Spell",
+    "level": 4,
+    "class": "Magic-User",
+    "duration": "6 turns +1 per level",
+    "range": "The caster",
+    "description": "The caster transforms themselves into another being:",
+    "special_rules": [
+      "HD:The new form may not have higher Hit Dice than the caster’s level.",
+      "Stats:The transformation does not alter the caster’s hit points, saving throws, attack probabilities, or intelligence.",
+      "Physical capabilities:Of the new form (e.g. strength, physical attack forms, modes of movement) are acquired.",
+      "Non-physical special abilities:(e.g. immunities, breath weapons, spell casting) are not acquired.",
+      "Casting spells:While polymorphed, the caster is unable to castspells.",
+      "Specific individuals:The spell cannot be used to duplicate a specific individual.",
+      "Reversion:If the caster dies while polymorphed, they return to their original form."
+    ]
+  },
+  "Speak with Plants": {
+    "type": "4th LevelCleric Spell",
+    "level": 4,
+    "class": "Cleric",
+    "duration": "3 turns",
+    "range": "30’",
+    "description": "This spell has two usages:"
+  },
+  "Bless (Blight)": {
+    "type": "2nd LevelCleric Spell",
+    "level": 2,
+    "class": "Cleric",
+    "duration": "6 turns",
+    "range": "60’",
+    "description": "May be used in one of two situations:\nIncurs a -1 penalty to morale checks, attack rolls, and damage rolls of enemies within a 20’ square area. Asave versus spellsis allowed to resist theblight."
+  },
+  "Anti-Magic Shell": {
+    "type": "6th LevelMagic-User Spell",
+    "level": 6,
+    "class": "Magic-User",
+    "duration": "12 turns",
+    "range": "The caster",
+    "description": "Wreathes the caster in an anti-magic barrier.",
+    "special_rules": [
+      "Blocks magic:The barrier blocks all spells and spell effects in both directions, including spells cast by the caster.",
+      "Dismissing:At any time the caster wishes, they may dismiss the barrier, ending the spell."
+    ]
+  },
+  "Protection from Evil (C)": {
+    "type": "1st LevelCleric Spell",
+    "level": 1,
+    "class": "Cleric",
+    "duration": "12 turns",
+    "range": "The caster",
+    "description": "This spell wards the caster from attacks by creatures of another alignment, as follows:",
+    "special_rules": [
+      "Bonuses:The caster gains a +1 bonus tosaving throwsagainst attacks or special abilities of affected creatures.",
+      "Affected creatures’ attacks:Against the caster are penalised by -1.",
+      "Enchanted, constructed, or summoned creatures:The spell additionally prevents such creatures from attacking the caster in melee, though they may still make ranged attacks. If the caster engages such a creature in melee, this protection is broken (the caster still gains the save and attack bonuses mentioned above)."
+    ]
+  },
+  "Remove Quest": {
+    "type": "5th LevelCleric Spell",
+    "level": 5,
+    "class": "Cleric",
+    "duration": "Until quest is completed / Instant (remove quest)",
+    "range": "30’",
+    "description": "The caster commands a single subject to perform a specific quest or task.\nCan dispel an activequestspell. If the character who cast thequestspell to be nullified is higher level than the character castingremove quest, there is a chance of the spell having no effect. The probability of failure is 5% per level the caster is below the caster ofquest.",
+    "special_rules": [
+      "Examples:Rescuing a prisoner, killing a specific monster, bringing a magic item to the caster, or going on a journey to a holy site.",
+      "Suicidal quests:The prescribed quest must not be obviously suicidal.",
+      "Saving throw:The subject maysave versus spells, with success indicating that thequesthas no effect.",
+      "Refusal:Otherwise, the subject must undertake the quest or fall under a curse (per thecursespell, with the exact nature of the curse determined by thereferee).",
+      "Completion:Once the task is completed, the spell ends."
+    ]
+  },
+  "Phantasmal Force": {
+    "type": "2nd LevelMagic-User Spell",
+    "level": 2,
+    "class": "Magic-User",
+    "duration": "Concentration",
+    "range": "240’",
+    "description": "A visual illusion of the caster’s choosing manifests in a 20’ cube area. Three types of illusions may be created:\nStipulations:The following apply:",
+    "special_rules": [
+      "Concentration:Is required to maintain the illusion. If the caster moves or loses concentration, the spell ends.",
+      "Illusionary monsters or attacks:May appear to be harmful but no real damage is ever inflicted. A character who appears to die actually falls unconscious, a character turned to stone will actually be paralysed, and so on. Such effects last for 1d4 turns.",
+      "Illusions from imagination:If the illusion is of something the caster has not personally seen, therefereeshould grant targets a bonus to any applicable saving throws."
+    ]
+  },
+  "Remove Curse (Curse) (MU)": {
+    "type": "4th LevelMagic-User Spell",
+    "level": 4,
+    "class": "Magic-User",
+    "duration": "Instant / Permanent (curse)",
+    "range": "The caster or a creature touched",
+    "description": "This spell removes a single curse from the subject. It may allow a character to discard a cursed magic item.\nPlaces a deleterious effect upon a creature, if it fails asave versus spells.",
+    "special_rules": [
+      "Effects:The exact form and effects of the curse are determined by the caster.",
+      "Maximum possible effects include:A –2saving throwpenalty, a –4 attack roll penalty, reducing anability scoreby 50%.",
+      "Multiple curses:May afflict a creature, as long as each has a different effect.",
+      "Referee judgement:Therefereeshould judge the effects of this spell and may turn overly powerful curses back onto the caster!"
+    ]
+  },
+  "Protection from Evil 10’ Radius (MU)": {
+    "type": "3rd LevelMagic-User Spell",
+    "level": 3,
+    "class": "Magic-User",
+    "duration": "12 turns",
+    "range": "10’ around the caster",
+    "description": "This spell wards the caster and all allies within 10’ from attacks by creatures of another alignment, as follows:",
+    "special_rules": [
+      "Bonuses:Those warded gain a +1 bonus tosaving throwsagainst attacks or special abilities of affected creatures.",
+      "Affected creatures’ attacks:Against those warded are penalised by -1.",
+      "Enchanted, constructed, or summoned creatures:The spell additionally prevents such creatures from making melee attacks against those warded, though they may still make ranged attacks. If any of the warded party engages such a creature in melee, this protection is broken (those warded still gain the save and attack bonuses mentioned above)."
+    ]
+  },
+  "Light (Darkness) (MU)": {
+    "type": "1st LevelMagic-User Spell",
+    "level": 1,
+    "class": "Magic-User",
+    "duration": "6 turns +1 per level",
+    "range": "120’",
+    "description": "This spell has three usages:\nCreates a 15’ radius area of magical blackness, preventing normal sight (but notinfravision). Likelight, it may alternatively be used to blind creatures or to dispel alightspell."
+  },
+  "Wall of Ice": {
+    "type": "4th LevelMagic-User Spell",
+    "level": 4,
+    "class": "Magic-User",
+    "duration": "12 turns",
+    "range": "120’",
+    "description": "Conjures a semi-transparent sheet of ice, shaped as the caster wishes.",
+    "special_rules": [
+      "Size:The wall can be any length, height, and shape the caster wishes, up to 1,200 sq. ft total. For example, it may be a straight wall 10’ high and 120’ long or a ring 20’ high and 10’ radius.",
+      "Location:The wall must be supported (e.g. by the ground) and cannot be created in an area occupied by objects.",
+      "Monsters with fewer than 4 HD:Cannot pass the wall of ice.",
+      "Monsters with 4 or more HD:Can break through through the wall, but suffer 1d6 damage. Fire-based creatures (e.g. flame salamanders) suffer double damage."
+    ]
+  },
+  "Hold Person (MU)": {
+    "type": "3rd LevelMagic-User Spell",
+    "level": 3,
+    "class": "Magic-User",
+    "duration": "1 turn per level",
+    "range": "120’",
+    "description": "This spell causes one or more humans, demihumans, or human-like monsters (seePersons) to be paralysed if they fail asaving throw versus spells. It may be cast in two ways:\nRestrictions:Undeadand human-like monsters of greater than 4+1 HD (seeHit point modifiers) are not affected."
+  },
+  "Sleep": {
+    "type": "1st LevelMagic-User Spell",
+    "level": 1,
+    "class": "Magic-User",
+    "duration": "4d4 turns",
+    "range": "240’",
+    "description": "Causes creatures (exceptundead) to fall into a magical slumber. The spell may target either:\nWhen targeting creatures of 4 HD or less, the following rules apply:\nKilling:A single attack with a bladed weapon can kill a creature enchanted by this spell.\nAwakening:Enchanted creatures can be forcefully awakened (e.g. by slapping).",
+    "special_rules": [
+      "Weakest first:Targets with the least HD are affected first.",
+      "HD:Treat monsters with less than 1 HD as having 1 HD and monsters with a fixed hit point bonus as having the flat HD. (For example, a 3+2 HD monster would be treated as having 3 HD.)"
+    ]
+  },
+  "Cure Disease (Cause Disease)": {
+    "type": "3rd LevelCleric Spell",
+    "level": 3,
+    "class": "Cleric",
+    "duration": "Instant",
+    "range": "30’",
+    "description": "This spell has two usages:\nThe victim mustsave versus spellsor be afflicted with a horrid disease of withering:",
+    "special_rules": [
+      "Death:Within 2d12 days.",
+      "Attack penalty:-2 to attack rolls.",
+      "Natural healing:Takes twice the usual amount of time.",
+      "Magical healing:Is utterly ineffective.",
+      "Curing:This disease can be cured with a casting ofcure disease."
+    ]
+  },
+  "Mirror Image": {
+    "type": "2nd LevelMagic-User Spell",
+    "level": 2,
+    "class": "Magic-User",
+    "duration": "6 turns",
+    "range": "The caster",
+    "description": "1d4 illusory images of the caster appear.",
+    "special_rules": [
+      "Behaviour:The mirror images look and behave exactly as the caster.",
+      "Attacks on the caster:Destroy one of the mirror images (even if the attack misses)."
+    ]
+  },
+  "Cure Light Wounds (Cause Light Wounds)": {
+    "type": "1st LevelCleric Spell",
+    "level": 1,
+    "class": "Cleric",
+    "duration": "Instant",
+    "range": "The caster or a creature touched",
+    "description": "This spell has two usages:\nInflicts 1d6+1 hit points of damage to a touched creature. In combat, a melee attack roll is required."
+  },
+  "Silence 15’ Radius": {
+    "type": "2nd LevelCleric Spell",
+    "level": 2,
+    "class": "Cleric",
+    "duration": "12 turns",
+    "range": "180’",
+    "description": "A 15’ radius area is rendered utterly silent.",
+    "special_rules": [
+      "Within the area:All sound is prevented. Conversation and spell casting are impossible.",
+      "Noise from outside the area:Can be heard by those within it.",
+      "Casting upon a creature:Silencemay be cast upon a creature, which mustsave versus spells. If the save fails, the 15’ radius area of silence moves with the creature. If the save succeeds, the spell’s effect remains stationary—the targeted creature may move out of it."
+    ]
+  },
+  "Conjure Elemental": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "Permanent (until dismissed or slain)",
+    "range": "240’",
+    "description": "A 16 Hit Diceelemental—a being formed of pure elemental matter—is summoned from an elemental plane of the caster’s choice (air, earth, fire, water) to do the caster’s bidding.\nRestrictions:The caster may summon at most one elemental from each plane in a single day.\nHuge vortexes of whirling air.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV360’ (120’) flying,SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300\nHuge, humanoid figures of earth or stone.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV60’ (20’),SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300\nWhirling columns of fire.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV120’ (40’),SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300\nHuge waves of water.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV60’ (20’) / 180’ (60’) swimming,SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300",
+    "special_rules": [
+      "Materials:The summons requires a large volume of the appropriate element.",
+      "Concentration:Is required to command an elemental.",
+      "Dismissing:While control over the elemental is maintained, the caster may dismiss it at any time, sending it back to its plane of origin.",
+      "Disruption:If the caster moves at more than half speed or their concentration is disturbed, the command over the elemental ends. It is, henceforth, a free-willed entity and will immediately try to kill the caster and any who get in its way.",
+      "Dispelling:A conjured elemental may be dispelled bydispel magicordispel evil.",
+      "1Air Elemental",
+      "2Earth Elemental",
+      "3Fire Elemental",
+      "4Water Elemental",
+      "Size:32’ tall, 8’ across.",
+      "Whirlwind:Creatures with less than 2HD swept aside (save versus death).",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm flying creatures:Inflict extra 1d8 damage.",
+      "Size:16’ tall.",
+      "Blocked by water:Cannot cross a channel wider than own height.",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm creatures on the ground:Inflict extra 1d8 damage.",
+      "Size:16’ tall, 16’ across.",
+      "Blocked by water:Cannot cross a channel wider than own diameter.",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm cold-based creatures:Inflict extra 1d8 damage.",
+      "Size:8’ tall, 32’ across.",
+      "Water-bound:Must remain within 60’ of water.",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm creatures in water:Inflict extra 1d8 damage."
+    ]
+  },
+  "Flesh to Stone": {
+    "type": "6th LevelMagic-User Spell",
+    "level": 6,
+    "class": "Magic-User",
+    "duration": "Permanent",
+    "range": "120’",
+    "description": "Transforms stone into living flesh. It is especially useful for restoring a magically petrified creature to life.\nTransforms a living creature (including equipment) into stone. The victim maysave versus paralysisto resist."
+  },
+  "Clairvoyance": {
+    "type": "3rd LevelMagic-User Spell",
+    "level": 3,
+    "class": "Magic-User",
+    "duration": "12 turns",
+    "range": "60’",
+    "description": "The caster gains the ability to see through the eyes of other living creatures.",
+    "special_rules": [
+      "Focus for 1 turn:To establish a connection with a creature, the caster must focus their concentration in one particular direction for one turn.",
+      "After this turn:The visual perceptions of one creature within range in that direction are relayed to the caster.",
+      "Switching:Once a connection is established, the caster may choose to maintain it or to change to another subject.",
+      "Obstructions:Clairvoyanceis obstructed by a thin layer of lead or by rock of 2’ thick or greater."
+    ]
+  },
+  "Water Breathing": {
+    "type": "3rd LevelMagic-User Spell",
+    "level": 3,
+    "class": "Magic-User",
+    "duration": "1 day",
+    "range": "30’",
+    "description": "Bestows the ability to breathe water upon a single subject.",
+    "special_rules": [
+      "Breathing air:The spell does not affect the subject’s ability to breathe air.",
+      "Underwater movement:Is also not enhanced or affected."
+    ]
+  },
+  "Cloudkill": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "6 turns",
+    "range": "30’",
+    "description": "A poisonous fog streams from the caster’s fingertips, filling a 30’ diameter area.",
+    "special_rules": [
+      "Movement:The fog moves at 60’ (20’), driven by the wind or, in still conditions, away from the caster.",
+      "Sinking:Because the fog is denser than air, it sinks to the lowest point, flowing down hills, into holes, and so forth.",
+      "Damage:All creatures in contact with the fog suffer 1 damage per round.",
+      "Creatures with less than 5 Hit Dice:Must alsosave versus death(once per round of contact) or die."
+    ]
+  },
+  "Pass-Wall": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "3 turns",
+    "range": "30’",
+    "description": "A 5’ diameter hole is temporarily opened in solid rock or stone, forming a passageway up to 10’ deep."
+  },
+  "Find Traps": {
+    "type": "2nd LevelCleric Spell",
+    "level": 2,
+    "class": "Cleric",
+    "duration": "2 turns",
+    "range": "30’",
+    "description": "Trapped areas are caused to magically glow with a faint blue light.",
+    "special_rules": [
+      "Magical and mechanical traps:Are both revealed.",
+      "No knowledge:About the nature of traps or how to deactivate them is gained."
+    ]
+  },
+  "Teleport": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "Instant",
+    "range": "10’",
+    "description": "The caster or a chosen creature vanishes and reappears at a location of the caster’s choosing.\nGround level:The subject appears at the intended destination.\nToo high:The subject appears 1d10×10’ above the intended destination. If this causes the subject to appear inside solid matter, they die instantly. Otherwise, the subject falls from a height.\nToo low:The subject appears below the surface of the ground and dies instantly.\nKnowledge of destination:The caster’s knowledge of the destination is rated as follows:",
+    "special_rules": [
+      "Gear:The subject is teleported with all its gear, up to its maximum load.",
+      "Unwilling subjects:Maysave versus spellsto prevent the teleportation.",
+      "Destination:May be at any distance, but must be known to the caster. The destination must be an open space at ground level. (It is not possible to intentionally teleport the subject into mid-air or into solid matter.)",
+      "Risk:There is a risk, when teleporting, of accidentally arriving above or below ground level. The chance of a successful teleportation depends on the caster’s knowledge of the destination (see below). Roll d% and consult the table below.",
+      "Scant:A location that the caster has visited once or twice, has seen by magical scrying, or has heard of from descriptions.",
+      "Moderate:A location that the caster has visited often or has studied via scrying for several weeks.",
+      "Exact:A location that the caster has made a detailed study of, in person."
+    ]
+  },
+  "Create Food": {
+    "type": "5th LevelCleric Spell",
+    "level": 5,
+    "class": "Cleric",
+    "duration": "Permanent",
+    "range": "Appears in the caster’s presence",
+    "description": "Conjures food from thin air.",
+    "special_rules": [
+      "Volume:Food sufficient for twelve humans and twelve mounts for one day is conjured.",
+      "Higher level casters:If the caster is higher than 8th level, food sufficient for an additional 12 humans and mounts is produced for each level beyond 8th."
+    ]
+  },
+  "Insect Plague": {
+    "type": "5th LevelCleric Spell",
+    "level": 5,
+    "class": "Cleric",
+    "duration": "Concentration (up to 1 day)",
+    "range": "480’",
+    "description": "Cast above ground, this spell conjures a 60’ diameterswarm of flying insectswith the following properties:\nRestrictions:The spell has no effect if cast underground.",
+    "special_rules": [
+      "Movement:20’ per round. While the swarm is within range, the caster is able to direct its movements.",
+      "Vision:Within the area of the swarm is obscured.",
+      "Creatures of 2 HD or less:Are driven away, if caught within the swarm.",
+      "Concentration:If the caster moves or loses concentration, the swarm dissipates, ending the spell."
+    ]
+  },
+  "Resist Cold": {
+    "type": "1st LevelCleric Spell",
+    "level": 1,
+    "class": "Cleric",
+    "duration": "6 turns",
+    "range": "30’",
+    "description": "All creatures within range are protected from cold, as follows:",
+    "special_rules": [
+      "Normal cold:Unharmed by non-magical freezing temperatures.",
+      "Save bonus:Gain a +2 bonus to saving throws versus cold-based effects (e.g. magic or breath attacks).",
+      "Cold-based damage:Is reduced by 1 point per damage die rolled. (Each die inflicts a minimum of 1 damage.)"
+    ]
+  },
+  "Confusion": {
+    "type": "4th LevelMagic-User Spell",
+    "level": 4,
+    "class": "Magic-User",
+    "duration": "12 rounds",
+    "range": "120’",
+    "description": "3d6 creatures within a 30’ radius area are stricken with delusions and become unable to control their actions.",
+    "special_rules": [
+      "Subjects of 2+1 HD or greater:Maysave versus spellseach round to resist the spell’s effect, acting with free will that round if they make the save.",
+      "Subjects of 2 HD or lower:May not make a saving throw.",
+      "Behaviour:Roll on the following table separately for each affected subject each round to determine how that subject acts that round:"
+    ]
+  },
+  "Know Alignment": {
+    "type": "2nd LevelCleric Spell",
+    "level": 2,
+    "class": "Cleric",
+    "duration": "1 round",
+    "range": "10’",
+    "description": "Reveals thealignmentof one character, monster, object, or area within range. (Most objects or areas do not have an alignment, butmagic itemsor holy places may.)"
+  },
+  "Charm Monster": {
+    "type": "4th LevelMagic-User Spell",
+    "level": 4,
+    "class": "Magic-User",
+    "duration": "The charm lasts indefinitely, but the subject is allowed to make furthersaves versus spellsat intervals, depending on its INT score. If one of these saves succeeds, the spell ends.",
+    "range": "120’",
+    "description": "This spell places a charm upon either 3d6 creatures of 3 HD or less or a single creature of more than 3 HD. Each subject must make asave versus spellsor be charmed as follows:\nRestrictions:Undeadare not affected.",
+    "special_rules": [
+      "Friendship:Charmed creatures regard the caster as a close friend and will come to the caster’s defence.",
+      "Commands:If they share alanguage, the caster may give charmed creatures commands, which they will obey.",
+      "Subject’s nature:Charmed creatures may resist commands that contradict their habits oralignment.",
+      "Suicidal commands:Are always refused.",
+      "INT 3–8:New save once every month.",
+      "INT 9–12:New save each week.",
+      "INT 13–18:New save once every day."
+    ]
+  },
+  "Move Earth": {
+    "type": "6th LevelMagic-User Spell",
+    "level": 6,
+    "class": "Magic-User",
+    "duration": "6 turns",
+    "range": "240’",
+    "description": "Earth (but not stone) within range is rearranged as the caster wishes.",
+    "special_rules": [
+      "Movement rate:The caster can move earth in the area at up to 60’ per turn.",
+      "Excavations:The range of the spell also extends downwards, allowing excavations to be made."
+    ]
+  },
+  "Lightning Bolt": {
+    "type": "3rd LevelMagic-User Spell",
+    "level": 3,
+    "class": "Magic-User",
+    "duration": "Instant",
+    "range": "180’",
+    "description": "A bolt of lightning 60’ long and 5’ wide blasts from a point within range.",
+    "special_rules": [
+      "Damage:Creatures caught in thelightning boltsuffer 1d6 damage per level of the caster, with a successfulsave versus spellsindicating half damage.",
+      "Bouncing:If thelightning bolthits a solid barrier before its full length is reached, it is reflected and travels for any remaining distance of its full length in the direction of the caster."
+    ]
+  },
+  "Conjure Elemental: Fire": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "Permanent (until dismissed or slain)",
+    "range": "240’",
+    "description": "A 16 Hit Diceelemental—a being formed of pure elemental matter—is summoned from an elemental plane of the caster’s choice (air, earth, fire, water) to do the caster’s bidding.\nRestrictions:The caster may summon at most one elemental from each plane in a single day.\nHuge vortexes of whirling air.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV360’ (120’) flying,SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300\nHuge, humanoid figures of earth or stone.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV60’ (20’),SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300\nWhirling columns of fire.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV120’ (40’),SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300\nHuge waves of water.\nAC-2 [21],HD16* (72hp),Att1 × blow (3d8),THAC08 [+11],MV60’ (20’) / 180’ (60’) swimming,SVD2 W3 P4 B3 S6 (16),ML10,ALNeutral,XP2,300",
+    "special_rules": [
+      "Materials:The summons requires a large volume of the appropriate element.",
+      "Concentration:Is required to command an elemental.",
+      "Dismissing:While control over the elemental is maintained, the caster may dismiss it at any time, sending it back to its plane of origin.",
+      "Disruption:If the caster moves at more than half speed or their concentration is disturbed, the command over the elemental ends. It is, henceforth, a free-willed entity and will immediately try to kill the caster and any who get in its way.",
+      "Dispelling:A conjured elemental may be dispelled bydispel magicordispel evil.",
+      "1Air Elemental",
+      "2Earth Elemental",
+      "3Fire Elemental",
+      "4Water Elemental",
+      "Size:32’ tall, 8’ across.",
+      "Whirlwind:Creatures with less than 2HD swept aside (save versus death).",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm flying creatures:Inflict extra 1d8 damage.",
+      "Size:16’ tall.",
+      "Blocked by water:Cannot cross a channel wider than own height.",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm creatures on the ground:Inflict extra 1d8 damage.",
+      "Size:16’ tall, 16’ across.",
+      "Blocked by water:Cannot cross a channel wider than own diameter.",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm cold-based creatures:Inflict extra 1d8 damage.",
+      "Size:8’ tall, 32’ across.",
+      "Water-bound:Must remain within 60’ of water.",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm creatures in water:Inflict extra 1d8 damage."
+    ]
+  },
+  "Control Weather": {
+    "type": "6th LevelMagic-User Spell",
+    "level": 6,
+    "class": "Magic-User",
+    "duration": "Concentration",
+    "range": "240 yards around the caster",
+    "description": "By concentrating (no movement allowed), the caster causes one of the following conditions to manifest in the surrounding area. This spell only functions outdoors.\nA whirling column of air, 24’ high and 6’ across, that wreaks havoc for flying creatures and ships.\nAC0 [19],HD12* (54hp),Att1 × blow (2d8),THAC010 [+9],MV360’ (120’) flying,SVD6 W7 P8 B8 S10 (12),ML10,ALNeutral,XP1,900",
+    "special_rules": [
+      "Calm:Clears bad weather (though side-effects—e.g. mud after rain—remain.)",
+      "Extreme heat:Dries up snow or mud (includingtransmute rock to mud). Creatures in the area move at half normal rate.",
+      "Fog:Visibility drops to 20’. Creatures in the fog move at half their normal rate. At thereferee’soption, they may also have a chance of gettinglost.",
+      "High winds:Movement rates are halved. Missile fire and flight are impossible. High winds may be used to increase the sailing speed of ships by 50%, if they travel with the wind. In sandy areas, may cause a sandstorm, reducing visibility to 20’.",
+      "Rain:-2 penalty to missile attacks. Mud forms in 3 turns, halving movement rates.",
+      "Snow:Visibility drops to 20’. Movement rates are halved. Bodies of water may freeze. After the snow thaws, mud remains and still impedes movement.",
+      "Tornado:Conjures a whirlwind that the caster directs, moving 120’ per round and attacking as directed (see stats below). Ships caught in a tornado have a 75% chance of suffering 12 points of hull damage.",
+      "Whirlwind:Creatures with less than 2HD swept aside (save versus death).",
+      "Mundane damage immunity:Can only be harmed by magical attacks.",
+      "Harm flying creatures:Inflict extra 1d8 damage."
+    ]
+  },
+  "Reincarnation": {
+    "type": "6th LevelMagic-User Spell",
+    "level": 6,
+    "class": "Magic-User",
+    "duration": "Permanent",
+    "range": "Appears in the caster’s presence",
+    "description": "A dead character is returned to life in a new physical form that manifests in the presence of the caster. The character’s new body is not necessarily the same as the original; it is determined by rolling on theReincarnated Classtable below.\nThe roll indicates either a character class or a monster:\nStandard classes and monsters are listed in the tables. If other classes or monsters are in use, the referee may wish to create alternative reincarnation tables.",
+    "special_rules": [
+      "Character class:The character is of experience level 1d6 (or at most the same level as the character achieved before death). The reincarnated character can continue to gainexperienceand advance as normal, in the new class.",
+      "Monster:The type should be determined by thereferee. The monster should be at least partially intelligent, have Hit Dice no greater than the level of the character being reincarnated (at most 6 HD), and be of the same alignment. The tables below may be used, or the referee may create their own tables. Monsters cannot gain experience or advance in level."
+    ]
+  },
+  "Stone to Flesh (Flesh to Stone)": {
+    "type": "6th LevelMagic-User Spell",
+    "level": 6,
+    "class": "Magic-User",
+    "duration": "Permanent",
+    "range": "120’",
+    "description": "Transforms stone into living flesh. It is especially useful for restoring a magically petrified creature to life.\nTransforms a living creature (including equipment) into stone. The victim maysave versus paralysisto resist."
+  },
+  "Dispel Evil": {
+    "type": "5th LevelCleric Spell",
+    "level": 5,
+    "class": "Cleric",
+    "duration": "Concentration (up to 1 turn) or instant (see below)",
+    "range": "30’",
+    "description": "This spell has three uses:"
+  },
+  "Finger of Death": {
+    "type": "5th LevelCleric Spell",
+    "level": 5,
+    "class": "Cleric",
+    "duration": "Instant",
+    "range": "120’",
+    "description": "This spell has two usages:\nRestoring life:When used to restore life, the following stipulations apply:\nDirects a ray of deadly magic at a single target. If the target fails asaving throw versus death, it dies instantly. Castingfinger of deathis a chaotic act; it will only be used by lawful casters in desperate situations.",
+    "special_rules": [
+      "Time limit:The caster can raise a person that has been dead for no longer than four days per level of the caster above 7th. For example, a 10th level caster can revive a character that has been dead for twelve days (three levels above 7th × four days).",
+      "Weakness:Returning from death is an ordeal. Until the subject gets two full weeks of bed rest, they have 1 hit point, move at half the normal rate, cannot carry heavy items, and cannot attack, castspells, or use other class abilities. This period of weakness may not be shortened by any magical healing."
+    ]
+  },
+  "Detect Magic (MU)": {
+    "type": "1st LevelMagic-User Spell",
+    "level": 1,
+    "class": "Magic-User",
+    "duration": "2 turns",
+    "range": "60’",
+    "description": "Enchanted objects, areas, or creatures are caused to glow. Both permanent and temporary enchantments are revealed."
+  },
+  "Feeblemind": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "Permanent",
+    "range": "240’",
+    "description": "An arcane spell caster (e.g. amagic-userorelf) within range mustsave versus spells (at a -4 penalty)or become an imbecile, unable to think clearly or castspells."
+  },
+  "Curse (C)": {
+    "type": "3rd LevelCleric Spell",
+    "level": 3,
+    "class": "Cleric",
+    "duration": "Instant / Permanent (curse)",
+    "range": "The caster or a creature touched",
+    "description": "This spell removes a single curse from the subject. It may allow a character to discard a cursed magic item.\nPlaces a deleterious effect upon a creature, if it fails asave versus spells.",
+    "special_rules": [
+      "Effects:The exact form and effects of the curse are determined by the caster.",
+      "Maximum possible effects include:A –2 penalty tosaving throws, a –4 penalty to attack rolls, reducing anability scoreby 50%.",
+      "Multiple curses:May afflict a creature, as long as each has a different effect.",
+      "Referee judgement:Therefereeshould judge the effects of this spell and may turn overly powerful curses back onto the caster!"
+    ]
+  },
+  "Sticks to Snakes": {
+    "type": "4th LevelCleric Spell",
+    "level": 4,
+    "class": "Cleric",
+    "duration": "6 turns",
+    "range": "120’",
+    "description": "2d8 normal sticks are miraculously transformed intosnakesthat follow the caster’s orders.\nAC6 [13],HD1 (4hp),Att1 × bite (1d4),THAC019 [0],MV90’ (30’),SVD12 W13 P14 B15 S16 (1),ML7,ALNeutral,XP10 (13 if poisonous)",
+    "special_rules": [
+      "Reversion:The snakes become sticks once more if killed or when the duration ends.",
+      "Poison:There is a 50% chance of the snakes being poisonous.",
+      "When killed:Revert back to sticks."
+    ]
+  },
+  "Detect Magic (C)": {
+    "type": "1st LevelCleric Spell",
+    "level": 1,
+    "class": "Cleric",
+    "duration": "2 turns",
+    "range": "60’",
+    "description": "Enchanted objects, areas, or creatures are caused to glow. Both permanent and temporary enchantments are revealed."
+  },
+  "Protection from Evil 10’ Radius (C)": {
+    "type": "4th LevelCleric Spell",
+    "level": 4,
+    "class": "Cleric",
+    "duration": "12 turns",
+    "range": "10’ around the caster",
+    "description": "This spell wards the caster and all allies within 10’ from attacks by creatures of another alignment, as follows:",
+    "special_rules": [
+      "Bonuses:Those warded gain a +1 bonus tosaving throwsagainst attacks or special abilities of affected creatures.",
+      "Affected creatures’ attacks:Against those warded are penalised by -1.",
+      "Enchanted, constructed, or summoned creatures:The spell additionally prevents such creatures from making melee attacks against those warded, though they may still make ranged attacks. If any of the warded party engages such a creature in melee, this protection is broken (those warded still gain the save and attack bonuses mentioned above)."
+    ]
+  },
+  "Levitate": {
+    "type": "2nd LevelMagic-User Spell",
+    "level": 2,
+    "class": "Magic-User",
+    "duration": "6 turns +1 per level",
+    "range": "The caster",
+    "description": "This enchantment allows the caster to move up and down through the air:",
+    "special_rules": [
+      "Vertical:Vertical movement as desired, at up to 20’ per round.",
+      "Horizontal:The caster can move laterally by pushing against solid objects.",
+      "Weight:A normal amount of weight can be carried while levitating."
+    ]
+  },
+  "Transmute Rock to Mud (Mud to Rock)": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "3d6 days / Permanent (transmute mud to rock)",
+    "range": "120’",
+    "description": "Changes an area of rock into thick mud.\nPermanently changes an area of mud—up to 3,000 square feet and up to 10’ deep—into rock.",
+    "special_rules": [
+      "Area:Up to 3,000 square feet, 10’ deep.",
+      "Movement:Creatures in the mud move at 10% of their normal movement rate and may become stuck."
+    ]
+  },
+  "Continual Darkness (MU)": {
+    "type": "2nd LevelMagic-User Spell",
+    "level": 2,
+    "class": "Magic-User",
+    "duration": "Permanent",
+    "range": "120’",
+    "description": "This spell has three usages:\nCreates a 30’ radius area of magical blackness, preventing both normal sight andinfravision. Light sources brought within the area of darkness do not illuminate it. Likecontinual light, it may alternatively be used to blind creatures or to dispel acontinual lightspell."
+  },
+  "Curse (MU)": {
+    "type": "4th LevelMagic-User Spell",
+    "level": 4,
+    "class": "Magic-User",
+    "duration": "Instant / Permanent (curse)",
+    "range": "The caster or a creature touched",
+    "description": "This spell removes a single curse from the subject. It may allow a character to discard a cursed magic item.\nPlaces a deleterious effect upon a creature, if it fails asave versus spells.",
+    "special_rules": [
+      "Effects:The exact form and effects of the curse are determined by the caster.",
+      "Maximum possible effects include:A –2saving throwpenalty, a –4 attack roll penalty, reducing anability scoreby 50%.",
+      "Multiple curses:May afflict a creature, as long as each has a different effect.",
+      "Referee judgement:Therefereeshould judge the effects of this spell and may turn overly powerful curses back onto the caster!"
+    ]
+  },
+  "Telekinesis": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "Concentration (up to 6 rounds)",
+    "range": "120’",
+    "description": "By concentrating, the caster is able to move objects or creatures by the power of thought.",
+    "special_rules": [
+      "Weight:Up to 200 coins of weight per level of the caster may be targeted.",
+      "Movement:The target may be moved up to 20’ per round, in whatever direction the caster wishes (including vertically).",
+      "Save:If a creature is targeted, it maysave versus spellsto resist the spell.",
+      "Concentration:If the caster’s concentration is broken, the target will fall."
+    ]
+  },
+  "Knock": {
+    "type": "2nd LevelMagic-User Spell",
+    "level": 2,
+    "class": "Magic-User",
+    "duration": "1 round",
+    "range": "60’",
+    "description": "Causes locked, barred, secured, or stuck doors, gates, chests, and so forth to open.",
+    "special_rules": [
+      "Magically held doors:Are affected (e.g.hold portal,wizard lock).",
+      "Secret doors:May be opened, but they must be known to the caster."
+    ]
+  },
+  "Neutralize Poison": {
+    "type": "4th LevelCleric Spell",
+    "level": 4,
+    "class": "Cleric",
+    "duration": "Instant",
+    "range": "The caster or a creature or object touched",
+    "description": "This spell has two usages:"
+  },
+  "Continual Darkness (C)": {
+    "type": "3rd LevelCleric Spell",
+    "level": 3,
+    "class": "Cleric",
+    "duration": "Permanent",
+    "range": "120’",
+    "description": "This spell has three usages:\nCreates a 30’ radius area of magical blackness, preventing both normal sight andinfravision. Light sources brought within the area of darkness do not illuminate it. Likecontinual light, it may alternatively be used to blind creatures or to dispel acontinual lightspell."
+  },
+  "Growth of Animal": {
+    "type": "3rd LevelCleric Spell",
+    "level": 3,
+    "class": "Cleric",
+    "duration": "12 turns",
+    "range": "120’",
+    "description": "This spell doubles the size and strength of a single animal.",
+    "special_rules": [
+      "Damage:The damage inflicted by the animal’s attacks is doubled.",
+      "Load:The amount of weight the animal can carry is doubled.",
+      "Restrictions:This spell may be used on normal or giant animals, but intelligent animals, magical animals, and fantastic monsters are unaffected."
+    ]
+  },
+  "Geas (Remove Geas)": {
+    "type": "6th LevelMagic-User Spell",
+    "level": 6,
+    "class": "Magic-User",
+    "duration": "Permanent / Instant (remove geas)",
+    "range": "30’",
+    "description": "The caster commands a subject to perform or avoid performing a specific action.\nCan dispel an activegeasspell and any incurred penalties. Ageasplaced by a lower level caster is automatically dispelled. Ageascreated by a higher level caster has a 5% chance per level difference of not being dispelled.",
+    "special_rules": [
+      "Examples:Bringing a specific item to the caster, eating or drinking without restraint, keeping a certain fact secret.",
+      "Impossible or deadly tasks:The prescribedgeasmust not be impossible or directly deadly—if such ageasis cast, it affects the caster, instead.",
+      "Saving throw:The subject maysave versus spells, to avoid coming under the spell’s effect.",
+      "If the save fails:The subject must follow the stipulated course of action or suffer gradually increasing (and eventually fatal) penalties determined by thereferee(e.g. penalties to attack,ability scorereductions, inability to memorize spells, physical torment and feebleness, etc.)."
+    ]
+  },
+  "Lower Water": {
+    "type": "6th LevelMagic-User Spell",
+    "level": 6,
+    "class": "Magic-User",
+    "duration": "10 turns",
+    "range": "240’",
+    "description": "This spell reduces the depth of a body of water by half for the duration. An area of up to 10,000 square feet may be affected."
+  },
+  "Massmorph": {
+    "type": "4th LevelMagic-User Spell",
+    "level": 4,
+    "class": "Magic-User",
+    "duration": "Permanent",
+    "range": "240’",
+    "description": "Up to 100 human-sized creatures within a 120’ radius area are veiled by illusion to appear as a copse of trees or orchard.",
+    "special_rules": [
+      "Moving through:Once the illusion is in place, even creatures moving among the veiled subjects are deceived.",
+      "Subjects who leave the affected area:Cease to be veiled.",
+      "Dismissing:The caster may dismiss the illusion in its entirety at any time."
+    ]
+  },
+  "ESP": {
+    "type": "2nd LevelMagic-User Spell",
+    "level": 2,
+    "class": "Magic-User",
+    "duration": "12 turns",
+    "range": "60’",
+    "description": "This spell grants the caster the ability to perceive and understand the thoughts of other living creatures.",
+    "special_rules": [
+      "Focus for 1 turn:To pick up thoughts, the caster must focus their concentration in one direction for one turn.",
+      "After this turn:The thoughts of all creatures within range in that direction can be perceived.",
+      "Multiple creatures:If multiple creatures are within range in the direction being focused on, the caster perceives an incomprehensible mix of all their thoughts. If the caster focuses for an additional turn, they can filter out and understand a single creature’s thoughts.",
+      "Meaning:The caster can magically understand thoughts inlanguagesthey do not speak.",
+      "Obstructions:ESP' is obstructed by a thin layer of lead or by rock of 2’ thick or greater."
+    ]
+  },
+  "Haste": {
+    "type": "3rd LevelMagic-User Spell",
+    "level": 3,
+    "class": "Magic-User",
+    "duration": "3 turns",
+    "range": "240’",
+    "description": "Up to 24 creatures in a 30’ radius area are enchanted to be able to move and act twice as quickly as normal:",
+    "special_rules": [
+      "Movement:Subjects’ maximum movement rates are doubled.",
+      "Attacks:Subjects may make double the normal number of attacks per round.",
+      "Spells:The number ofspellsa subject may cast per round is not doubled.",
+      "Magical devices:The use of devices such as wands is also not doubled."
+    ]
+  },
+  "Wall of Stone": {
+    "type": "5th LevelMagic-User Spell",
+    "level": 5,
+    "class": "Magic-User",
+    "duration": "Permanent",
+    "range": "60’",
+    "description": "A wall of solid rock appears.",
+    "special_rules": [
+      "Size:The wall may be of whatever shape the caster desires and is of 1,000 cubic feet in volume. (For example, a 2’ thick wall, 50’ long and 10’ high.)",
+      "Location:The wall must be supported (e.g. by the ground) and cannot be created in an area occupied by objects."
+    ]
+  },
+  "Continual Light (Continual Darkness) (MU)": {
+    "type": "2nd LevelMagic-User Spell",
+    "level": 2,
+    "class": "Magic-User",
+    "duration": "Permanent",
+    "range": "120’",
+    "description": "This spell has three usages:\nCreates a 30’ radius area of magical blackness, preventing both normal sight andinfravision. Light sources brought within the area of darkness do not illuminate it. Likecontinual light, it may alternatively be used to blind creatures or to dispel acontinual lightspell."
+  },
+  "Cause Disease": {
+    "type": "3rd LevelCleric Spell",
+    "level": 3,
+    "class": "Cleric",
+    "duration": "Instant",
+    "range": "30’",
+    "description": "This spell has two usages:\nThe victim mustsave versus spellsor be afflicted with a horrid disease of withering:",
+    "special_rules": [
+      "Death:Within 2d12 days.",
+      "Attack penalty:-2 to attack rolls.",
+      "Natural healing:Takes twice the usual amount of time.",
+      "Magical healing:Is utterly ineffective.",
+      "Curing:This disease can be cured with a casting ofcure disease."
+    ]
+  },
+  "Fire Ball": {
+    "type": "3rd LevelMagic-User Spell",
+    "level": 3,
+    "class": "Magic-User",
+    "duration": "Instant",
+    "range": "240’",
+    "description": "Flame streaks towards a point within range and detonates in a 20’ radius sphere.",
+    "special_rules": [
+      "Damage:Creatures caught in thefire ballsuffer 1d6 damage per level of the caster, with a successfulsave versus spellsindicating half damage."
+    ]
+  },
+  "Wall of Fire": {
+    "type": "4th LevelMagic-User Spell",
+    "level": 4,
+    "class": "Magic-User",
+    "duration": "Concentration",
+    "range": "60’",
+    "description": "Conjures an opaque curtain of raging flame, shaped as the caster wishes.",
+    "special_rules": [
+      "Size:The wall can be any length, height, and shape the caster wishes, up to 1,200 sq. ft total. For example, it may be a straight wall 10’ high and 120’ long or a ring 20’ high and 10’ radius.",
+      "Location:The wall cannot be created in an area occupied by objects.",
+      "Monsters with fewer than 4 HD:Cannot pass the wall of flames.",
+      "Monsters with 4 or more HD:Can pass through the wall, but suffer 1d6 damage.Undeadand cold-based creatures (e.g. frost salamanders) suffer double damage.",
+      "Concentration:The wall persists as long as the caster concentrates on the spell and does not move."
+    ]
+  },
+  "Dispel Magic": {
+    "type": "3rd LevelMagic-User Spell",
+    "level": 3,
+    "class": "Magic-User",
+    "duration": "Instant",
+    "range": "120’",
+    "description": "Dispel magicends spell effects within a 20’ cube area.",
+    "special_rules": [
+      "Caster levels:Effects created by lower level casters are automatically dispelled. Effects created by higher level casters have a 5% chance per level difference of not being dispelled.",
+      "Magic items:Are unaffected."
+    ]
+  },
+  "Invisible Stalker (MU)": {
+    "type": "6th LevelMagic-User Spell",
+    "level": 6,
+    "class": "Magic-User",
+    "duration": "One mission",
+    "range": "Summoned to caster’s presence",
+    "description": "Aninvisible stalker(see below) is summoned to the caster’s presence and magically bound to perform a mission of the caster’s choosing.\nHighly intelligent, magical creatures summoned from another plane of existence to perform tasks for powerful magic-users.\nAC3 [16],HD8* (36hp),Att1 × blow (4d4),THAC012 [+7],MV120’ (40’),SVD8 W9 P10 B10 S12 (F8),ML12,ALNeutral,XP1,200",
+    "special_rules": [
+      "Wording:The caster must be careful with the wording of the mission. Invisible stalkers are treacherous and, unless the assigned mission can be easily and quickly accomplished, will follow the letter of the command while twisting the intent.",
+      "Duration:The creature is bound to attempt the mission until it succeeds or is destroyed.",
+      "Banishing:The spelldispel evilwill banish an invisible stalker, ending the spell.",
+      "Tracking:Without fault.",
+      "Surprise:On a 1–5, unless target can detect invisibility.",
+      "If killed:Returns to plane of origin."
+    ]
+  },
+  "Projected Image": {
+    "type": "6th LevelMagic-User Spell",
+    "level": 6,
+    "class": "Magic-User",
+    "duration": "6 turns",
+    "range": "240’",
+    "description": "An illusory duplicate of the caster appears within range.",
+    "special_rules": [
+      "Duplicate:The image is an exact duplicate of the caster that can only be differentiated by touch.",
+      "Subsequent spells cast:Appear to originate from the image. (Targets must still be visible to the caster, however.)",
+      "Spells and missiles:The image appears unaffected byspellsor missile weapons.",
+      "Melee or touch:If the image is touched or hit in melee, it disappears."
+    ]
+  },
+  "Disintegrate": {
+    "type": "6th LevelMagic-User Spell",
+    "level": 6,
+    "class": "Magic-User",
+    "duration": "Instant",
+    "range": "60’",
+    "description": "The material form of a single, non-magical creature or object is instantly and permanently destroyed.",
+    "special_rules": [
+      "If a creature is targeted:It maysave versus deathto resistdisintegration.",
+      "Examples of objects:The following might be targeted: a tree, a ship, a 10’ section of wall."
+    ]
+  },
+  "Wizard Eye": {
+    "type": "4th LevelMagic-User Spell",
+    "level": 4,
+    "class": "Magic-User",
+    "duration": "6 turns",
+    "range": "240’",
+    "description": "An invisible, magical eye is conjured that allows the caster to see at a distance.",
+    "special_rules": [
+      "Movement:The eye can be directed to move within range at up to 120’ per turn.",
+      "Seeing through the eye:By concentrating, the caster can see through the eye.",
+      "Types of vision:The magical eye grantsinfravisionto 60’ as well as normal vision.",
+      "Barriers: Though invisible, the eye is tangible and cannot pass through solid barriers.",
+      "Size: The eye is as big as a normal human eye."
+    ]
+  },
+  "Snake Charm": {
+    "type": "2nd LevelCleric Spell",
+    "level": 2,
+    "class": "Cleric",
+    "duration": "1d4+1 rounds or turns",
+    "range": "60’",
+    "description": "One or moresnakesare rendered non-hostile, rearing up and swaying to and fro but not attacking.",
+    "special_rules": [
+      "HD affected:The spell affects up to 1 HD of snakes per level of the caster. For example, a 6th level caster could affect three 2 HD snakes, two 3 HD snakes, etc.",
+      "Duration:When cast on snakes that are already attacking, the spell lasts for 1d4+1 rounds. Otherwise, it lasts for 1d4+1 turns."
+    ]
+  }
+}
