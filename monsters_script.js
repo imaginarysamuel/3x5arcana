@@ -158,6 +158,9 @@ const statLine = [
         <div class="favorite-icon" id="${monsterId}-favorite-icon">●</div>
         <div class="card-title">${monster["Name"]}</div>
       </div>
+      <div class="monster-level">
+        ${monster["Level"] || "?"}
+      </div>
     </div>
 
     <div class="card-body" id="${monsterId}-body">
