@@ -91,12 +91,12 @@ function getCardInnerHTML(monster, monsterId) {
       
       <div class="ose-stats">
         <p><strong>AC</strong> ${stats["Armour Class"] || "-"}, 
-        <strong>HD</strong> ${stats["Hit Dice"] || "-"}, 
+        <strong>HD</strong> ${stats["Hit Dice"] || "-"}, <br> 
         <strong>ATK</strong> ${stats["Attacks"] || "-"}, 
-        <strong>THAC0</strong> ${stats["THAC0"] || "-"}, 
-        <strong>MV</strong> ${stats["Movement"] || "-"}, ${formatSaves(stats["Saving Throws"]) || "-"}, 
+        <strong>THAC0</strong> ${stats["THAC0"] || "-"}, <br>
+        <strong>MV</strong> ${stats["Movement"] || "-"}, ${formatSaves(stats["Saving Throws"]) || "-"}, <br>
         <strong>Morale</strong> ${stats["Morale"] || "-"}, <strong>AL</strong> ${stats["Alignment"] || "-"}, 
-        <strong>XP</strong> ${stats["XP"] || "-"}, 
+        <strong>XP</strong> ${stats["XP"] || "-"}, <br>
         <strong># Appearing</strong> ${stats["Number Appearing"] || "-"}, 
         <strong>Treasure Type</strong> ${stats["Treasure Type"] || "-"}</p>
       </div>
