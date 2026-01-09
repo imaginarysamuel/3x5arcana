@@ -1,45 +1,28 @@
 // 📌 burgermenu_script.js
-// Burger Menu Functionality with centralized menu creation
+// Burger Menu Functionality with centralized menu from HTML file
 
-// Create and inject menu HTML
+// Fetch and inject menu HTML from separate file
 function createMenu() {
-  const menuHTML = `
-    <div class="burger-menu">
-      <div class="burger-icon" id="burger-icon">☰</div>
-      <div class="menu-overlay" id="menu-overlay">
-        <div class="menu-card">
-          <div class="menu-card-header">
-            <div class="menu-close-icon" id="menu-close-icon">✖︎</div>
-          </div>
-          <div class="menu-content">
-            <a href="spells.html" target="_blank">SD Spells</a>
-            <a href="monsters.html" target="_blank">SD Monsters</a>
-            <a href="magic-items.html" target="_blank">SD Magic Items</a>
-            <a href="stacks.html" target="_blank">SD Module Stat Blocks</a>
-            <a href="ose-monsters.html" target="_blank">OSE Monsters</a>
-            <a href="game.html" target="_blank">3x5 💔</a>
-            <a href="index.html" target="_blank">Home</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-  
-  const container = document.getElementById('menu-container');
-  if (container) {
-    container.innerHTML = menuHTML;
-  }
+  fetch('main-menu.html')
+    .then(response => response.text())
+    .then(html => {
+      const container = document.getElementById('menu-container');
+      if (container) {
+        container.innerHTML = html;
+        initBurgerMenu();
+      }
+    })
+    .catch(error => console.error('Error loading menu:', error));
 }
 
-// Initialize after menu is created
-document.addEventListener("DOMContentLoaded", () => {
-  createMenu();
-  
-  // YOUR ORIGINAL CODE - runs after menu is injected
+// Initialize burger menu event listeners
+function initBurgerMenu() {
   const burgerIcon = document.getElementById("burger-icon");
   const menuOverlay = document.getElementById("menu-overlay");
   const menuCloseIcon = document.getElementById("menu-close-icon");
   const menuCard = document.querySelector(".menu-card");
+  
+  if (!burgerIcon || !menuOverlay || !menuCloseIcon || !menuCard) return;
   
   function openMenu() {
     menuOverlay.classList.add("open");
@@ -60,4 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
       closeMenu();
     }
   });
-});
+}
+
+// Auto-load menu when DOM is ready
+document.addEventListener("DOMContentLoaded", createMenu);
