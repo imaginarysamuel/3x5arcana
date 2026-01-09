@@ -679,8 +679,8 @@ p.header-area {
    OSE-specific stats layout 
 ----------------------------------------------------------*/
 .ose-stats {
-  font-size: 0.9em;
-  line-height: 1.6;
+  font-size: 1em;
+  line-height: 1.2;
 }
 
 .ose-stats p {
