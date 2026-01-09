@@ -94,12 +94,11 @@ function getCardInnerHTML(monster, monsterId) {
         <strong>HD</strong> ${stats["Hit Dice"] || "-"}, 
         <strong>ATK</strong> ${stats["Attacks"] || "-"}, 
         <strong>THAC0</strong> ${stats["THAC0"] || "-"}, 
-        <strong>MV</strong> ${stats["Movement"] || "-"}</p>
-        <p><strong>Saves</strong> ${formatSaves(stats["Saving Throws"]) || "-"}</p>
-        <p><strong>Morale</strong> ${stats["Morale"] || "-"}, <strong>AL</strong> ${stats["Alignment"] || "-"}</p>
-        <p><strong>XP</strong> ${stats["XP"] || "-"}</p>
-        <p><strong># Appearing</strong> ${stats["Number Appearing"] || "-"}</p>
-        <p><strong>Treasure Type</strong> ${stats["Treasure Type"] || "-"}</p>
+        <strong>MV</strong> ${stats["Movement"] || "-"}, ${formatSaves(stats["Saving Throws"]) || "-"}, 
+        <strong>Morale</strong> ${stats["Morale"] || "-"}, <strong>AL</strong> ${stats["Alignment"] || "-"}, 
+        <strong>XP</strong> ${stats["XP"] || "-"}, 
+        <strong># Appearing</strong> ${stats["Number Appearing"] || "-"}, 
+        <strong>Treasure Type</strong> ${stats["Treasure Type"] || "-"}</p>
       </div>
 
       <div class="divider"></div>
@@ -128,7 +127,8 @@ function formatAbility(ability) {
   const match = ability.match(/^(.*?[.:])/);
   if (match) {
     const bolded = `<strong>${match[1]}</strong>`;
-    return ability.replace(match[1], bolded);
+    const rest = ability.substring(match[1].length);
+    return bolded + ' ' + rest;
   }
   return ability;
 }
