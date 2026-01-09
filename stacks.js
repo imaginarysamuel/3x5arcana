@@ -73,55 +73,24 @@ function renderBookmark(item, cardId) {
   `;
 }
 
-// 👹 Render Monster
+// 👹 Render Monster - delegates to monsters_script.js if available
 function renderMonster(item, cardId, useAlt = false) {
-  // Format abilities
-  const abilities = [];
-  for (let i = 1; i <= 9; i++) {
-    if (item[`Ability ${i}`]) {
-      abilities.push(`<p>${formatAbility(item[`Ability ${i}`])}</p>`);
-    }
+  // Check if monsters_script.js is loaded and has the function
+  if (typeof window.getMonsterCardHTML === 'function') {
+    return window.getMonsterCardHTML(item, cardId, useAlt);
   }
-  const abilitiesHTML = abilities.length > 0 ? abilities.join("") : "<p>No special abilities.</p>";
-
+  
+  // Fallback if monsters_script.js isn't loaded
+  console.warn('monsters_script.js not loaded, using basic monster render');
   return `
     <div class="card-header">
       <div class="card-favorite-title">
         <div class="favorite-icon" id="${cardId}-favorite-icon">●</div>
         <div class="card-title">${item.Name || "Unknown Monster"}</div>
       </div>
-      <div class="monster-level">${item.Level || "?"}</div>
     </div>
-    <div class="card-body" id="${cardId}-body">
-      <p class="flavor-text">${item["Flavor Text"] || "No description available."}</p>
-      <div class="divider"></div>
-      <table class="stats-table">
-        <tr><th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th></tr>
-        <tr>
-          <td>${item.S || "-"}</td>
-          <td>${item.D || "-"}</td>
-          <td>${item.C || "-"}</td>
-          <td>${item.I || "-"}</td>
-          <td>${item.W || "-"}</td>
-          <td>${item.Ch || "-"}</td>
-        </tr>
-      </table>
-      <div class="divider"></div>
-      <table class="traits-table">
-        <tr><th>AC</th><th>HP</th><th>AL</th><th>MV</th></tr>
-        <tr>
-          <td>${item.AC || "-"}</td>
-          <td>${item.HP || "-"}</td>
-          <td>${item.AL || "-"}</td>
-          <td>${item.MV || "-"}</td>
-        </tr>
-      </table>
-      <div class="divider"></div>
-      <div class="attacks">
-        <p><strong>Attack:</strong> ${item.ATK || "None"}</p>
-      </div>
-      <div class="divider"></div>
-      <div class="abilities">${abilitiesHTML}</div>
+    <div class="card-body">
+      <p>Monster rendering requires monsters_script.js</p>
     </div>
   `;
 }
