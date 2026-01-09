@@ -18,7 +18,7 @@ const filterClericCheckbox = document.getElementById("filter-cleric");
 showLoading("Loading OSE spells...");
 
 // Load the JSON file
-fetch('ose_spells.json')
+fetch('OSE_spells.json')
   .then(response => response.json())
   .then(jsonData => {
     // Convert JSON object to array
