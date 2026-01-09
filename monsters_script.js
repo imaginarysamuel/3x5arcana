@@ -155,7 +155,8 @@ function getCardInnerHTML(monster, monsterId, useAlt = false) {
       <p class="flavor-text">
         ${monster["Flavor Text"] || "No description available."}
       </p>
-
+      <div class="divider"></div>
+      
       <p class="statline">
         ${statLine}
       </p>
