@@ -1,5 +1,6 @@
 // 📌 monsters_script.js
-// 🧸 load monster database
+// 🧸 Monster page data fetching and filtering
+
 const monsterSheetUrl = "https://opensheet.elk.sh/1E9c3F3JPCDnxqLE0qVtW0K7PBsgHSd7s5oU8p8qeAAY/All";
 let data = [];
 let currentMinLevel = 0;
@@ -28,10 +29,10 @@ fetch(monsterSheetUrl)
     };
     data.unshift(justUseBears);
 
-    loadFavorites(); // 💾 Load saved favorites
+    loadFavorites();
     updateRangeDisplay();
     displayList();
-    displayFavorites(true); // Render favorites list
+    displayFavorites(true);
   })
   .catch(error => {
     console.error("Error loading monster data:", error);
@@ -41,24 +42,23 @@ fetch(monsterSheetUrl)
 function displayList() {
   cardListContainer.innerHTML = "";
   const sortedData = getSortedData();
-  const justUseBears = sortedData.find(m => m["Name"] === "Just Use Bears"); // 🧸 Isolate the bear
-  const filteredData = getFilteredData(sortedData).filter(m => m["Name"] !== "Just Use Bears"); // 🧸 Remove it from regular list
+  const justUseBears = sortedData.find(m => m["Name"] === "Just Use Bears");
+  const filteredData = getFilteredData(sortedData).filter(m => m["Name"] !== "Just Use Bears");
 
   if (justUseBears) {
-    addCardsToList([justUseBears], cardListContainer, "", false); // 🧸 Always render it first
+    addCardsToList([justUseBears], cardListContainer, "", false);
   }
 
   addCardsToList(filteredData, cardListContainer, "", false);
 }
 
 function getSortedData() {
-  const arr = data.slice(); // don't mutate original
+  const arr = data.slice();
 
   if (window.sortMode === 'alpha') {
     return arr.sort((a, b) => (a["Name"] || "").localeCompare(b["Name"] || ""));
   }
 
-  // 'level' mode for monsters = Level → Name (NaN-safe)
   return arr.sort((a, b) => {
     const aLevel = parseFloat(a["Level"]);
     const bLevel = parseFloat(b["Level"]);
@@ -77,7 +77,6 @@ function getFilteredData(sortedData) {
   return sortedData.filter(monster => {
     const nameMatches = monster["Name"].toLowerCase().includes(currentSearchQuery);
     const levelRaw = monster["Level"];
-    // Check for * first, before any parsing
     if (levelRaw === "*") return nameMatches;
     
     const level = parseFloat(levelRaw) || 0;
@@ -87,111 +86,7 @@ function getFilteredData(sortedData) {
 }
 
 function getCardInnerHTML(monster, monsterId, useAlt = false) {
-  // 🧸 Load custom HTML card
-  if (monster["Type"] === "custom-html") {
-    setTimeout(() => {
-      const path = useAlt ? monster["Alt HTML Path"] : monster["HTML Path"];
-      fetch(path)
-        .then(res => res.text())
-        .then(html => {
-          const target = document.getElementById(`${monsterId}-body`);
-          if (target) target.innerHTML = html;
-        });
-    }, 0);
-
-    return `
-      <div class="card-header">
-        <div class="card-favorite-title">
-          <div class="favorite-icon" id="${monsterId}-favorite-icon">●</div>
-          <div class="card-title">${monster["Name"]}</div>
-        </div>
-      </div>
-      <div class="card-body" id="${monsterId}-body">
-        <div class="loading">Loading...</div>
-      </div>
-    `;
-  }
-  
-// 🌍 Export monster card rendering for use by other scripts
-window.getMonsterCardHTML = function(monster, monsterId, useAlt = false) {
-  return getCardInnerHTML(monster, monsterId, useAlt);
-};
-  // ✨ Default card generation continues here...
-
-  const abilities = [];
-  for (let i = 1; i <= 9; i++) {
-    if (monster[`Ability ${i}`]) {
-      abilities.push(`<p>${formatAbility(monster[`Ability ${i}`])}</p>`);
-    }
-  }
-
-  const abilitiesHTML = abilities.length
-    ? abilities.join("")
-    : "<p>No special abilities.</p>";
-
-const statLine = [
-  ["AC", monster["AC"]],
-  ["HP", monster["HP"]],
-  ["ATK", monster["ATK"]],
-  ["MV", monster["MV"]],
-  ["S", monster["S"]],
-  ["D", monster["D"]],
-  ["C", monster["C"]],
-  ["I", monster["I"]],
-  ["W", monster["W"]],
-  ["Ch", monster["Ch"]],
-  ["AL", monster["AL"]],
-  ["LV", monster["Level"]],
-]
-  .filter(item =>
-    item === "<br>" ||
-    (Array.isArray(item) && item[1] !== undefined && item[1] !== "")
-  )
-  .map(item =>
-    item === "<br>"
-      ? "<br>"
-      : `<strong>${item[0]}</strong> ${item[1]}`
-  )
-  .join(", ");
-
-  return `
-    <div class="card-header">
-      <div class="card-favorite-title">
-        <div class="favorite-icon" id="${monsterId}-favorite-icon">●</div>
-        <div class="card-title">${monster["Name"]}</div>
-      </div>
-      <div class="monster-level">
-        ${monster["Level"] || "?"}
-      </div>
-    </div>
-
-    <div class="card-body" id="${monsterId}-body">
-      <p class="flavor-text">
-        ${monster["Flavor Text"] || "No description available."}
-      </p>
-      <div class="divider"></div>
-      
-      <p class="statline">
-        ${statLine}
-      </p>
-
-      <div class="divider"></div>
-
-      <div class="abilities">
-        ${abilitiesHTML}
-      </div>
-    </div>
-  `;
-}
-
-
-function formatAbility(ability) {
-  const match = ability.match(/^(.*?[.:])/);
-  if (match) {
-    const bolded = `<strong>${match[1]}</strong>`;
-    return ability.replace(match[1], bolded);
-  }
-  return ability;
+  return window.getMonsterCardHTML(monster, monsterId, useAlt);
 }
 
 monsterRangeMin.addEventListener("input", function () {
