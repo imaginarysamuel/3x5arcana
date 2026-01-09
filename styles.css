@@ -198,10 +198,11 @@ p.header-area {
   background: var(--grey-medium);
   transition: all 0.3s ease;
   margin-bottom: 8px;
+  color: var(--grey-darkest) !important;
 }
 
 #search-bar::placeholder {
-  color: var(--text-muted);
+  color: var(--text-muted) !important;
 }
 
 #search-bar:focus,
