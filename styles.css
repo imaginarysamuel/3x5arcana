@@ -65,6 +65,9 @@ body {
 p.header-area {
   color: var(--grey-lightest);
 }
+.header * {
+  color: var(--grey-lightest);
+}
 
 /* ----------------------------------------------------------
    Burger Menu
