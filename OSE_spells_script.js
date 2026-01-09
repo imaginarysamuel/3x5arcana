@@ -73,7 +73,7 @@ function getFilteredData(sortedData) {
 
 // Generate card HTML
 function getCardInnerHTML(spell, spellId) {
-  let classLabel = spell["class"] === "Magic-User" ? "MU" : "C";
+  let classLabel = spell["class"] === "Magic-User" ? "M" : "C";
   let levelDisplay = spell["level"] || "?";
 
   return `
