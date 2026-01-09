@@ -111,7 +111,11 @@ function getCardInnerHTML(monster, monsterId, useAlt = false) {
       </div>
     `;
   }
-
+  
+// 🌍 Export monster card rendering for use by other scripts
+window.getMonsterCardHTML = function(monster, monsterId, useAlt = false) {
+  return getCardInnerHTML(monster, monsterId, useAlt);
+};
   // ✨ Default card generation continues here...
 
   const abilities = [];
