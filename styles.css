@@ -540,6 +540,7 @@ p.header-area {
 .statline {
   font-size: 1em;
   line-height: 1.2;
+  margin: 10px;
 }
 
 /* ----------------------------------------------------------
