@@ -676,6 +676,23 @@ p.header-area {
 }
 
 /* ----------------------------------------------------------
+   OSE-specific stats layout 
+----------------------------------------------------------*/
+.ose-stats {
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+.ose-stats p {
+  margin: 4px 0;
+}
+
+.ose-stats strong {
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+/* ----------------------------------------------------------
    Duplicate Card Styling
 ---------------------------------------------------------- */
 .duplicate-card {
