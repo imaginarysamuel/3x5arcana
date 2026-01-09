@@ -89,7 +89,6 @@ function getFilteredData(sortedData) {
 function getCardInnerHTML(monster, monsterId, useAlt = false) {
   // 🧸 Load custom HTML card
   if (monster["Type"] === "custom-html") {
-    // 🧸 Mark placeholder for content load
     setTimeout(() => {
       const path = useAlt ? monster["Alt HTML Path"] : monster["HTML Path"];
       fetch(path)
@@ -114,13 +113,35 @@ function getCardInnerHTML(monster, monsterId, useAlt = false) {
   }
 
   // ✨ Default card generation continues here...
+
   const abilities = [];
   for (let i = 1; i <= 9; i++) {
     if (monster[`Ability ${i}`]) {
       abilities.push(`<p>${formatAbility(monster[`Ability ${i}`])}</p>`);
     }
   }
-  const abilitiesHTML = abilities.length > 0 ? abilities.join("") : "<p>No special abilities.</p>";
+
+  const abilitiesHTML = abilities.length
+    ? abilities.join("")
+    : "<p>No special abilities.</p>";
+
+  const statLine = [
+    ["AC", monster["AC"]],
+    ["HP", monster["HP"]],
+    ["ATK", monster["ATK"]],
+    ["MV", monster["MV"]],
+    ["S", monster["S"]],
+    ["D", monster["D"]],
+    ["C", monster["C"]],
+    ["I", monster["I"]],
+    ["W", monster["W"]],
+    ["Ch", monster["Ch"]],
+    ["AL", monster["AL"]],
+    ["LV", monster["Level"]],
+  ]
+    .filter(([, value]) => value !== undefined && value !== "")
+    .map(([label, value]) => `<strong>${label}</strong> ${value}`)
+    .join(", ");
 
   return `
     <div class="card-header">
@@ -128,41 +149,26 @@ function getCardInnerHTML(monster, monsterId, useAlt = false) {
         <div class="favorite-icon" id="${monsterId}-favorite-icon">●</div>
         <div class="card-title">${monster["Name"]}</div>
       </div>
-      <div class="monster-level">${monster["Level"] || "?"}</div>
     </div>
+
     <div class="card-body" id="${monsterId}-body">
-      <p class="flavor-text">${monster["Flavor Text"] || "No description available."}</p>
+      <p class="flavor-text">
+        ${monster["Flavor Text"] || "No description available."}
+      </p>
+
+      <p class="statline">
+        ${statLine}
+      </p>
+
       <div class="divider"></div>
-      <table class="stats-table">
-        <tr><th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th></tr>
-        <tr>
-          <td>${monster["S"] || "-"}</td>
-          <td>${monster["D"] || "-"}</td>
-          <td>${monster["C"] || "-"}</td>
-          <td>${monster["I"] || "-"}</td>
-          <td>${monster["W"] || "-"}</td>
-          <td>${monster["Ch"] || "-"}</td>
-        </tr>
-      </table>
-      <div class="divider"></div>
-      <table class="traits-table">
-        <tr><th>AC</th><th>HP</th><th>AL</th><th>MV</th></tr>
-        <tr>
-          <td>${monster["AC"] || "-"}</td>
-          <td>${monster["HP"] || "-"}</td>
-          <td>${monster["AL"] || "-"}</td>
-          <td>${monster["MV"] || "-"}</td>
-        </tr>
-      </table>
-      <div class="divider"></div>
-      <div class="attacks">
-        <p><strong>Attack:</strong> ${monster["ATK"] || "None"}</p>
+
+      <div class="abilities">
+        ${abilitiesHTML}
       </div>
-      <div class="divider"></div>
-      <div class="abilities">${abilitiesHTML}</div>
     </div>
   `;
 }
+
 
 function formatAbility(ability) {
   const match = ability.match(/^(.*?[.:])/);
