@@ -1,0 +1,70 @@
+<!-- OSE Monster Page -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PFMKRV8VBN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PFMKRV8VBN');
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3x5 Arcana</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+
+  <!-- HEADER -->
+  <header class="header">
+    <div id="menu-container"></div>
+    <h1 class="main-title">3x5 Arcana: OSE Monsters</h1>
+
+    <!-- SEARCH BAR -->
+    <input type="text" id="search-bar" placeholder="Search Monsters...">
+
+    <!-- Radio Buttons -->
+<div id="sort-group" class="sort-group">
+  <label class="sort-option">
+    <input type="radio" name="sort-mode" value="level" checked>
+    <span class="dot"></span>
+    <span class="label-text">HD</span>
+  </label>
+
+  <label class="sort-option">
+    <input type="radio" name="sort-mode" value="alpha">
+    <span class="dot"></span>
+    <span class="label-text">A–Z</span>
+  </label>
+</div>  
+    
+    <!-- FILTER CONTAINER -->
+    <div id="monster-filter-container">
+      <div class="spell-range-container">
+        <label class="slider-label" for="range-min">HD:</label>
+        <span id="range-display">0 - 30</span>
+        <div class="slider-inputs">
+          <input type="range" id="range-min" value="0" step="1" min="0" max="30">
+          <input type="range" id="range-max" value="30" step="1" min="0" max="30">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="spacer"></div>
+  <div id="favorites-list"></div>
+  <div class="spacer"></div>
+  <div id="cards-list"></div>
+  <script src="burgermenu_script.js"></script>
+  <script src="list_script.js"></script>
+  <script src="ose_monsters_script.js"></script>
+  <div class="spacer"></div>
+   <!-- Logo Image -->
+
+</body>
+</html>
