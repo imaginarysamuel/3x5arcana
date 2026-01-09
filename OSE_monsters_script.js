@@ -12,7 +12,7 @@ const monsterRangeMin = document.getElementById("range-min");
 const monsterRangeMax = document.getElementById("range-max");
 
 // Load the JSON file
-fetch('OSE-Monsters-JSON.json')
+fetch('OSE_monsters.json')
   .then(response => response.json())
   .then(jsonData => {
     // Convert JSON object to array, excluding the "Category:Monsters" entry
