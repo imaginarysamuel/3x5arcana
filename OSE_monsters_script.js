@@ -90,17 +90,16 @@ function getCardInnerHTML(monster, monsterId) {
       <div class="divider"></div>
       
       <div class="ose-stats">
-        <p><strong>AC</strong> ${stats["Armour Class"] || "-"}</p>
-        <p><strong>HD</strong> ${stats["Hit Dice"] || "-"}</p>
-        <p><strong>ATK</strong> ${stats["Attacks"] || "-"}</p>
-        <p><strong>THAC0</strong> ${stats["THAC0"] || "-"}</p>
-        <p><strong>MV</strong> ${stats["Movement"] || "-"}</p>
+        <p><strong>AC</strong> ${stats["Armour Class"] || "-"}, 
+        <strong>HD</strong> ${stats["Hit Dice"] || "-"}, 
+        <strong>ATK</strong> ${stats["Attacks"] || "-"}, 
+        <strong>THAC0</strong> ${stats["THAC0"] || "-"}, 
+        <strong>MV</strong> ${stats["Movement"] || "-"}</p>
         <p><strong>Saves</strong> ${formatSaves(stats["Saving Throws"]) || "-"}</p>
-        <p><strong>M</strong> ${stats["Morale"] || "-"}</p>
-        <p><strong>AL</strong> ${stats["Alignment"] || "-"}</p>
+        <p><strong>Morale</strong> ${stats["Morale"] || "-"}, <strong>AL</strong> ${stats["Alignment"] || "-"}</p>
         <p><strong>XP</strong> ${stats["XP"] || "-"}</p>
         <p><strong># Appearing</strong> ${stats["Number Appearing"] || "-"}</p>
-        <p><strong>TT</strong> ${stats["Treasure Type"] || "-"}</p>
+        <p><strong>Treasure Type</strong> ${stats["Treasure Type"] || "-"}</p>
       </div>
 
       <div class="divider"></div>
