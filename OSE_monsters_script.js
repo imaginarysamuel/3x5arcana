@@ -13,7 +13,7 @@ const monsterRangeMax = document.getElementById("range-max");
 const sortRadios = document.querySelectorAll('input[name="sort-mode"]');
 
 // Load the JSON file
-fetch('OSE-Monsters-JSON.json')
+fetch('OSE_monsters_script.json')
   .then(response => response.json())
   .then(jsonData => {
     // Convert JSON object to array, excluding the "Category:Monsters" entry
