@@ -22,8 +22,8 @@ fetch(monsterSheetUrl)
     const justUseBears = {
       "Name": "Just Use Bears",
       "Type": "custom-html",
-      "HTML Path": "/files/just_use_bears.html",
-      "Alt HTML Path": "/files/just_use_bears_card.html",
+      "HTML Path": "/monsters_just_use_bears.html",
+      "Alt HTML Path": "/monsters_just_use_bears_card.html",
       "Level": 0
     };
     data.unshift(justUseBears);
