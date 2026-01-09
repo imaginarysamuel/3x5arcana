@@ -3,7 +3,7 @@
 
 // Fetch and inject menu HTML from separate file
 function createMenu() {
-  fetch('main-menu.html')
+  fetch('/main-menu.html')
     .then(response => response.text())
     .then(html => {
       const container = document.getElementById('menu-container');
