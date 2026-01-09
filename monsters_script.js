@@ -130,7 +130,6 @@ const statLine = [
   ["HP", monster["HP"]],
   ["ATK", monster["ATK"]],
   ["MV", monster["MV"]],
-  "<br>"
   ["S", monster["S"]],
   ["D", monster["D"]],
   ["C", monster["C"]],
