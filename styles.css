@@ -679,7 +679,7 @@ p.header-area {
    OSE-specific stats layout 
 ----------------------------------------------------------*/
 .ose-stats {
-  font-size: 1em;
+  font-size: .9em;
   line-height: 1.2;
 }
 
