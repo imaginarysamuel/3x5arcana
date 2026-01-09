@@ -141,9 +141,16 @@ const statLine = [
   ["AL", monster["AL"]],
   ["LV", monster["Level"]],
 ]
-    .filter(([, value]) => value !== undefined && value !== "")
-    .map(([label, value]) => `<strong>${label}</strong> ${value}`)
-    .join(", ");
+  .filter(item =>
+    item === "<br>" ||
+    (Array.isArray(item) && item[1] !== undefined && item[1] !== "")
+  )
+  .map(item =>
+    item === "<br>"
+      ? "<br>"
+      : `<strong>${item[0]}</strong> ${item[1]}`
+  )
+  .join(", ");
 
   return `
     <div class="card-header">
