@@ -73,27 +73,17 @@ function renderBookmark(item, cardId) {
   `;
 }
 
-// 👹 Render Monster - delegates to monsters_script.js if available
+// 👹 Render Monster - delegates to monsters_rendering.js
 function renderMonster(item, cardId, useAlt = false) {
-  // Check if monsters_script.js is loaded and has the function
   if (typeof window.getMonsterCardHTML === 'function') {
     return window.getMonsterCardHTML(item, cardId, useAlt);
   }
   
-  // Fallback if monsters_script.js isn't loaded
-  console.warn('monsters_script.js not loaded, using basic monster render');
-  return `
-    <div class="card-header">
-      <div class="card-favorite-title">
-        <div class="favorite-icon" id="${cardId}-favorite-icon">●</div>
-        <div class="card-title">${item.Name || "Unknown Monster"}</div>
-      </div>
-    </div>
-    <div class="card-body">
-      <p>Monster rendering requires monsters_script.js</p>
-    </div>
-  `;
+  console.error('monsters_rendering.js not loaded!');
+  return `<div class="card-body"><p>Error: Monster rendering unavailable</p></div>`;
 }
+
+// Remove the duplicate formatAbility function from stacks.js
 
 // ✨ Render Spell
 function renderSpell(item, cardId, useAlt = false) {
