@@ -78,7 +78,7 @@ function getCardInnerHTML(monster, monsterId) {
   return `
     <div class="card-header">
       <div class="card-favorite-title">
-        <div class="favorite-icon" id="${monsterId}-favorite-icon">●</div>
+        <div class="favorite-icon" id="${monsterId}-favorite-icon">◈</div>
         <div class="card-title">${monster.Name}</div>
       </div>
       <div class="monster-level">${hdDisplay}</div>
