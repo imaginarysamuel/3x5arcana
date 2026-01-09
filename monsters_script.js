@@ -130,14 +130,14 @@ const statLine = [
   ["HP", monster["HP"]],
   ["ATK", monster["ATK"]],
   ["MV", monster["MV"]],
-  "<br>",
+  "<br>"
   ["S", monster["S"]],
   ["D", monster["D"]],
   ["C", monster["C"]],
   ["I", monster["I"]],
   ["W", monster["W"]],
   ["Ch", monster["Ch"]],
-  "<br>",
+  "<br>"
   ["AL", monster["AL"]],
   ["LV", monster["Level"]],
 ]
