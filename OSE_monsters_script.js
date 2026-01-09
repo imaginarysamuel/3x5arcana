@@ -13,7 +13,7 @@ const monsterRangeMax = document.getElementById("range-max");
 const sortRadios = document.querySelectorAll('input[name="sort-mode"]');
 
 // Load the JSON file
-fetch('OSE_monsters.json')
+fetch('OSE-Monsters-JSON.json')
   .then(response => response.json())
   .then(jsonData => {
     // Convert JSON object to array, excluding the "Category:Monsters" entry
@@ -40,15 +40,18 @@ function extractHD(hdString) {
 }
 
 function getSortedData() {
-  if (currentSortMode === "alpha") {
-    return [...data].sort((a, b) => a.Name.localeCompare(b.Name));
-  } else {
-    return [...data].sort((a, b) => {
-      const aHD = extractHD(a.stats["Hit Dice"]);
-      const bHD = extractHD(b.stats["Hit Dice"]);
-      return aHD - bHD || a.Name.localeCompare(b.Name);
-    });
+  const arr = data.slice(); // don't mutate original
+
+  if (window.sortMode === 'alpha') {
+    return arr.sort((a, b) => (a["Name"] || "").localeCompare(b["Name"] || ""));
   }
+
+  // 'level' mode for OSE = HD → Name
+  return arr.sort((a, b) => {
+    const aHD = extractHD(a.stats["Hit Dice"]);
+    const bHD = extractHD(b.stats["Hit Dice"]);
+    return aHD - bHD || (a["Name"] || "").localeCompare(b["Name"] || "");
+  });
 }
 
 function getFilteredData(sortedData) {
@@ -131,14 +134,6 @@ function formatAbility(ability) {
   }
   return ability;
 }
-
-// Handle sort mode changes
-sortRadios.forEach(radio => {
-  radio.addEventListener("change", function() {
-    currentSortMode = this.value;
-    displayList();
-  });
-});
 
 // Prevent min slider from going above max
 monsterRangeMin.addEventListener("input", function () {
