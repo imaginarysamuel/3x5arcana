@@ -58,7 +58,7 @@ function printPDF() {
 }
 
 
-// Add this to script.js - loads license card into any page
+// 📌 Function to add the License card wherever you drop <div id="license-container"></div>
 function loadLicenseCard() {
   const container = document.getElementById('license-container');
   if (!container) return;
