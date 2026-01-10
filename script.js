@@ -67,9 +67,16 @@ function loadLicenseCard() {
     .then(response => response.text())
     .then(html => {
       container.innerHTML = html;
+      
+      // Set up click listeners for the newly injected card
+      container.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', function(event) {
+          if (event.target.classList.contains('card-button') || event.target.tagName === 'A') {
+            return;
+          }
+          toggleCard(card);
+        });
+      });
     })
     .catch(error => console.error('Error loading license card:', error));
 }
-
-// Auto-load license card on page load
-document.addEventListener("DOMContentLoaded", loadLicenseCard);
