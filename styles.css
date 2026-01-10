@@ -518,7 +518,7 @@ p.header-area {
   font-size: 1em;
   color: var(--grey-dark);
   margin-right: 8px;
-  vertical-align: 50%;
+  vertical-align: 100%;
 }
 
 .favorite-icon:hover {
