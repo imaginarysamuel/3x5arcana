@@ -1,26 +1,29 @@
 // 📌 script.js
-// PDF printing function
+// Global utilities only — card expansion is handled elsewhere
+
+// 📌 Print embedded character sheet PDF
 function printPDF() {
-    const iframe = document.getElementById("character-sheet-pdf");
-    if (iframe) {
-        iframe.contentWindow.print();
-    } else {
-        alert("Error: PDF not found.");
-    }
+  const iframe = document.getElementById("character-sheet-pdf");
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.print();
+  } else {
+    alert("Error: PDF not found.");
+  }
 }
 
-// 📌 Function to add the License card wherever you drop <div id="license-container"></div>
+// 📌 Load the License card wherever <div id="license-container"></div> exists
 function loadLicenseCard() {
-  const container = document.getElementById('license-container');
+  const container = document.getElementById("license-container");
   if (!container) return;
-  
-  fetch('/license_card.html')
+
+  fetch("/license_card.html")
     .then(response => response.text())
     .then(html => {
       container.innerHTML = html;
+      // No card toggle binding here — handled by list_script.js if needed
     })
-    .catch(error => console.error('Error loading license card:', error));
+    .catch(err => console.error("Error loading license card:", err));
 }
 
-// Auto-load license card on page load
+// 📌 Auto-load license card on page load
 document.addEventListener("DOMContentLoaded", loadLicenseCard);
