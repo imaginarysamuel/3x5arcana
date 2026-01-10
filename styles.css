@@ -515,10 +515,9 @@ p.header-area {
 }
 
 .favorite-icon {
-  font-size: 1em;
+  font-size: .7em;
   color: var(--grey-dark);
   margin-right: 8px;
-  vertical-align: 100%;
 }
 
 .favorite-icon:hover {
