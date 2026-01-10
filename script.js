@@ -1,85 +1,32 @@
 // 📌 script.js
-document.addEventListener("DOMContentLoaded", function () {
-    // 📌 Select all cards on the page
-    const cards = document.querySelectorAll(".card");
+// Global utilities only — card expansion is handled by list_script.js
 
-    // 📌 Add click event listener to all cards
-    cards.forEach(card => {
-        card.addEventListener("click", function (event) {
-            // Prevent expansion if a button or link was clicked
-            if (event.target.classList.contains("card-button") || event.target.tagName === "A") {
-                return;
-            }
-            // Toggle expansion of the clicked card
-            toggleCard(card);
-        });
-    });
-});
-
-// 📌 Function to toggle a card open or closed
-function toggleCard(card) {
-    const body = card.querySelector(".card-body");
-    if (!body) return;
-
-    const isExpanded = card.classList.contains("expanded");
-    if (isExpanded) {
-        collapseCard(card);
-    } else {
-        expandCard(card);
-    }
-}
-
-// 📌 Function to expand a card
-function expandCard(card) {
-    const body = card.querySelector(".card-body");
-    if (!body) return;
-
-    body.style.maxHeight = body.scrollHeight + "px";
-    card.classList.add("expanded");
-}
-
-// 📌 Function to collapse a card
-function collapseCard(card) {
-    const body = card.querySelector(".card-body");
-    if (!body) return;
-
-    body.style.maxHeight = null;
-    card.classList.remove("expanded");
-}
-
-// 📌 Function to print the embedded PDF
+// 📌 Print embedded character sheet PDF
 function printPDF() {
-    const iframe = document.getElementById("character-sheet-pdf");
-    if (iframe) {
-        iframe.contentWindow.print();
-    } else {
-        alert("Error: PDF not found.");
-    }
+  const iframe = document.getElementById("character-sheet-pdf");
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.print();
+  } else {
+    alert("Error: PDF not found.");
+  }
 }
 
-
-// 📌 Function to add the License card wherever you drop <div id="license-container"></div>
+// 📌 Load the License card wherever <div id="license-container"></div> exists
 function loadLicenseCard() {
-  const container = document.getElementById('license-container');
+  const container = document.getElementById("license-container");
   if (!container) return;
   
-  fetch('/license_card.html')
+  fetch("/license_card.html")
     .then(response => response.text())
     .then(html => {
       container.innerHTML = html;
-      
-      // Set up click listeners for the newly injected card
-      container.querySelectorAll('.card').forEach(card => {
-        card.addEventListener('click', function(event) {
-          if (event.target.classList.contains('card-button') || event.target.tagName === 'A') {
-            return;
-          }
-          toggleCard(card);
-        });
-      });
+      // Re-init static cards to bind the newly injected license cards
+      if (typeof window.initStaticCards === 'function') {
+        window.initStaticCards();
+      }
     })
-    .catch(error => console.error('Error loading license card:', error));
+    .catch(err => console.error("Error loading license card:", err));
 }
 
-// Auto-load license card on page load
+// 📌 Auto-load license card on page load
 document.addEventListener("DOMContentLoaded", loadLicenseCard);
