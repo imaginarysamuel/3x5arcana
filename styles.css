@@ -129,14 +129,14 @@ p.header-area {
   z-index: 1001;
 }
 
-.menu-close-icon {
+.menu-cl-icon {
   font-size: 1.5em;
   color: var(--red);
   cursor: pointer;
   transition: transform 0.2s ease;
 }
 
-.menu-close-icon:hover {
+.menu-cl-icon:hover {
   transform: translateY(-4px);
 }
 
@@ -691,6 +691,7 @@ p.header-area {
 .ose-stats {
   font-size: 1em;
   line-height: 1.2;
+  margin: 5px 0;
 }
 
 .ose-stats p {
