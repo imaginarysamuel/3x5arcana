@@ -3,14 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // 📌 Select all cards on the page
     const cards = document.querySelectorAll(".card");
 
-    // 📌 Expand the "About" card by default (assuming it's the last one)
-    const aboutCard = document.querySelector(".card-container:last-of-type .card");
-    if (aboutCard) {
-        setTimeout(() => {
-            expandCard(aboutCard);
-        }, 50); // Delay to ensure styles apply
-    }
-
     // 📌 Add click event listener to all cards
     cards.forEach(card => {
         card.addEventListener("click", function (event) {
