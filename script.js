@@ -64,3 +64,20 @@ function printPDF() {
         alert("Error: PDF not found.");
     }
 }
+
+
+// Add this to script.js - loads license card into any page
+function loadLicenseCard() {
+  const container = document.getElementById('license-container');
+  if (!container) return;
+  
+  fetch('/license_card.html')
+    .then(response => response.text())
+    .then(html => {
+      container.innerHTML = html;
+    })
+    .catch(error => console.error('Error loading license card:', error));
+}
+
+// Auto-load license card on page load
+document.addEventListener("DOMContentLoaded", loadLicenseCard);
