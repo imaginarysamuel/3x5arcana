@@ -80,3 +80,6 @@ function loadLicenseCard() {
     })
     .catch(error => console.error('Error loading license card:', error));
 }
+
+// Auto-load license card on page load
+document.addEventListener("DOMContentLoaded", loadLicenseCard);
