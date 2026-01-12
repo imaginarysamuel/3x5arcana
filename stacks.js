@@ -83,8 +83,6 @@ function renderMonster(item, cardId, useAlt = false) {
   return `<div class="card-body"><p>Error: Monster rendering unavailable</p></div>`;
 }
 
-// Remove the duplicate formatAbility function from stacks.js
-
 // ✨ Render Spell
 function renderSpell(item, cardId, useAlt = false) {
   return `
@@ -158,6 +156,14 @@ function renderGeneric(item, cardId, useAlt = false) {
     .map(text => `<p>${parseMarkdown(text)}</p>`)
     .join("");
   
+  // Check for button (case-insensitive to handle ButtonText, buttontext, etc.)
+  const buttonText = item.ButtonText || item.buttontext || item.Buttontext;
+  const buttonLink = item.ButtonLink || item.buttonlink || item.Buttonlink;
+  const hasButton = buttonText && buttonLink;
+  const buttonHTML = hasButton 
+    ? `<div class="divider"></div><p><a href="${buttonLink}" class="card-button" onclick="event.stopPropagation();">${buttonText}</a></p>`
+    : '';
+  
   return `
     <div class="card-header">
       <div class="card-favorite-title">
@@ -167,6 +173,7 @@ function renderGeneric(item, cardId, useAlt = false) {
     </div>
     <div class="card-body" id="${cardId}-body">
       ${paragraphs || "<p>No content available.</p>"}
+      ${buttonHTML}
     </div>
   `;
 }
