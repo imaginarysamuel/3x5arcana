@@ -15,13 +15,17 @@
 </head>
 <body>
 
-  <body>
   <!-- HEADER -->
   <header class="header">
     <div id="menu-container"></div>
     <h1 class="main-title">Knave Spells - 3x5 Arcana</h1>
     <p class="header-area">100 Level-less Spells for Knave, by Ben Milton</p>
-  </header>
+<!-- Search bar -->
+<div class="spacer"></div>
+<input type="text" id="search-bar" placeholder="Search spells..." /> 
+<div class="spacer"></div>
+
+     </header>
   
   <!-- Configuration -->
   <script>
@@ -29,8 +33,11 @@
   </script>
   
   <div class="spacer"></div>
-  
-  <!-- Dynamic cards rendered here -->
+
+<!-- Favorites section (appears when you have favorites) -->
+<div id="favorites-list"></div>
+    
+    <!-- Dynamic cards rendered here -->
   <div id="cards-list"></div>
 
   <!-- License Container -->
@@ -42,6 +49,5 @@
   <script src="/script.js"></script>
   <script src="/list_script.js"></script>
   <script src="/stacks.js"></script>
-  <script src="/spells_script.js"></script>
   
 </body>
