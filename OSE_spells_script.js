@@ -75,12 +75,18 @@ function getFilteredData(sortedData) {
 function getCardInnerHTML(spell, spellId) {
   let classLabel = spell["class"] === "Magic-User" ? "M" : "C";
   let levelDisplay = spell["level"] || "?";
+  
+  // Clean the spell name by removing (MU) or (C) suffix
+  let cleanName = spell["Name"]
+    .replace(/\s*\(MU\)\s*$/i, '')
+    .replace(/\s*\(C\)\s*$/i, '')
+    .trim();
 
   return `
     <div class="card-header">
       <div class="card-favorite-title">
         <div class="favorite-icon" id="${spellId}-favorite-icon">◆</div>
-        <div class="card-title">${spell["Name"] || "Unknown Spell"}</div>
+        <div class="card-title">${cleanName}</div>
       </div>
       <div class="spell-tier">${classLabel} ${levelDisplay}</div>
     </div>
