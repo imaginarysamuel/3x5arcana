@@ -1,168 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3x5 Arcana: Stacks</title>
-  <link rel="stylesheet" href="styles.css">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PFMKRV8VBN"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-PFMKRV8VBN');
-  </script>
-</head>
 <body>
-
   <!-- HEADER -->
   <header class="header">
     <div id="menu-container"></div>
     <h1 class="main-title">3x5 Arcana</h1>
     <p class="header-area">Stat Blocks for Shadowdark RPG Adventure Modules</p>
   </header>
-
+  
+  <!-- Configuration -->
+  <script>
+    const STACK_DATA_URL = "https://opensheet.elk.sh/1OOpq3QOfMcxBew1_qFHwgzpDiYeO2cROox6uh_trE-A/stacks";
+  </script>
+  
   <div class="spacer"></div>
-
-  <!-- Bookmark --> 
-  <div class="card collapsed bookmark">
-    <div class="card-header">
-      <div class="card-favorite-title">
-        <div class="card-title">Arcane Library</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Scarlet Minotaur Card -->
-  <div class="card-container">
-    <div class="card" data-static>
-      <div class="card-header">
-        <div class="card-title">Lost Citadel of the Scarlet Minotaur</div>
-      </div>
-      <div class="card-body">
-        <p></p>
-        <p><a href="stacks/scarlet-minotaur.html" class="card-button" onclick="event.stopPropagation();">The Red Devil will find you!</a></p>
-      </div>
-    </div>
-  </div>
   
-  <!-- Eroding Isle Card -->
-  <div class="card-container">
-    <div class="card" data-static>
-      <div class="card-header">
-        <div class="card-title">Eroding Isle of the Executioner</div>
-      </div>
-      <div class="card-body">
-        <p></p>
-        <p><a href="stacks/eroding-isle.html" class="card-button" onclick="event.stopPropagation();">Tread Carefully!</a></p>
-      </div>
-    </div>
-  </div>
+  <!-- Dynamic cards rendered here -->
+  <div id="cards-list"></div>
 
-  <!-- Elephant God Card -->
-  <div class="card-container">
-    <div class="card" data-static>
-      <div class="card-header">
-        <div class="card-title">Sanctum of the Elephant God</div>
-      </div>
-      <div class="card-body">
-        <p></p>
-        <p><a href="stacks/elephant-god.html" class="card-button" onclick="event.stopPropagation();">Face the perils!</a></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Pale Ones Card -->
-  <div class="card-container">
-    <div class="card" data-static>
-      <div class="card-header">
-        <div class="card-title">Twisting Cave of the Pale Ones</div>
-      </div>
-      <div class="card-body">
-        <p></p>
-        <p><a href="stacks/pale-ones.html" class="card-button" onclick="event.stopPropagation();">Rot in Darkness!</a></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Wavestone Monolith Card -->
-  <div class="card-container">
-    <div class="card" data-static>
-      <div class="card-header">
-        <div class="card-title">The Wavestone Monolith</div>
-      </div>
-      <div class="card-body">
-        <p></p>
-        <p><a href="stacks/wavestone-monolith.html" class="card-button" onclick="event.stopPropagation();">Fear the Dark Stone Itself!</a></p>
-      </div>
-    </div>
-  </div>
-
- <!-- Hidden Leprechaun Hollow Card -->
-  <div class="card-container">
-    <div class="card" data-static>
-      <div class="card-header">
-        <div class="card-title">The Hidden Leprechaun Hollow</div>
-      </div>
-      <div class="card-body">
-        <p></p>
-        <p><a href="stacks/hidden-leprechaun-hollow.html" class="card-button" onclick="event.stopPropagation();">Steal the Treasure!</a></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bookmark --> 
-  <div class="card collapsed bookmark">
-    <div class="card-header">
-      <div class="card-favorite-title">
-        <div class="card-title">Others</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Winters Daughter Card -->
-  <div class="card-container">
-    <div class="card" data-static>
-      <div class="card-header">
-        <div class="card-title">Winter's Daughter (Shadowdark Conversion)</div>
-      </div>
-      <div class="card-body">
-        <p>By Gavin Norman</p>
-        <p><a href="https://necroticgnome.com/products/winters-daughter">get this module</a></p>
-        <p><a href="stacks/winters-daughter.html" class="card-button" onclick="event.stopPropagation();">Love never dies!</a></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Slime Lord Card -->
-  <div class="card-container">
-    <div class="card" data-static>
-      <div class="card-header">
-        <div class="card-title">Trial of the Slime Lord</div>
-      </div>
-      <div class="card-body">
-        <p>By Jordan Rudd</p>
-        <p><a href="https://jordanrudd.itch.io/trial-of-the-slime-lord">get this module</a></p>
-        <p><a href="stacks/slime-lord.html" class="card-button" onclick="event.stopPropagation();">Survive the slime!</a></p>
-      </div>
-    </div>
-  </div>
-  
-  <!-- License Card -->
+  <!-- License Container -->
   <div id="license-container"></div>
   <div class="spacer"></div>
 
-  <!-- Logo Image -->
+  <!-- Logo -->
   <img src="/designed-for-use-with_SDRPG-black-transparent.png" 
-     alt="Designed for use with Shadowdark Logo" 
-     class="share-icon">
-     <div class="spacer"></div>
-  
+       alt="Designed for use with Shadowdark Logo" 
+       class="share-icon">
+  <div class="spacer"></div>
+
   <!-- Scripts -->
   <script src="/burgermenu_script.js"></script>
   <script src="/script.js"></script>
-  <script src="/stacks.js"></script>
   <script src="/list_script.js"></script>
-
+  <script src="/stacks.js"></script>
 </body>
-</html>
