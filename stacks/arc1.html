@@ -11,15 +11,19 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <!-- 🔔 ══════════════════════════════ Update the Header Below! ══════════════════════════════ -->
-  <title>The Spear of Horrendous Iron - 3x5 Arcana</title>
   <link rel="stylesheet" href="/styles.css">
+  
+      <!-- 🔔 ══════════════════════════════ Update! ══════════════════════════════ -->
+  <title>The Spear of Horrendous Iron - 3x5 Arcana</title>
+
 </head>
+
 <body>
   <!-- HEADER -->
   <header class="header">
      <div id="menu-container"></div>
-          <!-- 🔔 ══════════════════════════════ Update the Header Below! ══════════════════════════════ -->
+          
+    <!-- 🔔 ══════════════════════════════ Update! ══════════════════════════════ -->
     <h1 class="main-title">The Spear of Horrendous Iron</h1>
     <p>Playtest</p>
   </header>
@@ -32,10 +36,9 @@
   
   <!-- License Card -->
   <div id="license-container"></div>
-  
-  <div class="spacer"></div>
 
   <!-- FOOTER -->
+  <div class="spacer"></div>
   <img
     src="/designed-for-use-with_SDRPG-black-transparent.png"
     alt="Designed for use with Shadowdark Logo"
@@ -43,16 +46,24 @@
   <div class="spacer"></div>
 
   <!-- SCRIPTS -->
+      <!-- 🔔 ══════════════════════════════ Update! ══════════════════════════════ -->
+  <script>
+    const STACK_DATA_URL = [
+      "https://opensheet.elk.sh/1hyysIJol042aXXo6lSzWo0sy6lOPAeE5VyVUMEbTVj8/ARC1-Monsters",
+      "https://opensheet.elk.sh/1hyysIJol042aXXo6lSzWo0sy6lOPAeE5VyVUMEbTVj8/ARC1-Items"
+    ];
+  </script> 
   <script src="/burgermenu_script.js"></script>
   <script src="/list_script.js"></script>
   <script src="/script.js"></script>
-  
-  <!-- ═══════════════════════════════════════════════════════════════════════════
+  <script src="/monsters_rendering.js"></script>
+  <script src="/stacks.js"></script>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════
        🔔 TO ADD A NEW ADVENTURE STACK:
        ═══════════════════════════════════════════════════════════════════════════
        1. Copy this HTML file
-       2. Update the <title> and <h1> above
-       3. Replace ONLY the URL below with your new Google Sheet OpenSheet URL
+       2. Update as directed above
        4. That's it! stacks.js handles the rest automatically.
        -> you can use multiple sheets. just format them like this: 
           const STACK_DATA_URL = [
@@ -62,15 +73,6 @@
             "https://opensheet.elk.sh/YOUR_ID/Rules"
           ];
        ═══════════════════════════════════════════════════════════════════════════ -->
-  <script>
-    const STACK_DATA_URL = [
-      "https://opensheet.elk.sh/1hyysIJol042aXXo6lSzWo0sy6lOPAeE5VyVUMEbTVj8/ARC1-Monsters",
-      "https://opensheet.elk.sh/1IkmsirtMYWIrz0lOfILEaBwQkwJbBCh-dywA0EpouOE/ARC1-Items"
-    ];
-  </script>
-  <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-  
-  <script src="/monsters_rendering.js"></script>
-  <script src="/stacks.js"></script>
+
 </body>
 </html>
