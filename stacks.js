@@ -203,9 +203,10 @@ function getContentChunks(row) {
   return chunks;
 }
 
-// Simple markdown parser (inline only: bold, italic, inline code)
+// Simple markdown parser (inline only: bold, italic, inline code, links)
 function parseMarkdown(text) {
   return text
+    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank">$1</a>')  // [text](url)
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')  // **bold**
     .replace(/\*(.+?)\*/g, '<em>$1</em>')              // *italic*
     .replace(/__(.+?)__/g, '<strong>$1</strong>')      // __bold__
