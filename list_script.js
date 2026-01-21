@@ -364,11 +364,126 @@ function fallbackCopyTextToClipboard(text, card) {
 }
 
 // ============================================
+// 📏 CONTENT SPLITTING FOR MULTI-PAGE CARDS
+// ============================================
+
+/**
+ * Measures content height and splits into multiple pages if needed
+ * Returns array of page objects: { title, level, contentHTML, isContinuation }
+ */
+function splitContentForPrint(title, level, bodyClone) {
+  // Card content area dimensions (in pixels, approximate)
+  // 4.75in width, ~2.3in usable height after header/branding at 96dpi
+  const MAX_HEIGHT_PX = 200; // Conservative estimate for content area
+  
+  // Create hidden measuring container
+  const measurer = document.createElement('div');
+  measurer.style.cssText = `
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 4.5in;
+    font-family: Arial, sans-serif;
+    font-size: 9pt;
+    line-height: 1.2;
+  `;
+  document.body.appendChild(measurer);
+  
+  // Get all content elements from the clone
+  const elements = [];
+  for (let child of bodyClone.children) {
+    if (child.classList.contains('card-actions')) continue;
+    elements.push(child.outerHTML);
+  }
+  
+  // Build pages
+  const pages = [];
+  let currentPageContent = [];
+  let currentHeight = 0;
+  
+  for (let i = 0; i < elements.length; i++) {
+    const elementHTML = elements[i];
+    
+    // Measure this element
+    measurer.innerHTML = elementHTML;
+    const elementHeight = measurer.offsetHeight;
+    
+    // Would this element overflow the current page?
+    if (currentHeight + elementHeight > MAX_HEIGHT_PX && currentPageContent.length > 0) {
+      // Save current page
+      pages.push({
+        title: pages.length === 0 ? title : `${title} (cont'd)`,
+        level: level,
+        contentHTML: currentPageContent.join(''),
+        isContinuation: pages.length > 0
+      });
+      
+      // Start new page
+      currentPageContent = [elementHTML];
+      currentHeight = elementHeight;
+    } else {
+      // Add to current page
+      currentPageContent.push(elementHTML);
+      currentHeight += elementHeight;
+    }
+  }
+  
+  // Don't forget the last page
+  if (currentPageContent.length > 0) {
+    pages.push({
+      title: pages.length === 0 ? title : `${title} (cont'd)`,
+      level: level,
+      contentHTML: currentPageContent.join(''),
+      isContinuation: pages.length > 0
+    });
+  }
+  
+  // Clean up
+  document.body.removeChild(measurer);
+  
+  // If somehow we got no pages, return single page with all content
+  if (pages.length === 0) {
+    pages.push({
+      title: title,
+      level: level,
+      contentHTML: elements.join(''),
+      isContinuation: false
+    });
+  }
+  
+  return pages;
+}
+
+/**
+ * Builds HTML for multiple pages
+ */
+function buildMultiPagePrintContent(pages) {
+  let html = buildPrintStyles();
+  
+  for (const page of pages) {
+    html += `
+      <div class="print-card-page">
+        <div class="print-card-header">
+          <div class="print-card-title">${page.title}</div>
+          ${page.level ? `<div class="print-card-level">${page.level}</div>` : ''}
+        </div>
+        <div class="print-card-body">
+          ${page.contentHTML}
+        </div>
+        <div class="print-card-branding">3x5arcana.com</div>
+      </div>
+    `;
+  }
+  
+  return html;
+}
+
+// ============================================
 // 🖨️ PRINT SINGLE CARD
 // ============================================
 
 /**
- * Generates a 3x5 PDF for a single card
+ * Generates a 3x5 PDF for a single card (supports multi-page)
  */
 function printSingleCard(card) {
   if (typeof html2pdf === 'undefined') {
@@ -392,7 +507,9 @@ function printSingleCard(card) {
     const actions = bodyClone.querySelector('.card-actions');
     if (actions) actions.remove();
     
-    const printContent = buildPrintContent(title, level, bodyClone);
+    // Split content into pages if needed
+    const pages = splitContentForPrint(title, level, bodyClone);
+    const printContent = buildMultiPagePrintContent(pages);
     
     const opt = {
       margin: 0,
@@ -409,12 +526,11 @@ function printSingleCard(card) {
         orientation: 'landscape'
       }
     };
-    console.log('Print content:', printContent);
     
     setTimeout(() => {
       html2pdf().set(opt).from(printContent).save();
-  }, 100); 
-  
+    }, 100);
+    
   } catch (error) {
     console.error('Error generating PDF:', error);
     alert('Failed to generate PDF. Please try again.');
@@ -457,7 +573,7 @@ function updatePrintAllButton() {
 }
 
 /**
- * Generates multi-page PDF with all favorited cards
+ * Generates multi-page PDF with all favorited cards (supports multi-page per card)
  */
 function printAllFavorites() {
   if (typeof html2pdf === 'undefined') {
@@ -494,18 +610,24 @@ function printAllFavorites() {
       const actions = bodyClone.querySelector('.card-actions');
       if (actions) actions.remove();
       
-      allPagesHTML += `
-        <div class="print-card-page">
-          <div class="print-card-header">
-            <div class="print-card-title">${title}</div>
-            ${level ? `<div class="print-card-level">${level}</div>` : ''}
+      // Split content into pages if needed
+      const pages = splitContentForPrint(title, level, bodyClone);
+      
+      // Add each page
+      for (const page of pages) {
+        allPagesHTML += `
+          <div class="print-card-page">
+            <div class="print-card-header">
+              <div class="print-card-title">${page.title}</div>
+              ${page.level ? `<div class="print-card-level">${page.level}</div>` : ''}
+            </div>
+            <div class="print-card-body">
+              ${page.contentHTML}
+            </div>
+            <div class="print-card-branding">3x5arcana.com</div>
           </div>
-          <div class="print-card-body">
-            ${formatBodyForPrint(bodyClone)}
-          </div>
-          <div class="print-card-branding">3x5arcana.com</div>
-        </div>
-      `;
+        `;
+      }
     });
     
     const timestamp = new Date().toISOString().slice(0, 10);
@@ -526,15 +648,18 @@ function printAllFavorites() {
       }
     };
     
-    html2pdf().set(opt).from(allPagesHTML).save().then(() => {
-      btn.innerHTML = originalHTML;
-      btn.disabled = false;
-    }).catch(err => {
-      console.error('PDF generation failed:', err);
-      btn.innerHTML = originalHTML;
-      btn.disabled = false;
-      alert('Failed to generate PDF. Please try again.');
-    });
+    setTimeout(() => {
+      html2pdf().set(opt).from(allPagesHTML).save().then(() => {
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+      }).catch(err => {
+        console.error('PDF generation failed:', err);
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+        alert('Failed to generate PDF. Please try again.');
+      });
+    }, 100);
+    
   } catch (error) {
     console.error('Error in printAllFavorites:', error);
     const btn = document.getElementById('print-all-favorites-btn');
@@ -557,7 +682,7 @@ function buildPrintStyles() {
     <style>
       @page {
         size: 5in 3in;
-        margin: 0,
+        margin: 0;
       }
       
       * {
@@ -616,7 +741,7 @@ function buildPrintStyles() {
       .print-card-body .divider {
         width: 100%;
         height: 1px;
-        color: #000;
+        background-color: #9ecee6;
         margin: 6px 0;
       }
       
@@ -661,7 +786,7 @@ function buildPrintStyles() {
 }
 
 /**
- * Builds complete HTML for single card PDF
+ * Builds complete HTML for single card PDF (legacy, kept for compatibility)
  */
 function buildPrintContent(title, level, bodyClone) {
   return `
