@@ -79,6 +79,7 @@ function getCardInnerHTML(spell, spellId) {
     : "P";
 
   return `
+    ${getCardActionButtonsHTML()}
     <div class="card-header">
       <div class="card-favorite-title">
         <div class="favorite-icon" id="${spellId}-favorite-icon">●</div>
