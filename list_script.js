@@ -568,8 +568,8 @@ function buildPrintStyles() {
       }
       
       .print-card-page {
-        width: 5in;
-        height: 3in;
+        width: 4.75in;
+        height: 2.75in;
         padding: 0;
         page-break-after: always;
         overflow: wrap;
