@@ -137,6 +137,8 @@ function addCardsToList(list, container, suffix, useAlt = false) {
         // Prevent expansion if clicking on favorite icon or links
         if (e.target.classList.contains("favorite-icon") || 
             e.target.classList.contains("card-button") || 
+            e.target.classList.contains("card-action-btn") ||
+            e.target.closest('.card-actions') ||
             e.target.tagName === "A") {
           return;
         }
