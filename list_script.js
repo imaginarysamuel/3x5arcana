@@ -371,9 +371,12 @@ function fallbackCopyTextToClipboard(text, card) {
  * Measures content height and splits into multiple pages if needed
  * Returns array of page objects: { title, level, contentHTML, isContinuation }
  */
+/**
+ * Measures content height and splits into multiple pages if needed
+ * Returns array of page objects: { title, level, contentHTML, isContinuation }
+ */
 function splitContentForPrint(title, level, bodyClone) {
   // Card content area dimensions (in pixels, approximate)
-  // 4.75in width, ~2.3in usable height after header/branding at 96dpi
   const MAX_HEIGHT_PX = 200; // Conservative estimate for content area
   
   // Create hidden measuring container
@@ -389,11 +392,23 @@ function splitContentForPrint(title, level, bodyClone) {
   `;
   document.body.appendChild(measurer);
   
-  // Get all content elements from the clone
+  // Flatten all content elements - break apart containers like .abilities, .ose-stats
   const elements = [];
   for (let child of bodyClone.children) {
     if (child.classList.contains('card-actions')) continue;
-    elements.push(child.outerHTML);
+    
+    // If it's a container with multiple paragraphs, split them out individually
+    if (child.classList.contains('abilities') || 
+        child.classList.contains('spell-stats') || 
+        child.classList.contains('ose-stats')) {
+      const paragraphs = child.querySelectorAll('p');
+      paragraphs.forEach(p => {
+        elements.push(`<p>${p.innerHTML}</p>`);
+      });
+    } else {
+      // Keep other elements as-is (dividers, flavor text, tables, etc.)
+      elements.push(child.outerHTML);
+    }
   }
   
   // Build pages
