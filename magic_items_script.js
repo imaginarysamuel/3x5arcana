@@ -32,6 +32,7 @@ function getFilteredData(sortedData) {
 
 function getCardInnerHTML(item, itemId) {
   let cardContent = `
+    ${getCardActionButtonsHTML()}
     <div class="card-header">
       <div class="card-favorite-title">
         <div class="favorite-icon" id="${itemId}-favorite-icon">●</div>
