@@ -185,6 +185,8 @@ function toggleFavorite(name) {
 
   saveFavorites();
   displayFavorites(true);
+
+  updatePrintAllButton();  // <-- ADD THIS LINE
 }
 
 // ============================================
