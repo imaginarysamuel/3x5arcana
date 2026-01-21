@@ -393,7 +393,7 @@ function printSingleCard(card) {
     const printContent = buildPrintContent(title, level, bodyClone);
     
     const opt = {
-      margin: 0.25,
+      margin: 0,
       filename: `${title.replace(/[^a-z0-9]/gi, '_')}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { 
@@ -505,7 +505,7 @@ function printAllFavorites() {
     const timestamp = new Date().toISOString().slice(0, 10);
     
     const opt = {
-      margin: 0.25,
+      margin: 0,
       filename: `3x5_Favorites_${timestamp}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { 
