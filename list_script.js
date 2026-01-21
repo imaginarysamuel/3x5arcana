@@ -610,7 +610,7 @@ function buildPrintStyles() {
       .print-card-body .divider {
         width: 100%;
         height: 1px;
-        color: #000
+        color: #000;
         margin: 6px 0;
       }
       
