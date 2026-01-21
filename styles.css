@@ -901,6 +901,10 @@ p.header-area {
   display: none;
 }
 
+#cards-list .card .print-btn {
+  display: none;
+}
+
 /* ============================================
    PRINT ALL FAVORITES BUTTON
    ============================================ */
