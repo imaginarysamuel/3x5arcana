@@ -86,6 +86,7 @@ function renderMonster(item, cardId, useAlt = false) {
 // ✨ Render Spell
 function renderSpell(item, cardId, useAlt = false) {
   return `
+    ${getCardActionButtonsHTML()}
     <div class="card-header">
       <div class="card-favorite-title">
         <div class="favorite-icon" id="${cardId}-favorite-icon">●</div>
@@ -137,6 +138,7 @@ function renderItem(item, cardId, useAlt = false) {
   const content = sections.length > 0 ? sections.join('<div class="divider"></div>') : "<p>No description available.</p>";
   
   return `
+    ${getCardActionButtonsHTML()}
     <div class="card-header">
       <div class="card-favorite-title">
         <div class="favorite-icon" id="${cardId}-favorite-icon">●</div>
@@ -165,6 +167,7 @@ function renderGeneric(item, cardId, useAlt = false) {
     : '';
   
   return `
+    ${getCardActionButtonsHTML()}
     <div class="card-header">
       <div class="card-favorite-title">
         <div class="favorite-icon" id="${cardId}-favorite-icon">●</div>
