@@ -116,6 +116,8 @@ function displayFavorites(useAlt = false) {
   let sortedData = getSortedData();
   let favoriteData = sortedData.filter(item => favoritesIdList.includes(item["Name"]));
   addCardsToList(favoriteData, favoritesListContainer, "-fav", useAlt);
+
+  updatePrintAllButton(); 
 }
 
 function addCardsToList(list, container, suffix, useAlt = false) {
@@ -186,7 +188,7 @@ function toggleFavorite(name) {
   saveFavorites();
   displayFavorites(true);
 
-  updatePrintAllButton();  // <-- ADD THIS LINE
+  updatePrintAllButton(); 
 }
 
 // ============================================
