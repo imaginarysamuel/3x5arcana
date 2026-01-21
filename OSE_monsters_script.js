@@ -76,6 +76,7 @@ function getCardInnerHTML(monster, monsterId) {
   const hdDisplay = hdNum === 0.5 ? "½" : hdNum;
 
   return `
+    ${getCardActionButtonsHTML()}
     <div class="card-header">
       <div class="card-favorite-title">
         <div class="favorite-icon" id="${monsterId}-favorite-icon">◆</div>
