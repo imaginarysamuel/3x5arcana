@@ -544,7 +544,7 @@ function printSingleCard(card) {
     
     setTimeout(() => {
       html2pdf().set(opt).from(printContent).save();
-    }, 200);
+    }, 500);
     
   } catch (error) {
     console.error('Error generating PDF:', error);
