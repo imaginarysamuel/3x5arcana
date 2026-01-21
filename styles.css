@@ -830,3 +830,123 @@ p.header-area {
   font-family: inherit;
   text-align: center;
 }
+
+/* ============================================
+   CARD ACTION BUTTONS - COPY & PRINT
+   ============================================ */
+
+/* Container for action buttons - positioned top-right of card */
+.card-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+/* Show buttons on card hover */
+.card:hover .card-actions {
+  opacity: 1;
+}
+
+/* Individual action button styling */
+.card-action-btn {
+  background-color: var(--grey-lighter);
+  border: 1px solid var(--blue-light);
+  border-radius: 5px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--grey-dark);
+  transition: all 0.15s ease;
+  user-select: none;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-action-btn:hover {
+  background-color: var(--grey-medium);
+  border-color: var(--grey-dark);
+  color: var(--grey-darkest);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.card-action-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Success state for copy button */
+.card-action-btn.copied {
+  background-color: var(--blue-light);
+  border-color: var(--blue-dark);
+  color: var(--grey-darkest);
+}
+
+/* Ensure card has positioning context for absolute buttons */
+.card {
+  position: relative;
+}
+
+/* Hide buttons on bookmark cards */
+.card.bookmark .card-actions {
+  display: none;
+}
+
+/* ============================================
+   PRINT ALL FAVORITES BUTTON
+   ============================================ */
+
+.print-all-favorites {
+  position: relative;
+  width: fit-content;
+  margin: 20px auto;
+  padding: 12px 24px;
+  background-color: var(--grey-lighter);
+  border: 2px solid var(--blue-dark);
+  border-radius: 8px;
+  font-family: 'National Park', sans-serif;
+  font-size: 1em;
+  font-weight: bold;
+  color: var(--grey-darkest);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  display: none;
+}
+
+.print-all-favorites.visible {
+  display: block;
+}
+
+.print-all-favorites:hover {
+  background-color: var(--blue-light);
+  border-color: var(--grey-darkest);
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.print-all-favorites:active {
+  transform: translateY(-1px);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.print-all-favorites:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.print-all-favorites .button-icon {
+  margin-right: 8px;
+}
