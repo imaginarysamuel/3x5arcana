@@ -505,7 +505,7 @@ function printAllFavorites() {
     const timestamp = new Date().toISOString().slice(0, 10);
     
     const opt = {
-      margin: 0.25,
+      margin: 0,
       filename: `3x5_Favorites_${timestamp}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { 
@@ -570,7 +570,7 @@ function buildPrintStyles() {
       .print-card-page {
         width: 5in;
         height: 3in;
-        padding: 0.2in;
+        padding: 0;
         page-break-after: always;
         overflow: hidden;
         position: relative;
