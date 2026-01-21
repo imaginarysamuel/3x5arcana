@@ -399,7 +399,9 @@ function printSingleCard(card) {
       html2canvas: { 
         scale: 2,
         useCORS: true,
-        letterRendering: true
+        letterRendering: true,
+        windowWidth: 480,   // 5in * 96px
+        windowHeight: 288   // 3in * 96px
       },
       jsPDF: { 
         unit: 'in', 
@@ -408,7 +410,14 @@ function printSingleCard(card) {
       }
     };
     
-    html2pdf().set(opt).from(printContent).save();
+    const wrapper = document.createElement('div');
+    wrapper.style.width = '5in';
+    wrapper.style.height = '3in';
+    wrapper.style.overflow = 'hidden';
+    wrapper.innerHTML = printContent;
+
+html2pdf().set(opt).from(wrapper).save();
+
   } catch (error) {
     console.error('Error generating PDF:', error);
     alert('Failed to generate PDF. Please try again.');
@@ -453,7 +462,7 @@ function updatePrintAllButton() {
 /**
  * Generates multi-page PDF with all favorited cards
  */
-function printAllFavorites() {
+async function printAllFavorites() {
   if (typeof html2pdf === 'undefined') {
     alert('PDF library not loaded. Please refresh and try again.');
     return;
@@ -511,7 +520,9 @@ function printAllFavorites() {
       html2canvas: { 
         scale: 2,
         useCORS: true,
-        letterRendering: true
+        letterRendering: true,
+        windowWidth: 480,   // 5in * 96px
+        windowHeight: 288   // 3in * 96px
       },
       jsPDF: { 
         unit: 'in', 
@@ -520,15 +531,33 @@ function printAllFavorites() {
       }
     };
     
-    html2pdf().set(opt).from(allPagesHTML).save().then(() => {
-      btn.innerHTML = originalHTML;
-      btn.disabled = false;
-    }).catch(err => {
-      console.error('PDF generation failed:', err);
-      btn.innerHTML = originalHTML;
-      btn.disabled = false;
-      alert('Failed to generate PDF. Please try again.');
-    });
+    // ⛔ Create a fixed-size wrapper so html2canvas can't over-capture
+    const wrapper = document.createElement('div');
+    wrapper.style.width = '5in';
+    wrapper.style.overflow = 'hidden';
+    
+    // Important: inject your generated pages
+    wrapper.innerHTML = allPagesHTML;
+    
+    // Wait for fonts to load (prevents silent font fallback)
+    await document.fonts.ready;
+    
+    // Generate PDF
+    html2pdf()
+      .set(opt)
+      .from(wrapper)
+      .save()
+      .then(() => {
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+      })
+      .catch(err => {
+        console.error('PDF generation failed:', err);
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+        alert('Failed to generate PDF. Please try again.');
+      });
+
   } catch (error) {
     console.error('Error in printAllFavorites:', error);
     const btn = document.getElementById('print-all-favorites-btn');
@@ -549,6 +578,13 @@ function printAllFavorites() {
 function buildPrintStyles() {
   return `
     <style>
+       html, body {
+        width: 5in;
+        height: 3in;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
       * {
         box-sizing: border-box;
         margin: 0;
