@@ -572,6 +572,7 @@ function buildPrintStyles() {
         height: 2.75in;
         padding: 0.15in;
         page-break-after: always;
+        overflow: hidden;
         position: relative;
       }
       
