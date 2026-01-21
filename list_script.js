@@ -377,7 +377,7 @@ function fallbackCopyTextToClipboard(text, card) {
  */
 function splitContentForPrint(title, level, bodyClone) {
   // Card content area dimensions (in pixels, approximate)
-  const MAX_HEIGHT_PX = 350; // Conservative estimate for content area
+  const MAX_HEIGHT_PX = 325; // Estimate for content area
   
   // Create hidden measuring container
   const measurer = document.createElement('div');
