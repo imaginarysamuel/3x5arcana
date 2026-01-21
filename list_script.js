@@ -409,8 +409,12 @@ function printSingleCard(card) {
         orientation: 'landscape'
       }
     };
+    console.log('Print content:', printContent);
     
-    html2pdf().set(opt).from(printContent).save();
+    setTimeout(() => {
+      html2pdf().set(opt).from(printContent).save();
+  }, 100); 
+  
   } catch (error) {
     console.error('Error generating PDF:', error);
     alert('Failed to generate PDF. Please try again.');
