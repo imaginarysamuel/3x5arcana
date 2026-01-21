@@ -790,8 +790,8 @@ function buildPrintStyles() {
       
       .print-card-branding {
         position: absolute;
-        bottom: 0;
-        right: 0;
+        bottom: 0.05in;
+        right: 0.05in;
         font-size: 7pt;
         color: #7d7d7d;
         text-align: right;
