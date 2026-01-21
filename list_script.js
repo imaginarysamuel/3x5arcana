@@ -393,15 +393,13 @@ function printSingleCard(card) {
     const printContent = buildPrintContent(title, level, bodyClone);
     
     const opt = {
-      margin: 0,
+      margin: 0.25,
       filename: `${title.replace(/[^a-z0-9]/gi, '_')}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { 
         scale: 2,
         useCORS: true,
-        letterRendering: true,
-        windowWidth: 480,   // 5in * 96px
-        windowHeight: 288   // 3in * 96px
+        letterRendering: true
       },
       jsPDF: { 
         unit: 'in', 
@@ -410,14 +408,7 @@ function printSingleCard(card) {
       }
     };
     
-    const wrapper = document.createElement('div');
-    wrapper.style.width = '5in';
-    wrapper.style.height = '3in';
-    wrapper.style.overflow = 'hidden';
-    wrapper.innerHTML = printContent;
-
-html2pdf().set(opt).from(wrapper).save();
-
+    html2pdf().set(opt).from(printContent).save();
   } catch (error) {
     console.error('Error generating PDF:', error);
     alert('Failed to generate PDF. Please try again.');
@@ -462,7 +453,7 @@ function updatePrintAllButton() {
 /**
  * Generates multi-page PDF with all favorited cards
  */
-async function printAllFavorites() {
+function printAllFavorites() {
   if (typeof html2pdf === 'undefined') {
     alert('PDF library not loaded. Please refresh and try again.');
     return;
@@ -514,15 +505,13 @@ async function printAllFavorites() {
     const timestamp = new Date().toISOString().slice(0, 10);
     
     const opt = {
-      margin: 0,
+      margin: 0.25,
       filename: `3x5_Favorites_${timestamp}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { 
         scale: 2,
         useCORS: true,
-        letterRendering: true,
-        windowWidth: 480,   // 5in * 96px
-        windowHeight: 288   // 3in * 96px
+        letterRendering: true
       },
       jsPDF: { 
         unit: 'in', 
@@ -531,33 +520,15 @@ async function printAllFavorites() {
       }
     };
     
-    // ⛔ Create a fixed-size wrapper so html2canvas can't over-capture
-    const wrapper = document.createElement('div');
-    wrapper.style.width = '5in';
-    wrapper.style.overflow = 'hidden';
-    
-    // Important: inject your generated pages
-    wrapper.innerHTML = allPagesHTML;
-    
-    // Wait for fonts to load (prevents silent font fallback)
-    await document.fonts.ready;
-    
-    // Generate PDF
-    html2pdf()
-      .set(opt)
-      .from(wrapper)
-      .save()
-      .then(() => {
-        btn.innerHTML = originalHTML;
-        btn.disabled = false;
-      })
-      .catch(err => {
-        console.error('PDF generation failed:', err);
-        btn.innerHTML = originalHTML;
-        btn.disabled = false;
-        alert('Failed to generate PDF. Please try again.');
-      });
-
+    html2pdf().set(opt).from(allPagesHTML).save().then(() => {
+      btn.innerHTML = originalHTML;
+      btn.disabled = false;
+    }).catch(err => {
+      console.error('PDF generation failed:', err);
+      btn.innerHTML = originalHTML;
+      btn.disabled = false;
+      alert('Failed to generate PDF. Please try again.');
+    });
   } catch (error) {
     console.error('Error in printAllFavorites:', error);
     const btn = document.getElementById('print-all-favorites-btn');
@@ -578,13 +549,11 @@ async function printAllFavorites() {
 function buildPrintStyles() {
   return `
     <style>
-       html, body {
-        width: 5in;
-        height: 3in;
+      @page {
+        size: 5in 3in;
         margin: 0;
-        padding: 0;
-        overflow: hidden;
       }
+      
       * {
         box-sizing: border-box;
         margin: 0;
@@ -593,9 +562,9 @@ function buildPrintStyles() {
       
       body {
         font-family: 'National Park', -apple-system, BlinkMacSystemFont, sans-serif;
-        font-size: 8pt;
+        font-size: 9pt;
         line-height: 1.2;
-        color: #262626;
+        color: #000;
       }
       
       .print-card-page {
@@ -615,40 +584,40 @@ function buildPrintStyles() {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding-bottom: 3px;
-        margin-bottom: 4px;
-        border-bottom: 2px solid #000000;
+        padding-bottom: 4px;
+        margin-bottom: 6px;
+        border-bottom: 2px solid #fa8072;
       }
       
       .print-card-title {
-        font-size: 10pt;
+        font-size: 11pt;
         font-weight: bold;
         text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
       
       .print-card-level {
-        font-size: 9pt;
+        font-size: 10pt;
         font-weight: bold;
       }
       
       .print-card-body p {
-        margin: 3px 0;
-        font-size: 8pt;
+        margin: 4px 0;
+        font-size: 9pt;
         line-height: 1.2;
       }
       
       .print-card-body .divider {
         width: 100%;
         height: 1px;
-        background-color: #000000;
-        margin: 4px 0;
+        margin: 6px 0;
       }
       
       .print-card-body .flavor-text,
       .print-card-body .spell-school,
       .print-card-body .item-description {
         font-style: italic;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
       }
       
       .print-card-body strong {
@@ -658,13 +627,13 @@ function buildPrintStyles() {
       .print-card-body table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 8pt;
-        margin: 3px 0;
+        font-size: 9pt;
+        margin: 4px 0;
       }
       
       .print-card-body th,
       .print-card-body td {
-        padding: 1px 3px;
+        padding: 2px 4px;
         text-align: left;
       }
       
@@ -674,10 +643,11 @@ function buildPrintStyles() {
       
       .print-card-branding {
         position: absolute;
-        bottom: 0.1in;
-        right: 0.15in;
-        font-size: 6pt;
+        bottom: 0.2in;
+        right: 0.25in;
+        font-size: 7pt;
         color: #7d7d7d;
+        text-align: right;
       }
     </style>
   `;
