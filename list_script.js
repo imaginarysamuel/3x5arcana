@@ -549,11 +549,6 @@ function printAllFavorites() {
 function buildPrintStyles() {
   return `
     <style>
-      @page {
-        size: 5in 3in;
-        margin: 0;
-      }
-      
       * {
         box-sizing: border-box;
         margin: 0;
@@ -562,8 +557,8 @@ function buildPrintStyles() {
       
       body {
         font-family: 'National Park', -apple-system, BlinkMacSystemFont, sans-serif;
-        font-size: 9pt;
-        line-height: 1.3;
+        font-size: 8pt;
+        line-height: 1.2;
         color: #262626;
       }
       
@@ -571,9 +566,6 @@ function buildPrintStyles() {
         width: 5in;
         height: 3in;
         padding: 0.25in;
-        background-color: #fff9f5;
-        border: 1px solid #9ecee6;
-        border-radius: 5px;
         page-break-after: always;
         overflow: hidden;
         position: relative;
@@ -587,41 +579,40 @@ function buildPrintStyles() {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding-bottom: 6px;
-        margin-bottom: 8px;
-        border-bottom: 2px solid #fa8072;
+        padding-bottom: 3px;
+        margin-bottom: 4px;
+        border-bottom: 2px solid #000000;
       }
       
       .print-card-title {
-        font-size: 11pt;
+        font-size: 10pt;
         font-weight: bold;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
       }
       
       .print-card-level {
-        font-size: 10pt;
+        font-size: 9pt;
         font-weight: bold;
       }
       
       .print-card-body p {
-        margin: 4px 0;
-        font-size: 9pt;
-        line-height: 1.25;
+        margin: 3px 0;
+        font-size: 8pt;
+        line-height: 1.2;
       }
       
       .print-card-body .divider {
         width: 100%;
         height: 1px;
-        background-color: #9ecee6;
-        margin: 6px 0;
+        background-color: #000000;
+        margin: 4px 0;
       }
       
       .print-card-body .flavor-text,
       .print-card-body .spell-school,
       .print-card-body .item-description {
         font-style: italic;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
       }
       
       .print-card-body strong {
@@ -631,13 +622,13 @@ function buildPrintStyles() {
       .print-card-body table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 9pt;
-        margin: 4px 0;
+        font-size: 8pt;
+        margin: 3px 0;
       }
       
       .print-card-body th,
       .print-card-body td {
-        padding: 2px 4px;
+        padding: 1px 3px;
         text-align: left;
       }
       
@@ -647,11 +638,10 @@ function buildPrintStyles() {
       
       .print-card-branding {
         position: absolute;
-        bottom: 0.2in;
-        right: 0.25in;
-        font-size: 7pt;
+        bottom: 0.1in;
+        right: 0.15in;
+        font-size: 6pt;
         color: #7d7d7d;
-        text-align: right;
       }
     </style>
   `;
