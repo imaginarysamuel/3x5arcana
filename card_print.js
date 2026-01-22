@@ -471,7 +471,7 @@ function renderLine(doc, segments, x, y) {
       printButton = document.createElement('button');
       printButton.id = 'print-all-favorites-btn';
       printButton.className = 'print-all-favorites';
-      printButton.innerHTML = '<span class="button-icon">⎙</span>Print All Favorites';
+      printButton.innerHTML = '<img src="/files/printer_icon.png" alt="Print">Print All Favorites';
       printButton.addEventListener('click', printAllFavorites);
       favoritesContainer.appendChild(printButton);
     }
