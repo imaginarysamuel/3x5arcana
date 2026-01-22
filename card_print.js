@@ -277,6 +277,9 @@
         if (rendered.overflow) {
           return { overflow: true, nextIndex: sectionIndex };
         }
+       // Add extra space between abilities
+        y += LINE_HEIGHT * 0.1; // Add 30% more space
+        
         sectionIndex++;
         continue;
       }
