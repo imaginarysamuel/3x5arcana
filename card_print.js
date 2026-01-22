@@ -20,6 +20,7 @@
   const FONT_SIZE_BRANDING = 7;
   
   const LINE_HEIGHT = 0.16;  // inches per line at body font size
+  const ABILITY_SPACING = LINE_HEIGHT * 0.1;  // extra space between ability paragraphs
   const HEADER_HEIGHT = 0.35; // space for title + divider
   const FOOTER_HEIGHT = 0.12; // space for branding
   
@@ -278,7 +279,7 @@
           return { overflow: true, nextIndex: sectionIndex };
         }
        // Add extra space between abilities
-        y += LINE_HEIGHT * 0.1; // Add 30% more space
+        y += ABILITY_SPACING;
         
         sectionIndex++;
         continue;
