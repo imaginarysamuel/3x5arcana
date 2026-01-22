@@ -375,99 +375,32 @@ function fallbackCopyTextToClipboard(text, card) {
  * Measures content height and splits into multiple pages if needed
  * Returns array of page objects: { title, level, contentHTML, isContinuation }
  */
-function splitContentForPrint(title, level, bodyClone) {
-  // Card content area dimensions (in pixels, approximate)
-  const MAX_HEIGHT_PX = 325; // Estimate for content area
-  
-  // Create hidden measuring container
-  const measurer = document.createElement('div');
-  measurer.style.cssText = `
-    position: absolute;
-    left: -9999px;
-    top: -9999px;
-    width: 4.45in;
-    font-family: 'National Park', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 9pt;
-    line-height: 1.2;
-  `;
-  document.body.appendChild(measurer);
-  
-  // Flatten all content elements - break apart containers like .abilities, .ose-stats
-  const elements = [];
-  for (let child of bodyClone.children) {
-    if (child.classList.contains('card-actions')) continue;
-    
-    // If it's a container with multiple paragraphs, split them out individually
-    if (child.classList.contains('abilities') || 
-        child.classList.contains('spell-stats') || 
-        child.classList.contains('ose-stats')) {
-      const paragraphs = child.querySelectorAll('p');
-      paragraphs.forEach(p => {
-        elements.push(`<p>${p.innerHTML}</p>`);
-      });
-    } else {
-      // Keep other elements as-is (dividers, flavor text, tables, etc.)
-      elements.push(child.outerHTML);
-    }
-  }
-  
-  // Build pages
-  const pages = [];
-  let currentPageContent = [];
-  let currentHeight = 0;
-  
-  for (let i = 0; i < elements.length; i++) {
-    const elementHTML = elements[i];
-    
-    // Measure this element
-    measurer.innerHTML = elementHTML;
-    const elementHeight = measurer.offsetHeight;
-    
-    // Would this element overflow the current page?
-    if (currentHeight + elementHeight > MAX_HEIGHT_PX && currentPageContent.length > 0) {
-      // Save current page
-      pages.push({
-        title: pages.length === 0 ? title : `${title} (cont'd)`,
-        level: level,
-        contentHTML: currentPageContent.join(''),
-        isContinuation: pages.length > 0
-      });
+  function splitContentForPrint(title, level, bodyClone) {
+    // Temporary: just return single page, no splitting
+    const elements = [];
+    for (let child of bodyClone.children) {
+      if (child.classList.contains('card-actions')) continue;
       
-      // Start new page
-      currentPageContent = [elementHTML];
-      currentHeight = elementHeight;
-    } else {
-      // Add to current page
-      currentPageContent.push(elementHTML);
-      currentHeight += elementHeight;
+      // Still flatten abilities/stats containers
+      if (child.classList.contains('abilities') || 
+          child.classList.contains('spell-stats') || 
+          child.classList.contains('ose-stats')) {
+        const paragraphs = child.querySelectorAll('p');
+        paragraphs.forEach(p => {
+          elements.push(`<p>${p.innerHTML}</p>`);
+        });
+      } else {
+        elements.push(child.outerHTML);
+      }
     }
-  }
-  
-  // Don't forget the last page
-  if (currentPageContent.length > 0) {
-    pages.push({
-      title: pages.length === 0 ? title : `${title} (cont'd)`,
-      level: level,
-      contentHTML: currentPageContent.join(''),
-      isContinuation: pages.length > 0
-    });
-  }
-  
-  // Clean up
-  document.body.removeChild(measurer);
-  
-  // If somehow we got no pages, return single page with all content
-  if (pages.length === 0) {
-    pages.push({
+    
+    return [{
       title: title,
       level: level,
       contentHTML: elements.join(''),
       isContinuation: false
-    });
+    }];
   }
-  
-  return pages;
-}
 
 /**
  * Builds HTML for multiple pages
