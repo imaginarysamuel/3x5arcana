@@ -210,10 +210,8 @@
     });
     
     // Register National Park fonts
-    doc.addFileToVFS('NationalPark-Regular.ttf', NATIONAL_PARK_REGULAR);
     doc.addFileToVFS('NationalPark-Bold.ttf', NATIONAL_PARK_BOLD);
     doc.addFileToVFS('NationalPark-Light.ttf', NATIONAL_PARK_LIGHT);
-    doc.addFont('NationalPark-Regular.ttf', 'NationalPark', 'normal');
     doc.addFont('NationalPark-Bold.ttf', 'NationalPark', 'bold');
     doc.addFont('NationalPark-Light.ttf', 'NationalPark', 'light');
     
