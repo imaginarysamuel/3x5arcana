@@ -298,67 +298,54 @@
    * Renders rich text (with bold segments) handling word wrap
    * This is the tricky part - mixing fonts inline
    */
-  function renderRichText(doc, segments, x, y, maxWidth, maxY) {
-    // Flatten segments into one string for wrapping calculation
-    let fullText = segments.map(s => s.text).join('');
+function renderRichText(doc, segments, x, y, maxWidth, maxY) {
+  let currentLine = [];
+  let currentLineWidth = 0;
+  
+  for (const segment of segments) {
+    doc.setFont('NationalPark', segment.bold ? 'bold' : 'normal');
+    const words = segment.text.split(' ');
     
-    // Use normal font for width calculation
-    doc.setFont('NationalPark', 'normal');
-    const lines = doc.splitTextToSize(fullText, maxWidth);
-    
-    // Track position in the original text
-    let charIndex = 0;
-    
-    for (const line of lines) {
-      if (y + LINE_HEIGHT > maxY) {
-        return { y, overflow: true };
-      }
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i] + (i < words.length - 1 ? ' ' : '');
+      const wordWidth = doc.getTextWidth(word);
       
-      // Always start each line at the left margin
-      let lineX = x;
-      let lineCharIndex = charIndex;
-      
-      // Find which segments this line covers and render with appropriate styling
-      let remaining = line.length;
-      
-      while (remaining > 0) {
-        // Find current segment based on character position
-        let segmentStart = 0;
-        let currentSegment = null;
-        
-        for (const seg of segments) {
-          if (lineCharIndex >= segmentStart && lineCharIndex < segmentStart + seg.text.length) {
-            currentSegment = seg;
-            break;
-          }
-          segmentStart += seg.text.length;
+      if (currentLineWidth + wordWidth > maxWidth && currentLine.length > 0) {
+        // Render current line
+        if (y + LINE_HEIGHT > maxY) {
+          return { y, overflow: true };
         }
-        
-        if (!currentSegment) break;
-        
-        // How much of this segment can we render?
-        const segmentOffset = lineCharIndex - segmentStart;
-        const segmentCharsLeft = currentSegment.text.length - segmentOffset;
-        const charsToRender = Math.min(segmentCharsLeft, remaining);
-        
-        // Get the actual text chunk
-        const chunk = currentSegment.text.substring(segmentOffset, segmentOffset + charsToRender);
-        
-        // Render chunk
-        doc.setFont('NationalPark', currentSegment.bold ? 'bold' : 'normal');
-        doc.text(chunk, lineX, y);
-        lineX += doc.getTextWidth(chunk);
-        
-        lineCharIndex += charsToRender;
-        remaining -= charsToRender;
+        renderLine(doc, currentLine, x, y);
+        y += LINE_HEIGHT;
+        currentLine = [];
+        currentLineWidth = 0;
       }
       
-      y += LINE_HEIGHT;
-      charIndex = lineCharIndex;
+      currentLine.push({ text: word, bold: segment.bold });
+      currentLineWidth += wordWidth;
     }
-    
-    return { y, overflow: false };
   }
+  
+  // Render final line
+  if (currentLine.length > 0) {
+    if (y + LINE_HEIGHT > maxY) {
+      return { y, overflow: true };
+    }
+    renderLine(doc, currentLine, x, y);
+    y += LINE_HEIGHT;
+  }
+  
+  return { y, overflow: false };
+}
+
+function renderLine(doc, segments, x, y) {
+  let currentX = x;
+  for (const seg of segments) {
+    doc.setFont('NationalPark', seg.bold ? 'bold' : 'normal');
+    doc.text(seg.text, currentX, y);
+    currentX += doc.getTextWidth(seg.text);
+  }
+}
 
   // ============================================
   // 🎯 PUBLIC API
