@@ -847,6 +847,12 @@ p.header-area {
   z-index: 10;
 }
 
+/*make the button images the right size */
+.card-action-btn img {
+  width: 16px;
+  height: 16px;
+}
+
 /* Show buttons on expanded card hover */
 .card.expanded:hover .card-actions {
   opacity: 1;
