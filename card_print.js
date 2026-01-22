@@ -21,7 +21,7 @@
   
   const LINE_HEIGHT = 0.16;  // inches per line at body font size
   const ABILITY_SPACING = LINE_HEIGHT * 0.15;  // extra space between ability paragraphs
-  const DIVIDER_SPACING = 0.50;  // space above and below dividers
+  const DIVIDER_SPACING = 0.90;  // space above and below dividers
   const HEADER_HEIGHT = 0.35; // space for title + divider
   const FOOTER_HEIGHT = 0.12; // space for branding
   
