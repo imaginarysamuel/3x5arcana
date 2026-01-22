@@ -265,20 +265,30 @@
       }
       
       if (section.type === 'rich') {
-        // Rich text with bold segments - render inline
-        const rendered = renderRichText(doc, section.content, MARGIN, y, CONTENT_WIDTH, maxY);
-        y = rendered.y;
+    // Estimate section height (rough: count words, assume ~6 words per line)
+    const totalWords = section.content.reduce((sum, seg) => sum + seg.text.split(' ').length, 0);
+    const estimatedLines = Math.ceil(totalWords / 6);
+    const estimatedHeight = estimatedLines * LINE_HEIGHT + ABILITY_SPACING;
+    
+    // If section won't fit, move to next page
+    if (y + estimatedHeight > maxY) {
+      return { overflow: true, nextIndex: sectionIndex };
+    }
+    
+    // Rich text with bold segments - render inline
+    const rendered = renderRichText(doc, section.content, MARGIN, y, CONTENT_WIDTH, maxY);
+    y = rendered.y;
+    
+    if (rendered.overflow) {
+      return { overflow: true, nextIndex: sectionIndex };
+    }
+    // Add extra space between abilities
+    y += ABILITY_SPACING;
+    
+    sectionIndex++;
+    continue;
+  }
         
-        if (rendered.overflow) {
-          return { overflow: true, nextIndex: sectionIndex };
-        }
-       // Add extra space between abilities
-        y += ABILITY_SPACING;
-        
-        sectionIndex++;
-        continue;
-      }
-      
       sectionIndex++;
     }
     
@@ -306,7 +316,7 @@ function renderRichText(doc, segments, x, y, maxWidth, maxY) {
   let currentLineWidth = 0;
   
   for (const segment of segments) {
-    doc.setFont('NationalPark', segment.bold ? 'bold' : 'normal');
+    doc.setFont('NationalPark', segment.bold ? 'bold' : 'light');
     const words = segment.text.split(' ');
     
     for (let i = 0; i < words.length; i++) {
