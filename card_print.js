@@ -131,16 +131,16 @@
     
     function walk(node) {
       if (node.nodeType === Node.TEXT_NODE) {
-        const text = node.textContent;
-        if (text && text.trim()) {
+        const text = node.textContent.replace(/\s+/g, ' ').trim(); // ← Normalize HERE
+        if (text) {
           segments.push({ text: text, bold: false });
         }
       } else if (node.nodeType === Node.ELEMENT_NODE) {
         const isBold = node.tagName === 'STRONG' || node.tagName === 'B';
         
         if (isBold) {
-          const text = node.textContent;
-          if (text && text.trim()) {
+          const text = node.textContent.replace(/\s+/g, ' ').trim(); // ← And HERE
+          if (text) {
             segments.push({ text: text, bold: true });
           }
         } else {
