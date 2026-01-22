@@ -15,12 +15,12 @@
   const CONTENT_HEIGHT = CARD_HEIGHT - (MARGIN * 2); // 2.6in
   
   const FONT_SIZE_TITLE = 12;
-  const FONT_SIZE_LEVEL = 11;
-  const FONT_SIZE_BODY = 9;
+  const FONT_SIZE_LEVEL = 12;
+  const FONT_SIZE_BODY = 10;
   const FONT_SIZE_BRANDING = 7;
   
-  const LINE_HEIGHT = 0.14;  // inches per line at body font size
-  const HEADER_HEIGHT = 0.30; // space for title + divider
+  const LINE_HEIGHT = 0.16;  // inches per line at body font size
+  const HEADER_HEIGHT = 0.35; // space for title + divider
   const FOOTER_HEIGHT = 0.12; // space for branding
   
   const MAX_BODY_HEIGHT = CONTENT_HEIGHT - HEADER_HEIGHT - FOOTER_HEIGHT;
