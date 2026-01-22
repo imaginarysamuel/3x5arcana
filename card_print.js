@@ -21,7 +21,6 @@
   
   const LINE_HEIGHT = 0.16;  // inches per line at body font size
   const ABILITY_SPACING = LINE_HEIGHT * 0.15;  // extra space between ability paragraphs
-  const DIVIDER_SPACING = 0.90;  // space above and below dividers
   const HEADER_HEIGHT = 0.35; // space for title + divider
   const FOOTER_HEIGHT = 0.12; // space for branding
   
@@ -238,11 +237,11 @@
         // Check if we have room for divider + at least one line after
         if (y + 0.1 + LINE_HEIGHT > maxY) break;
         
-        y -= (LINE_HEIGHT - DIVIDER_SPACING);  // Adjust space above
+        y += 0;  // Adjust space above
         doc.setDrawColor(158, 206, 230); // light blue
         doc.setLineWidth(0.01);
         doc.line(MARGIN, y, CARD_WIDTH - MARGIN, y);
-        y += DIVIDER_SPACING;  // Space below
+        y += 0.16;  // Space below
         sectionIndex++;
         continue;
       }
