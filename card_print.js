@@ -265,7 +265,7 @@
       if (section.type === 'rich') {
         // Estimate section height (rough: ~12 words per line based on actual rendering)
         const totalWords = section.content.reduce((sum, seg) => sum + seg.text.split(' ').length, 0);
-        const estimatedLines = Math.ceil(totalWords / 12);
+        const estimatedLines = Math.ceil(totalWords / 14);
         const estimatedHeight = estimatedLines * LINE_HEIGHT + ABILITY_SPACING;
         
         // If section won't fit AND we're not at the top of the page, move to next page
