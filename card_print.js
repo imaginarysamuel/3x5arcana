@@ -215,7 +215,7 @@
     doc.setFontSize(FONT_SIZE_TITLE);
     doc.setFont('NationalPark', 'bold');
     
-    const displayTitle = isContinuation ? title.toUpperCase() + " (cont'd)" : title;
+    const displayTitle = title.toUpperCase() + (isContinuation ? " (cont'd)" : "");
     doc.text(displayTitle, MARGIN, y + 0.15);
     
     if (level && !isContinuation) {
