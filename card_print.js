@@ -237,11 +237,11 @@
         // Check if we have room for divider + at least one line after
         if (y + 0.1 + LINE_HEIGHT > maxY) break;
         
-        y += 0;  // Adjust space above
+        y -= 0.08;  // Adjust space above
         doc.setDrawColor(158, 206, 230); // light blue
         doc.setLineWidth(0.01);
         doc.line(MARGIN, y, CARD_WIDTH - MARGIN, y);
-        y += 0.16;  // Space below
+        y += 0.2;  // Space below
         sectionIndex++;
         continue;
       }
