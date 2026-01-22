@@ -745,6 +745,10 @@ function buildPrintStyles() {
       float: right;
       font-size: 10pt;
       font-weight: bold;
+      min-height: 14pt;
+      margin-bottom: 6px;
+      padding-bottom: 4px;
+      overflow: hidden; /* ← THIS is the important addition */
     }
     
           
