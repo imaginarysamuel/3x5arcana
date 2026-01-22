@@ -15,7 +15,7 @@
   const CONTENT_HEIGHT = CARD_HEIGHT - (MARGIN * 2); // 2.6in
   
   const FONT_SIZE_TITLE = 12;
-  const FONT_SIZE_LEVEL = 12;
+  const FONT_SIZE_LEVEL = 10;
   const FONT_SIZE_BODY = 10;
   const FONT_SIZE_BRANDING = 7;
   
