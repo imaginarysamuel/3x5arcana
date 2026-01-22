@@ -210,7 +210,7 @@
     doc.setFontSize(FONT_SIZE_TITLE);
     doc.setFont('NationalPark', 'bold');
     
-    const displayTitle = isContinuation ? title + " (cont'd)" : title;
+    const displayTitle = isContinuation ? title.toUpperCase() + " (cont'd)" : title;
     doc.text(displayTitle, MARGIN, y + 0.15);
     
     if (level && !isContinuation) {
@@ -239,7 +239,7 @@
         // Check if we have room for divider + at least one line after
         if (y + 0.1 + LINE_HEIGHT > maxY) break;
         
-        y += 0.1;
+        y += 0;
         doc.setDrawColor(158, 206, 230); // light blue
         doc.setLineWidth(0.01);
         doc.line(MARGIN, y, CARD_WIDTH - MARGIN, y);
