@@ -386,7 +386,7 @@ function splitContentForPrint(title, level, bodyClone) {
     left: -9999px;
     top: -9999px;
     width: 4.5in;
-    font-family: Arial, sans-serif;
+    font-family: 'National Park', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 9pt;
     line-height: 1.2;
   `;
@@ -727,26 +727,27 @@ function buildPrintStyles() {
       }
       
       .print-card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-bottom: 4px;
-        margin-bottom: 6px;
-        border-bottom: 2px solid #fa8072;
-      }
-      
-      .print-card-title {
-        font-size: 11pt;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-      
-      .print-card-level {
-        font-size: 10pt;
-        font-weight: bold;
-      }
-      
+      min-height: 14pt;
+      margin-bottom: 6px;
+      padding-bottom: 4px;
+      border-bottom: 2px solid #fa8072;
+      overflow: hidden; /* ← THIS is the important addition */
+    }
+    
+    .print-card-title {
+      font-size: 11pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .print-card-level {
+      float: right;
+      font-size: 10pt;
+      font-weight: bold;
+    }
+    
+          
       .print-card-body p {
         margin: 4px 0;
         font-size: 9pt;
