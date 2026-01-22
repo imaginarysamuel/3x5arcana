@@ -240,12 +240,12 @@ if (searchBar) {
 
 function getCardActionButtonsHTML() {
   const printBtn = typeof jspdf !== 'undefined' 
-    ? `<button class="card-action-btn print-btn" title="Print as 3x5 PDF">🖨️</button>`
+    ? `<button class="card-action-btn print-btn" title="Print as 3x5 PDF"><img src="/files/printer_icon.png" alt="Print"></button>`
     : '';
   
   return `
     <div class="card-actions">
-      <button class="card-action-btn copy-btn" title="Copy to clipboard">⧉</button>
+      <button class="card-action-btn copy-btn" title="Copy to clipboard"><img src="/files/copy_icon.png" alt="Copy"></button>
       ${printBtn}
     </div>
   `;
