@@ -265,15 +265,27 @@
       }
       
       if (section.type === 'rich') {
-         // Rich text with bold segments - render inline
-            const rendered = renderRichText(doc, section.content, MARGIN, y, CONTENT_WIDTH, maxY);
-            y = rendered.y;
-            
-            if (rendered.overflow) {
-              return { overflow: true, nextIndex: sectionIndex };
-            }
-           // Add extra space between abilities
-            y += ABILITY_SPACING;
+        // Estimate section height (rough: ~12 words per line based on actual rendering)
+        const totalWords = section.content.reduce((sum, seg) => sum + seg.text.split(' ').length, 0);
+        const estimatedLines = Math.ceil(totalWords / 12);
+        const estimatedHeight = estimatedLines * LINE_HEIGHT + ABILITY_SPACING;
+        
+        // If section won't fit AND we're not at the top of the page, move to next page
+        // (If we ARE at top of page, we must try to render it anyway to avoid infinite loop)
+        const isNearTopOfPage = y < (MARGIN + HEADER_HEIGHT + 0.3);
+        if (!isNearTopOfPage && y + estimatedHeight > maxY) {
+          return { overflow: true, nextIndex: sectionIndex };
+        }
+        
+        // Rich text with bold segments - render inline
+        const rendered = renderRichText(doc, section.content, MARGIN, y, CONTENT_WIDTH, maxY);
+        y = rendered.y;
+        
+        if (rendered.overflow) {
+          return { overflow: true, nextIndex: sectionIndex };
+        }
+        // Add extra space between abilities
+        y += ABILITY_SPACING;
         
         sectionIndex++;
         continue;
