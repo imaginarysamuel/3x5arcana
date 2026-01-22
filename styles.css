@@ -935,6 +935,13 @@ p.header-area {
   display: none;
 }
 
+.print-all-favorites img {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
 .print-all-favorites.visible {
   display: block;
 }
