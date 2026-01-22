@@ -408,7 +408,7 @@ function renderLine(doc, segments, x, y) {
     let originalHTML;
     if (btn) {
       originalHTML = btn.innerHTML;
-      btn.innerHTML = '⏳ Generating...';
+      btn.innerHTML = 'generating...';
       btn.disabled = true;
     }
 
