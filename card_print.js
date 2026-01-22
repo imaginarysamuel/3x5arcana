@@ -265,29 +265,19 @@
       }
       
       if (section.type === 'rich') {
-    // Estimate section height (rough: count words, assume ~6 words per line)
-    const totalWords = section.content.reduce((sum, seg) => sum + seg.text.split(' ').length, 0);
-    const estimatedLines = Math.ceil(totalWords / 6);
-    const estimatedHeight = estimatedLines * LINE_HEIGHT + ABILITY_SPACING;
-    
-    // If section won't fit, move to next page
-    if (y + estimatedHeight > maxY) {
-      return { overflow: true, nextIndex: sectionIndex };
-    }
-    
-    // Rich text with bold segments - render inline
-    const rendered = renderRichText(doc, section.content, MARGIN, y, CONTENT_WIDTH, maxY);
-    y = rendered.y;
-    
-    if (rendered.overflow) {
-      return { overflow: true, nextIndex: sectionIndex };
-    }
-    // Add extra space between abilities
-    y += ABILITY_SPACING;
-    
-    sectionIndex++;
-    continue;
-  }
+         // Rich text with bold segments - render inline
+            const rendered = renderRichText(doc, section.content, MARGIN, y, CONTENT_WIDTH, maxY);
+            y = rendered.y;
+            
+            if (rendered.overflow) {
+              return { overflow: true, nextIndex: sectionIndex };
+            }
+           // Add extra space between abilities
+            y += ABILITY_SPACING;
+        
+        sectionIndex++;
+        continue;
+      }
         
       sectionIndex++;
     }
