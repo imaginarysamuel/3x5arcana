@@ -544,7 +544,7 @@ function printSingleCard(card) {
     
     setTimeout(() => {
       html2pdf().set(opt).from(printContent).save();
-    }, 1000);
+    }, 500);
     
   } catch (error) {
     console.error('Error generating PDF:', error);
@@ -673,7 +673,7 @@ function printAllFavorites() {
         btn.disabled = false;
         alert('Failed to generate PDF. Please try again.');
       });
-    }, 100);
+    }, 500);
     
   } catch (error) {
     console.error('Error in printAllFavorites:', error);
