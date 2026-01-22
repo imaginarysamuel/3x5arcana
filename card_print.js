@@ -126,20 +126,25 @@
    * Extracts text content, preserving bold markers
    * Returns array of { text, bold } segments
    */
-  function extractTextWithBold(element) {
+    function extractTextWithBold(element) {
     const segments = [];
     
     function walk(node) {
       if (node.nodeType === Node.TEXT_NODE) {
-        const text = node.textContent.replace(/\s+/g, ' ').trim(); // ← Normalize HERE
-        if (text) {
+        // Replace newlines/tabs with spaces, but keep leading/trailing spaces
+        let text = node.textContent.replace(/[\n\r\t]+/g, ' ');
+        // Collapse multiple spaces to single space
+        text = text.replace(/  +/g, ' ');
+        
+        if (text) {  // Don't check trim() - we need those spaces!
           segments.push({ text: text, bold: false });
         }
       } else if (node.nodeType === Node.ELEMENT_NODE) {
         const isBold = node.tagName === 'STRONG' || node.tagName === 'B';
         
         if (isBold) {
-          const text = node.textContent.replace(/\s+/g, ' ').trim(); // ← And HERE
+          // For bold elements, we can safely trim since they're inline
+          const text = node.textContent.replace(/\s+/g, ' ').trim();
           if (text) {
             segments.push({ text: text, bold: true });
           }
