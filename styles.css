@@ -907,6 +907,12 @@ p.header-area {
   display: none;
 }
 
+/* hide print button on main stack */
+#cards-list .card .print-btn {
+  display: none;
+}
+
+
 /* ============================================
    PRINT ALL FAVORITES BUTTON
    ============================================ */
