@@ -27,6 +27,26 @@
   const MAX_BODY_HEIGHT = CONTENT_HEIGHT - HEADER_HEIGHT - FOOTER_HEIGHT;
 
   // ============================================
+  // 📝 ITALIC TEXT RENDERING
+  // ============================================
+
+  /**
+   * Renders text with oblique (faux italic) transformation
+   * Standard oblique angle is ~12 degrees
+   */
+  function renderItalicText(doc, text, x, y) {
+    doc.saveGraphicsState();
+    
+    // Skew matrix for 12° slant: tan(12°) ≈ 0.213
+    const skewAngle = 0.213;
+    doc.setTextMatrix(1, 0, skewAngle, 1, x, y);
+    
+    doc.text(text, 0, 0);
+    
+    doc.restoreGraphicsState();
+  }
+
+  // ============================================
   // 📄 CONTENT EXTRACTION
   // ============================================
 
@@ -116,13 +136,13 @@
   }
 
   /**
-   * Extracts text content, preserving bold markers
-   * Returns array of { text, bold } segments
+   * Extracts text content, preserving bold AND italic markers
+   * Returns array of { text, bold, italic } segments
    */
     function extractTextWithBold(element) {
     const segments = [];
     
-    function walk(node) {
+    function walk(node, ancestorItalic = false) {
       if (node.nodeType === Node.TEXT_NODE) {
         // Replace newlines/tabs with spaces, but keep leading/trailing spaces
         let text = node.textContent.replace(/[\n\r\t]+/g, ' ');
@@ -130,21 +150,25 @@
         text = text.replace(/  +/g, ' ');
         
         if (text) {  // Don't check trim() - we need those spaces!
-          segments.push({ text: text, bold: false });
+          segments.push({ text: text, bold: false, italic: ancestorItalic });
         }
       } else if (node.nodeType === Node.ELEMENT_NODE) {
         const isBold = node.tagName === 'STRONG' || node.tagName === 'B';
+        const isItalic = ancestorItalic || 
+                         node.tagName === 'EM' || 
+                         node.tagName === 'I' || 
+                         node.classList.contains('flavor-text');
         
         if (isBold) {
           // For bold elements, we can safely trim since they're inline
           const text = node.textContent.replace(/\s+/g, ' ').trim();
           if (text) {
-            segments.push({ text: text, bold: true });
+            segments.push({ text: text, bold: true, italic: isItalic });
           }
         } else {
           // Recurse into children
           for (const child of node.childNodes) {
-            walk(child);
+            walk(child, isItalic);
           }
         }
       }
@@ -186,8 +210,10 @@
     });
     
     // Register National Park fonts
+    doc.addFileToVFS('NationalPark-Regular.ttf', NATIONAL_PARK_REGULAR);
     doc.addFileToVFS('NationalPark-Bold.ttf', NATIONAL_PARK_BOLD);
     doc.addFileToVFS('NationalPark-Light.ttf', NATIONAL_PARK_LIGHT);
+    doc.addFont('NationalPark-Regular.ttf', 'NationalPark', 'normal');
     doc.addFont('NationalPark-Bold.ttf', 'NationalPark', 'bold');
     doc.addFont('NationalPark-Light.ttf', 'NationalPark', 'light');
     
@@ -255,7 +281,13 @@
             // Return with current position to continue on next page
             return { overflow: true, nextIndex: sectionIndex, partialLine: line };
           }
-          doc.text(line, MARGIN, y);
+          
+          if (section.italic) {
+            renderItalicText(doc, line, MARGIN, y);
+          } else {
+            doc.text(line, MARGIN, y);
+          }
+          
           y += LINE_HEIGHT;
         }
         sectionIndex++;
@@ -265,7 +297,7 @@
       if (section.type === 'rich') {
         // Estimate section height (rough: ~12 words per line based on actual rendering)
         const totalWords = section.content.reduce((sum, seg) => sum + seg.text.split(' ').length, 0);
-        const estimatedLines = Math.ceil(totalWords / 14);
+        const estimatedLines = Math.ceil(totalWords / 12);
         const estimatedHeight = estimatedLines * LINE_HEIGHT + ABILITY_SPACING;
         
         // If section won't fit AND we're not at the top of the page, move to next page
@@ -275,13 +307,14 @@
           return { overflow: true, nextIndex: sectionIndex };
         }
         
-        // Rich text with bold segments - render inline
+        // Rich text with bold/italic segments - render inline
         const rendered = renderRichText(doc, section.content, MARGIN, y, CONTENT_WIDTH, maxY);
         y = rendered.y;
         
         if (rendered.overflow) {
           return { overflow: true, nextIndex: sectionIndex };
         }
+        
         // Add extra space between abilities
         y += ABILITY_SPACING;
         
@@ -292,24 +325,15 @@
       sectionIndex++;
     }
     
-    // === FOOTER ===
+    // === FOOTER (branding) ===
     doc.setFontSize(FONT_SIZE_BRANDING);
     doc.setFont('NationalPark', 'light');
     doc.setTextColor(125, 125, 125);
-    
-    // Check if there's more content
-    const hasMoreContent = sectionIndex < sections.length;
-    
-    if (hasMoreContent) {
-      // Left side: continuation notice
-      doc.text("(cont'd on next card)", MARGIN, CARD_HEIGHT - MARGIN + 0.05, { align: 'left' });
-    }
-    
-    // Right side: branding
     doc.text('3x5arcana.com', CARD_WIDTH - MARGIN, CARD_HEIGHT - MARGIN + 0.05, { align: 'right' });
     doc.setTextColor(0, 0, 0); // reset
     
-    if (hasMoreContent) {
+    // Check if there's more content
+    if (sectionIndex < sections.length) {
       return { overflow: true, nextIndex: sectionIndex };
     }
     
@@ -317,7 +341,7 @@
   }
 
   /**
-   * Renders rich text (with bold segments) handling word wrap
+   * Renders rich text (with bold AND italic segments) handling word wrap
    * This is the tricky part - mixing fonts inline
    */
 function renderRichText(doc, segments, x, y, maxWidth, maxY) {
@@ -343,7 +367,7 @@ function renderRichText(doc, segments, x, y, maxWidth, maxY) {
         currentLineWidth = 0;
       }
       
-      currentLine.push({ text: word, bold: segment.bold });
+      currentLine.push({ text: word, bold: segment.bold, italic: segment.italic });
       currentLineWidth += wordWidth;
     }
   }
@@ -364,7 +388,13 @@ function renderLine(doc, segments, x, y) {
   let currentX = x;
   for (const seg of segments) {
     doc.setFont('NationalPark', seg.bold ? 'bold' : 'light');
-    doc.text(seg.text, currentX, y);
+    
+    if (seg.italic) {
+      renderItalicText(doc, seg.text, currentX, y);
+    } else {
+      doc.text(seg.text, currentX, y);
+    }
+    
     currentX += doc.getTextWidth(seg.text);
   }
 }
