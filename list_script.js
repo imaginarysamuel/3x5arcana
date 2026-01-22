@@ -230,7 +230,7 @@ if (searchBar) {
 }
 
 // ============================================
-// 🎨 CARD ACTION BUTTONS HTML GENERATOR
+// 📋🖨️  CARD ACTION BUTTONS HTML GENERATOR
 // ============================================
 
 /**
