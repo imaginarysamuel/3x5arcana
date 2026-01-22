@@ -224,7 +224,7 @@
     doc.setDrawColor(250, 128, 114); // salmon color
     doc.setLineWidth(0.02);
     doc.line(MARGIN, y, CARD_WIDTH - MARGIN, y);
-    y += 0.12;
+    y += 0.2;
     
     // === BODY ===
     doc.setFontSize(FONT_SIZE_BODY);
@@ -239,11 +239,11 @@
         // Check if we have room for divider + at least one line after
         if (y + 0.1 + LINE_HEIGHT > maxY) break;
         
-        y += 0.02;
+        y += 0.1;
         doc.setDrawColor(158, 206, 230); // light blue
         doc.setLineWidth(0.01);
         doc.line(MARGIN, y, CARD_WIDTH - MARGIN, y);
-        y += 0.50;  // more space after divider
+        y += 0.20;  // more space after divider
         sectionIndex++;
         continue;
       }
