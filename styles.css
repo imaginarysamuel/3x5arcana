@@ -915,8 +915,8 @@ p.header-area {
   margin: 20px auto;
   padding: 12px 24px;
   background-color: var(--grey-lighter);
-  border: 2px solid var(--blue-dark);
-  border-radius: 8px;
+  border: 1px solid var(--blue-dark);
+  border-radius: 5px;
   font-family: 'National Park', sans-serif;
   font-size: 1em;
   font-weight: bold;
@@ -934,7 +934,6 @@ p.header-area {
 }
 
 .print-all-favorites:hover {
-  background-color: var(--blue-light);
   border-color: var(--grey-darkest);
   box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.3);
   transform: translateY(-2px);
