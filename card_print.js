@@ -243,7 +243,7 @@
         doc.setDrawColor(158, 206, 230); // light blue
         doc.setLineWidth(0.01);
         doc.line(MARGIN, y, CARD_WIDTH - MARGIN, y);
-        y += 0.10;  // more space after divider
+        y += 0.50;  // more space after divider
         sectionIndex++;
         continue;
       }
