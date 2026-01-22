@@ -15,13 +15,13 @@
   const CONTENT_HEIGHT = CARD_HEIGHT - (MARGIN * 2); // 2.6in
   
   const FONT_SIZE_TITLE = 12;
-  const FONT_SIZE_LEVEL = 11;
+  const FONT_SIZE_LEVEL = 10;
   const FONT_SIZE_BODY = 9;
   const FONT_SIZE_BRANDING = 7;
   
-  const LINE_HEIGHT = 0.16;  // inches per line at body font size
-  const HEADER_HEIGHT = 0.35; // space for title + divider
-  const FOOTER_HEIGHT = 0.15; // space for branding
+  const LINE_HEIGHT = 0.16;  // inches per line at body font size (tightened)
+  const HEADER_HEIGHT = 0.30; // space for title + divider (reduced)
+  const FOOTER_HEIGHT = 0.12; // space for branding (reduced)
   
   const MAX_BODY_HEIGHT = CONTENT_HEIGHT - HEADER_HEIGHT - FOOTER_HEIGHT;
 
@@ -223,11 +223,11 @@
         // Check if we have room for divider + at least one line after
         if (y + 0.1 + LINE_HEIGHT > maxY) break;
         
-        y += 0.04;
+        y += 0.02;
         doc.setDrawColor(158, 206, 230); // light blue
         doc.setLineWidth(0.01);
         doc.line(MARGIN, y, CARD_WIDTH - MARGIN, y);
-        y += 0.08;
+        y += 0.10;  // more space after divider
         sectionIndex++;
         continue;
       }
@@ -290,8 +290,7 @@
     doc.setFont('helvetica', 'normal');
     const lines = doc.splitTextToSize(fullText, maxWidth);
     
-    // For simplicity, render line by line
-    // This loses some bold precision but handles wrapping correctly
+    // Track position in the original text
     let charIndex = 0;
     
     for (const line of lines) {
@@ -299,17 +298,20 @@
         return { y, overflow: true };
       }
       
-      // Find which segments this line covers and render with appropriate styling
+      // Always start each line at the left margin
       let lineX = x;
-      let remaining = line;
+      let lineCharIndex = charIndex;
       
-      while (remaining.length > 0 && charIndex < fullText.length) {
-        // Find current segment
+      // Find which segments this line covers and render with appropriate styling
+      let remaining = line.length;
+      
+      while (remaining > 0) {
+        // Find current segment based on character position
         let segmentStart = 0;
         let currentSegment = null;
         
         for (const seg of segments) {
-          if (charIndex >= segmentStart && charIndex < segmentStart + seg.text.length) {
+          if (lineCharIndex >= segmentStart && lineCharIndex < segmentStart + seg.text.length) {
             currentSegment = seg;
             break;
           }
@@ -318,38 +320,25 @@
         
         if (!currentSegment) break;
         
-        // How much of this segment is in our remaining line?
-        const segmentOffset = charIndex - segmentStart;
-        const segmentRemaining = currentSegment.text.substring(segmentOffset);
+        // How much of this segment can we render?
+        const segmentOffset = lineCharIndex - segmentStart;
+        const segmentCharsLeft = currentSegment.text.length - segmentOffset;
+        const charsToRender = Math.min(segmentCharsLeft, remaining);
         
-        let chunkEnd = remaining.indexOf(segmentRemaining);
-        let chunk;
-        
-        if (chunkEnd === 0) {
-          // Segment starts at beginning of remaining
-          const maxLen = Math.min(segmentRemaining.length, remaining.length);
-          // Find where segment ends or line ends
-          if (segmentRemaining.length <= remaining.length) {
-            chunk = segmentRemaining;
-          } else {
-            chunk = remaining;
-          }
-        } else {
-          // Just take what we can
-          chunk = remaining.substring(0, Math.min(remaining.length, segmentRemaining.length));
-        }
+        // Get the actual text chunk
+        const chunk = currentSegment.text.substring(segmentOffset, segmentOffset + charsToRender);
         
         // Render chunk
         doc.setFont('helvetica', currentSegment.bold ? 'bold' : 'normal');
         doc.text(chunk, lineX, y);
         lineX += doc.getTextWidth(chunk);
         
-        remaining = remaining.substring(chunk.length);
-        charIndex += chunk.length;
+        lineCharIndex += charsToRender;
+        remaining -= charsToRender;
       }
       
       y += LINE_HEIGHT;
-      charIndex++; // account for newline/space between wrapped lines
+      charIndex = lineCharIndex;
     }
     
     return { y, overflow: false };
