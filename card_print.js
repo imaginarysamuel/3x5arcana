@@ -35,15 +35,25 @@
    * Standard oblique angle is ~12 degrees
    */
   function renderItalicText(doc, text, x, y) {
-    doc.saveGraphicsState();
+    // Save current state
+    doc.internal.write('q');
     
-    // Skew matrix for 12° slant: tan(12°) ≈ 0.213
-    const skewAngle = 0.213;
-    doc.setTextMatrix(1, 0, skewAngle, 1, x, y);
+    // Apply transform matrix for italic skew
+    // jsPDF uses points (72 per inch) internally
+    const skewAngle = 0.213; // tan(12°)
+    const xPt = x * 72;
+    const yPt = (doc.internal.pageSize.height - y) * 72;
     
+    // Transform matrix: [1, 0, skew, 1, x, y]
+    doc.internal.write(
+      `1 0 ${skewAngle} 1 ${xPt} ${yPt} cm`
+    );
+    
+    // Render text at origin since we already translated
     doc.text(text, 0, 0);
     
-    doc.restoreGraphicsState();
+    // Restore state
+    doc.internal.write('Q');
   }
 
   // ============================================
@@ -209,7 +219,7 @@
       format: [CARD_WIDTH, CARD_HEIGHT]
     });
     
-    // Register National Park fonts
+    // Register National Park fonts (only Bold and Light available)
     doc.addFileToVFS('NationalPark-Bold.ttf', NATIONAL_PARK_BOLD);
     doc.addFileToVFS('NationalPark-Light.ttf', NATIONAL_PARK_LIGHT);
     doc.addFont('NationalPark-Bold.ttf', 'NationalPark', 'bold');
