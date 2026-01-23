@@ -36,9 +36,51 @@
    */
   function renderItalicText(doc, text, x, y) {
     console.log('🔧 renderItalicText called with:', { text, x, y });
-    // Temporarily just render as regular text to debug
-    doc.text(text, x, y);
-    console.log('✅ renderItalicText completed');
+    
+    // Get the current page's internal context
+    const pageHeight = doc.internal.pageSize.height;
+    
+    // Save graphics state
+    doc.saveGraphicsState();
+    
+    try {
+      // Apply a skew transformation for italic effect
+      // The transform method applies: [scaleX, skewX, skewY, scaleY, translateX, translateY]
+      // For italic, we want to skew X based on Y: skewX = tan(12°) ≈ 0.213
+      const skewAngle = 0.213;
+      
+      // jsPDF's transform applies to the coordinate system
+      // We need to: translate to position, apply skew, draw at 0,0, then restore
+      doc.internal.write('q'); // Save state
+      
+      // Build transformation matrix: 1 0 skew 1 x y
+      const xPt = x * 72;
+      const yPt = (pageHeight - y) * 72;
+      
+      doc.internal.write(`1 0 ${skewAngle} 1 ${xPt} ${yPt} cm`);
+      
+      // Draw text at origin (already transformed)
+      doc.internal.write('BT');
+      
+      // Get current font settings
+      const font = doc.internal.getFont();
+      const fontSize = doc.internal.getFontSize();
+      
+      doc.internal.write(`/${font.id} ${fontSize} Tf`);
+      doc.internal.write(`0 0 Td`);
+      doc.internal.write(`(${doc.internal.pdfEscape(text)}) Tj`);
+      doc.internal.write('ET');
+      
+      doc.internal.write('Q'); // Restore state
+      
+      console.log('✅ renderItalicText completed with transform');
+    } catch (error) {
+      console.error('❌ Transform failed, falling back to regular text:', error);
+      // Fallback to regular text if transform fails
+      doc.text(text, x, y);
+    } finally {
+      doc.restoreGraphicsState();
+    }
   }
 
   // ============================================
@@ -65,7 +107,6 @@
       text: c.textContent?.substring(0, 30)
     }));
     console.log('🔎 Card body children:', childrenInfo);
-    alert('Card body has ' + body.children.length + ' children. First: ' + JSON.stringify(childrenInfo[0]));
     
     // Walk through body children and extract content
     for (const child of body.children) {
@@ -79,15 +120,16 @@
       }
       
       // Flavor text (italic)
+      console.log('Checking child:', child.tagName, child.className, Array.from(child.classList));
       if (child.classList.contains('flavor-text')) {
+        console.log('✅ This IS flavor-text!');
         const text = child.textContent?.trim();
         console.log('🔍 FOUND FLAVOR TEXT:', text);
         if (text) {
           sections.push({ type: 'text', content: text, italic: true });
           console.log('✅ Added flavor text section');
-          alert('Found flavor text: ' + text.substring(0, 50));
         } else {
-          alert('Flavor text element found but text is empty!');
+          console.warn('⚠️ Flavor text element found but text is empty!');
         }
         continue;
       }
