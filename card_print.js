@@ -35,24 +35,32 @@
    * Standard oblique angle is ~12 degrees
    */
   function renderItalicText(doc, text, x, y) {
-    // Save current state
+    // Save current graphics state
     doc.internal.write('q');
     
-    // Apply transform matrix for italic skew
-    // jsPDF uses points (72 per inch) internally
+    // Apply skew transformation matrix
+    // Matrix format: [a b c d e f] where transformation is:
+    // x' = a*x + c*y + e
+    // y' = b*x + d*y + f
+    // For italic skew: [1, 0, tan(angle), 1, 0, 0]
     const skewAngle = 0.213; // tan(12°)
+    
+    // Convert inches to points (jsPDF internal unit)
     const xPt = x * 72;
     const yPt = (doc.internal.pageSize.height - y) * 72;
     
-    // Transform matrix: [1, 0, skew, 1, x, y]
-    doc.internal.write(
-      `1 0 ${skewAngle} 1 ${xPt} ${yPt} cm`
-    );
+    // Apply transformation matrix: 1 0 skew 1 x y cm
+    doc.internal.write(`1 0 ${skewAngle.toFixed(3)} 1 ${xPt.toFixed(2)} ${yPt.toFixed(2)} cm`);
     
-    // Render text at origin since we already translated
-    doc.text(text, 0, 0);
+    // Now render text at origin (transformation already applied)
+    const currentFont = doc.internal.getFont();
+    const fontSize = doc.internal.getFontSize();
+    doc.internal.write(`BT`); // Begin text
+    doc.internal.write(`/${currentFont.id} ${fontSize} Tf`); // Set font
+    doc.internal.write(`(${doc.internal.pdfEscape(text)}) Tj`); // Show text
+    doc.internal.write(`ET`); // End text
     
-    // Restore state
+    // Restore graphics state
     doc.internal.write('Q');
   }
 
