@@ -42,12 +42,12 @@
         return response.text();
       })
       .then(base64String => {
-        const trimmed = base64String.trim();
+        const cleaned = base64String.replace(/\s/g, '');
         
         // Store in the appropriate variable
-        if (fontKey === 'BOLD') NATIONAL_PARK_BOLD = trimmed;
-        else if (fontKey === 'LIGHT') NATIONAL_PARK_LIGHT = trimmed;
-        else if (fontKey === 'ITALIC') NATIONAL_PARK_LIGHT_ITALIC = trimmed;
+        if (fontKey === 'BOLD') NATIONAL_PARK_BOLD = cleaned;
+        else if (fontKey === 'LIGHT') NATIONAL_PARK_LIGHT = cleaned;
+        else if (fontKey === 'ITALIC') NATIONAL_PARK_LIGHT_ITALIC = cleaned;
         
         return trimmed;
       })
