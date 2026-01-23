@@ -35,33 +35,10 @@
    * Standard oblique angle is ~12 degrees
    */
   function renderItalicText(doc, text, x, y) {
-    // Save current graphics state
-    doc.internal.write('q');
-    
-    // Apply skew transformation matrix
-    // Matrix format: [a b c d e f] where transformation is:
-    // x' = a*x + c*y + e
-    // y' = b*x + d*y + f
-    // For italic skew: [1, 0, tan(angle), 1, 0, 0]
-    const skewAngle = 0.213; // tan(12°)
-    
-    // Convert inches to points (jsPDF internal unit)
-    const xPt = x * 72;
-    const yPt = (doc.internal.pageSize.height - y) * 72;
-    
-    // Apply transformation matrix: 1 0 skew 1 x y cm
-    doc.internal.write(`1 0 ${skewAngle.toFixed(3)} 1 ${xPt.toFixed(2)} ${yPt.toFixed(2)} cm`);
-    
-    // Now render text at origin (transformation already applied)
-    const currentFont = doc.internal.getFont();
-    const fontSize = doc.internal.getFontSize();
-    doc.internal.write(`BT`); // Begin text
-    doc.internal.write(`/${currentFont.id} ${fontSize} Tf`); // Set font
-    doc.internal.write(`(${doc.internal.pdfEscape(text)}) Tj`); // Show text
-    doc.internal.write(`ET`); // End text
-    
-    // Restore graphics state
-    doc.internal.write('Q');
+    console.log('🔧 renderItalicText called with:', { text, x, y });
+    // Temporarily just render as regular text to debug
+    doc.text(text, x, y);
+    console.log('✅ renderItalicText completed');
   }
 
   // ============================================
@@ -82,6 +59,12 @@
     
     if (!body) return { title, level, sections };
     
+    console.log('🔎 Card body children:', Array.from(body.children).map(c => ({
+      tag: c.tagName,
+      classes: Array.from(c.classList),
+      text: c.textContent?.substring(0, 50)
+    })));
+    
     // Walk through body children and extract content
     for (const child of body.children) {
       // Skip action buttons
@@ -96,8 +79,10 @@
       // Flavor text (italic)
       if (child.classList.contains('flavor-text')) {
         const text = child.textContent?.trim();
+        console.log('🔍 FOUND FLAVOR TEXT:', text);
         if (text) {
           sections.push({ type: 'text', content: text, italic: true });
+          console.log('✅ Added flavor text section');
         }
         continue;
       }
@@ -150,6 +135,7 @@
       }
     }
     
+    console.log('📋 EXTRACTED SECTIONS:', sections);
     return { title, level, sections };
   }
 
@@ -289,6 +275,7 @@
       }
       
       if (section.type === 'text') {
+        console.log('📝 Rendering text section:', { content: section.content, italic: section.italic });
         doc.setFont('NationalPark', 'light');
         const lines = doc.splitTextToSize(section.content, CONTENT_WIDTH);
         
@@ -299,8 +286,10 @@
           }
           
           if (section.italic) {
+            console.log('🎨 Rendering ITALIC line:', line);
             renderItalicText(doc, line, MARGIN, y);
           } else {
+            console.log('🎨 Rendering NORMAL line:', line);
             doc.text(line, MARGIN, y);
           }
           
