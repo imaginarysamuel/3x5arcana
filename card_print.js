@@ -49,7 +49,7 @@
         else if (fontKey === 'LIGHT') NATIONAL_PARK_LIGHT = cleaned;
         else if (fontKey === 'ITALIC') NATIONAL_PARK_LIGHT_ITALIC = cleaned;
         
-        return trimmed;
+        return cleaned;
       })
       .catch(error => {
         console.error(`Error loading ${fontName} font:`, error);
