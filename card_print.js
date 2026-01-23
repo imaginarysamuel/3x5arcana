@@ -59,11 +59,13 @@
     
     if (!body) return { title, level, sections };
     
-    console.log('🔎 Card body children:', Array.from(body.children).map(c => ({
+    const childrenInfo = Array.from(body.children).map(c => ({
       tag: c.tagName,
       classes: Array.from(c.classList),
-      text: c.textContent?.substring(0, 50)
-    })));
+      text: c.textContent?.substring(0, 30)
+    }));
+    console.log('🔎 Card body children:', childrenInfo);
+    alert('Card body has ' + body.children.length + ' children. First: ' + JSON.stringify(childrenInfo[0]));
     
     // Walk through body children and extract content
     for (const child of body.children) {
@@ -83,6 +85,9 @@
         if (text) {
           sections.push({ type: 'text', content: text, italic: true });
           console.log('✅ Added flavor text section');
+          alert('Found flavor text: ' + text.substring(0, 50));
+        } else {
+          alert('Flavor text element found but text is empty!');
         }
         continue;
       }
