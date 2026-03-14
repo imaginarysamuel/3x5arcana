@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PFMKRV8VBN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PFMKRV8VBN');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3x5 Dungeon Generator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div id="menu-container"></div>
+    <h1 class="main-title">3x5 Dungeon Generator</h1>
+    <p class="header-area">A 3x5 Arcana Joint in Beta Testing</p>
+  </header>
+
+  <!-- CLUSTER BUILDER -->
+  <div class="cluster-builder" id="clusterBuilder">
+    <div class="cluster-name-row">
+      <label>Name:</label>
+      <input type="text" id="clusterName" placeholder="e.g. …">
+    </div>
+    <!-- Environment select kept but commented out (prototype lines 241–244) -->
+    <!--
+    <div class="cluster-name-row">
+      <label>Environment:</label>
+      <select id="envSelect">
+        <option>Standard</option>
+        <option>Arctic</option>
+        <option>Cave</option>
+        <option>Tomb</option>
+        <option>Deep Tunnels</option>
+        <option>Ruins</option>
+        <option>Desert</option>
+        <option>Forest</option>
+        <option>Grassland</option>
+        <option>Jungle</option>
+        <option>Mountain</option>
+        <option>River and Coast</option>
+        <option>Temple</option>
+      </select>
+    </div>
+    -->
+    <div class="sparks-grid">
+      <div class="spark-group" id="sg-roomTypes">
+        <div class="spark-toggle" onclick="toggleSpark('sg-roomTypes')">
+          <div class="spark-plus">+</div>
+          <label>Room Types</label>
+        </div>
+        <div class="spark-inputs" id="sparkRoomTypes">
+          <input type="text" placeholder="e.g. Chapel">
+          <input type="text" placeholder="e.g. Tomb">
+          <input type="text" placeholder="">
+        </div>
+      </div>
+      <div class="spark-group" id="sg-features">
+        <div class="spark-toggle" onclick="toggleSpark('sg-features')">
+          <div class="spark-plus">+</div>
+          <label>Features</label>
+        </div>
+        <div class="spark-inputs" id="sparkFeatures">
+          <input type="text" placeholder="e.g. Crumbling">
+          <input type="text" placeholder="e.g. Bones">
+          <input type="text" placeholder="">
+        </div>
+      </div>
+      <div class="spark-group" id="sg-traps">
+        <div class="spark-toggle" onclick="toggleSpark('sg-traps')">
+          <div class="spark-plus">+</div>
+          <label>Traps</label>
+        </div>
+        <div class="spark-inputs" id="sparkTraps">
+          <input type="text" placeholder="e.g. Pit Trap">
+          <input type="text" placeholder="">
+          <input type="text" placeholder="">
+        </div>
+      </div>
+      <div class="spark-group" id="sg-obstacles">
+        <div class="spark-toggle" onclick="toggleSpark('sg-obstacles')">
+          <div class="spark-plus">+</div>
+          <label>Obstacles</label>
+        </div>
+        <div class="spark-inputs" id="sparkObstacles">
+          <input type="text" placeholder="e.g. Flooded">
+          <input type="text" placeholder="">
+          <input type="text" placeholder="">
+        </div>
+      </div>
+      <div class="spark-group" id="sg-monsters">
+        <div class="spark-toggle" onclick="toggleSpark('sg-monsters')">
+          <div class="spark-plus">+</div>
+          <label>Monsters</label>
+        </div>
+        <div class="spark-inputs" id="sparkMonsters">
+          <input type="text" placeholder="e.g. Goblin">
+          <input type="text" placeholder="">
+          <input type="text" placeholder="">
+        </div>
+      </div>
+      <div class="spark-group" id="sg-boons">
+        <div class="spark-toggle" onclick="toggleSpark('sg-boons')">
+          <div class="spark-plus">+</div>
+          <label>Boons</label>
+        </div>
+        <div class="spark-inputs" id="sparkBoons">
+          <input type="text" placeholder="e.g. Potion">
+          <input type="text" placeholder="">
+          <input type="text" placeholder="">
+        </div>
+      </div>
+    </div>
+    <div class="controls-row" style="justify-content:center;flex-direction:column;align-items:center;gap:6px">
+      <button class="roll-btn" style="width:3in" onclick="rollCluster()">Roll a Dungeon</button>
+      <div style="display:flex;gap:6px;width:3in">
+        <button class="roll-btn" style="flex:1" onclick="saveDungeons()">Save</button>
+        <button class="roll-btn" style="flex:1" onclick="document.getElementById('loadFileInput').click()">Load</button>
+      </div>
+      <input type="file" id="loadFileInput" accept=".json" style="display:none" onchange="loadDungeons(event)">
+    </div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div id="output"></div>
+
+  <!-- MAP KEY -->
+  <div class="map-key">
+    <div class="map-key-title">Map Key</div>
+    <div class="map-key-items">
+      <span><strong>▲</strong> Entrance</span>
+      <span><strong style="font-family:monospace">O</strong> Open Doorway</span>
+      <span><strong style="font-family:monospace">UL</strong> Unlocked Door</span>
+      <span><strong style="font-family:monospace">L</strong> Locked Door</span>
+      <span><strong style="font-family:monospace">T</strong> Trapped Door</span>
+      <span><strong style="font-family:monospace">S</strong> Secret Door</span>
+    </div>
+    <div class="map-key-items" style="margin-top:6px;padding-top:6px;border-top:0.5px solid var(--blue-light);">
+      <span><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border:1px solid var(--red);border-radius:3px;font-size:0.75em;font-weight:300;color:var(--red);vertical-align:middle;">T</span> Trap</span>
+      <span><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border:1px solid var(--grey-darkest);border-radius:3px;font-size:0.75em;font-weight:300;color:var(--grey-darkest);vertical-align:middle;">O</span> Obstacle</span>
+      <span><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border:1px solid var(--red);border-radius:3px;font-size:0.75em;font-weight:300;color:var(--red);vertical-align:middle;">M</span> Monster</span>
+      <span><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border:1px solid var(--blue-dark);border-radius:3px;font-size:0.75em;font-weight:300;color:var(--blue-dark);vertical-align:middle;">B</span> Boon</span>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- License Card -->
+  <div id="license-container"></div>
+
+  <div class="spacer"></div>
+
+  <div class="site-footer">
+    Traps by <a href="https://www.bastionland.com/2018/08/34-good-traps.html" target="_blank">Chris McDowell</a>, with an assist from Horatio von Becker.
+  </div>
+
+  <!-- Fullscreen map overlay — explicit last child of body (fixed from prototype) -->
+  <div id="map-fullscreen-overlay" class="map-fullscreen-overlay">
+    <div class="map-fullscreen-toolbar">
+      <span id="map-fullscreen-title">Map</span>
+      <span style="display:flex;align-items:center;gap:6px">
+        <button onclick="zoomSVG(fullscreenClusterIdx, true, -0.2)" style="background:var(--grey-lightest);border:none;border-radius:3px;color:var(--grey-darkest);font-size:1em;padding:1px 9px;cursor:pointer;font-family:'National Park',sans-serif;line-height:1.4">−</button>
+        <button onclick="zoomSVG(fullscreenClusterIdx, true, 0.2)" style="background:var(--grey-lightest);border:none;border-radius:3px;color:var(--grey-darkest);font-size:1em;padding:1px 9px;cursor:pointer;font-family:'National Park',sans-serif;line-height:1.4">+</button>
+        <button class="map-fullscreen-close" onclick="closeFullscreen()">✕</button>
+      </span>
+    </div>
+    <div class="map-fullscreen-body" id="map-fullscreen-body"></div>
+  </div>
+
+  <!-- Scripts — load order matters; dungeon_script.js depends on list_script.js and card_print.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="card_print.js"></script>
+  <script src="list_script.js"></script>
+  <script src="script.js"></script>
+  <script src="burgermenu_script.js"></script>
+  <script src="dungeon_script.js"></script>
+
+</body>
+</html>
