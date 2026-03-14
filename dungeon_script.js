@@ -2066,15 +2066,16 @@ function applyCardSnap(card, snap) {
 
 function buildRoomCard(clusterIdx, id, titleNum, roomType, isEntrance, diceHTML, bodyHTML) {
   const card = document.createElement('div');
-  card.className = 'room-card';
+  card.className = 'card';
+  card.dataset.cardType = 'dungeon';
   const cardId = `card-${clusterIdx}-${id}`;
   card.id = cardId;
   card.innerHTML = `
-    <div class="card-header" onclick="toggleCard('${clusterIdx}-${id}')">
-      <span class="card-title">${titleNum}. <span class="editable room-type-edit" contenteditable="true" onclick="event.stopPropagation()" spellcheck="false">${roomType}</span>${isEntrance ? ' ▲' : ''}</span>
+    <div class="card-header">
+      <span class="card-title">${titleNum}. <span class="editable room-type-edit" contenteditable="true" spellcheck="false">${roomType}</span>${isEntrance ? ' ▲' : ''}</span>
       ${diceHTML}
     </div>
-    <div class="card-body">${bodyHTML}<button class="add-bullet-btn" onclick="addBullet('${cardId}')"><span class="add-icon">▶︎</span></button></div>
+    <div class="card-body">${bodyHTML}<button class="add-bullet-btn"><span class="add-icon">▶︎</span></button></div>
   `;
   return card;
 }
@@ -2082,7 +2083,8 @@ function buildRoomCard(clusterIdx, id, titleNum, roomType, isEntrance, diceHTML,
 function buildNotesCard(idx, savedNotes) {
   const cardId = `notescard-${idx}`;
   const card = document.createElement('div');
-  card.className = 'room-card';
+  card.className = 'card';
+  card.dataset.cardType = 'dungeon';
   card.id = cardId;
 
   const sn = savedNotes || {};
@@ -2095,7 +2097,7 @@ function buildNotesCard(idx, savedNotes) {
   const line6Text = sn.line6 !== undefined ? sn.line6 : 'Hallways are';
 
   card.innerHTML = `
-    <div class="card-header" onclick="document.getElementById('notescard-${idx}').classList.toggle('expanded')">
+    <div class="card-header">
       <span class="card-title">Notes</span>
     </div>
     <div class="card-body">
@@ -2108,7 +2110,7 @@ function buildNotesCard(idx, savedNotes) {
       <div class="key-line" data-bullet="none" data-tags=""><span class="key-bullet bullet-none">·</span><div class="editable notes-line notes-line-4" contenteditable="true">${line4Text}</div></div>
       <div class="key-line" data-bullet="none" data-tags=""><span class="key-bullet bullet-none">·</span><div class="editable notes-line notes-line-5" contenteditable="true">${line5Text}</div></div>
       <div class="key-line" data-bullet="none" data-tags=""><span class="key-bullet bullet-none">·</span><div class="editable notes-line notes-line-6" contenteditable="true">${line6Text}</div></div>
-      <button class="add-bullet-btn" onclick="addBullet('${cardId}')"><span class="add-icon">▶︎</span></button>
+      <button class="add-bullet-btn"><span class="add-icon">▶︎</span></button>
     </div>
   `;
   return card;
@@ -2116,7 +2118,18 @@ function buildNotesCard(idx, savedNotes) {
 
 function toggleMapCard(id) {
   const card = document.getElementById(id);
-  if (card) card.classList.toggle('expanded');
+  if (!card) return;
+  const body = card.querySelector('.map-card-body');
+  if (!body) return;
+  const isExpanded = card.classList.contains('expanded');
+  if (isExpanded) {
+    body.style.maxHeight = null;
+    card.classList.remove('expanded');
+  } else {
+    const h = body.scrollHeight;
+    body.style.maxHeight = (h > 50 ? h : 2000) + 'px';
+    card.classList.add('expanded');
+  }
 }
 
 // ── Phase 4: printCluster ─────────────────────────────────────────────────────
