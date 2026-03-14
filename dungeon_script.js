@@ -2,15 +2,13 @@
 // Extracted from 3x5Tomb_Beta_0_14.html for integration into dungeon.html.
 //
 // CONFLICT RESOLUTION:
-//   - toggleCard: list_script.js defines toggleCard(cardElement). Dungeon cards use
-//     the same element-based toggleCard via delegated click listeners scoped to
-//     .cluster-block. No override needed — the string-ID calling convention from the
-//     prototype has been removed entirely in Phase 3.
+//   - toggleCard(id): Prototype calls toggleCard('clusterIdx-roomId') with a string ID.
+//     list_script.js defines toggleCard(card) with a DOM element. This file redefines
+//     toggleCard to handle the string-ID calling convention used by dungeon.html.
+//     list_script.js's version is never called on dungeon.html, so the override is safe.
 //   - All other functions are dungeon-specific and do not conflict with shared scripts.
-//   - MARGIN: card_print.js defines MARGIN for PDF page margins (inches). This file
-//     uses MARGIN in SVG map code for pixel padding. Different scopes, no collision.
 //
-// Phase 4 stub: printCluster(clusterIdx, extraCards) — defined at bottom, not yet wired.
+// Phase 4: printCluster(clusterIdx, extraCards) — implemented at bottom of file.
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 
@@ -1274,6 +1272,7 @@ function rollCluster() {
   hdr.innerHTML = `
     <span contenteditable="true" class="cluster-name-edit" spellcheck="false">${clusterName}</span>
     <span style="display:flex;align-items:center;gap:8px">
+      <button class="cluster-print-btn" onclick="printCluster(${clusterCount})" style="background:none;border:1px solid rgba(255,255,255,0.5);border-radius:3px;color:var(--grey-lightest);font-size:0.75em;padding:2px 7px;cursor:pointer;font-family:'National Park',sans-serif;text-transform:uppercase;letter-spacing:1px">⎙ Print</button>
       <button onclick="confirmDeleteCluster('${blockId}')" style="background:none;border:1px solid rgba(255,255,255,0.5);border-radius:3px;color:var(--grey-lightest);font-size:0.75em;padding:2px 7px;cursor:pointer;font-family:'National Park',sans-serif;text-transform:uppercase;letter-spacing:1px">✕</button>
     </span>
   `;
@@ -1622,46 +1621,24 @@ function toggleSpark(id) {
   group.classList.toggle('open');
 }
 
-// ── Card expansion delegation ──────────────────────────────────────────────────
-// Handles click on .card-header within .cluster-block.
-// Uses list_script.js's toggleCard(cardElement) — no local override needed.
-document.addEventListener('click', function(e) {
-  const header = e.target.closest('.cluster-block .card .card-header');
-  if (!header) return;
-  // Don't toggle if user is clicking into a contenteditable field
-  if (e.target.isContentEditable) return;
-  const card = header.closest('.card');
+// toggleCard: overrides list_script.js version for dungeon.html.
+// Called as toggleCard('clusterIdx-roomId') from card header onclick attributes.
+// list_script.js's toggleCard(cardElement) is never called on dungeon.html.
+function toggleCard(id) {
+  const card = document.getElementById(`card-${id}`);
   if (!card) return;
-  toggleCard(card);
-});
-
-// ── Dungeon interaction delegation ────────────────────────────────────────────
-// add-bullet-btn: appends a new editable key-line to the card body.
-// key-bullet mousedown: cycles TOMB states, only on already-expanded cards.
-document.addEventListener('click', function(e) {
-  const btn = e.target.closest('.add-bullet-btn');
-  if (!btn) return;
-  const card = btn.closest('.card');
-  if (!card) return;
-  addBullet(card);
-});
+  card.classList.toggle('expanded');
+}
 
 const BULLET_CYCLE = ['arrow', 'T', 'O', 'M', 'B', 'blank'];
 const BULLET_DISPLAY = { arrow: '▶︎', T: 'T', O: 'O', M: 'M', B: 'B', blank: '·', none: '' };
 const BULLET_CLASSES = { arrow: 'bullet-arrow', T: 'bullet-t', O: 'bullet-o', M: 'bullet-m', B: 'bullet-b', blank: 'bullet-blank', none: 'bullet-none' };
 const BULLET_CYCLE_FROM_NONE = ['none', 'arrow', 'T', 'O', 'M', 'B', 'blank'];
 
-// Delegated: clicking a bullet cycles through TOMB states.
-// Only fires when the parent .card is already expanded — collapsed bullet states
-// are invisible so there's no reason to cycle them. Never fires on .card-header.
+// Delegated: clicking a bullet cycles through TOMB states
 document.addEventListener('mousedown', function(e) {
   const bullet = e.target.closest('.key-bullet');
   if (!bullet) return;
-  // Must not be inside a card-header
-  if (bullet.closest('.card-header')) return;
-  // Parent card must already be expanded
-  const parentCard = bullet.closest('.card');
-  if (!parentCard || !parentCard.classList.contains('expanded')) return;
   e.preventDefault();
   const line = bullet.closest('.key-line');
   if (!line) return;
@@ -1743,11 +1720,12 @@ function scrollToCard(cardId) {
   }
   const card = document.getElementById(cardId);
   if (!card) return;
-  if (!card.classList.contains('expanded')) toggleCard(card);
+  card.classList.add('expanded');
   setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
 }
 
-function addBullet(card) {
+function addBullet(cardId) {
+  const card = document.getElementById(cardId);
   if (!card) return;
   const body = card.querySelector('.card-body');
   const btn = body.querySelector('.add-bullet-btn');
@@ -1904,6 +1882,7 @@ function restoreDungeons(clusters) {
     hdr.innerHTML = `
       <span contenteditable="true" class="cluster-name-edit" spellcheck="false">${saved.name}</span>
       <span style="display:flex;align-items:center;gap:8px">
+        <button class="cluster-print-btn" onclick="printCluster(${idx})" style="background:none;border:1px solid rgba(255,255,255,0.5);border-radius:3px;color:var(--grey-lightest);font-size:0.75em;padding:2px 7px;cursor:pointer;font-family:'National Park',sans-serif;text-transform:uppercase;letter-spacing:1px">⎙ Print</button>
         <button onclick="confirmDeleteCluster('${blockId}')" style="background:none;border:1px solid rgba(255,255,255,0.5);border-radius:3px;color:var(--grey-lightest);font-size:0.75em;padding:2px 7px;cursor:pointer;font-family:'National Park',sans-serif;text-transform:uppercase;letter-spacing:1px">✕ Delete</button>
       </span>
     `;
@@ -1927,14 +1906,12 @@ function restoreDungeons(clusters) {
     block.appendChild(mapCard);
 
     const notesCard = buildNotesCard(idx, saved.notes || null);
+    if (saved.notes && saved.notes.open) notesCard.classList.add('expanded');
     block.appendChild(notesCard);
 
     renderRoomCards(block, idx, saved.rooms, saved.cardSnaps);
 
     out.appendChild(block);
-
-    // Open notes card after block is in the live DOM so scrollHeight is valid
-    if (saved.notes && saved.notes.open) toggleCard(notesCard);
   });
 
   clusterCount = Math.max(clusterCount, clusters.length);
@@ -2089,16 +2066,15 @@ function applyCardSnap(card, snap) {
 
 function buildRoomCard(clusterIdx, id, titleNum, roomType, isEntrance, diceHTML, bodyHTML) {
   const card = document.createElement('div');
-  card.className = 'card';
-  card.dataset.cardType = 'dungeon';
+  card.className = 'room-card';
   const cardId = `card-${clusterIdx}-${id}`;
   card.id = cardId;
   card.innerHTML = `
-    <div class="card-header">
-      <span class="card-title">${titleNum}. <span class="editable room-type-edit" contenteditable="true" spellcheck="false">${roomType}</span>${isEntrance ? ' ▲' : ''}</span>
+    <div class="card-header" onclick="toggleCard('${clusterIdx}-${id}')">
+      <span class="card-title">${titleNum}. <span class="editable room-type-edit" contenteditable="true" onclick="event.stopPropagation()" spellcheck="false">${roomType}</span>${isEntrance ? ' ▲' : ''}</span>
       ${diceHTML}
     </div>
-    <div class="card-body">${bodyHTML}<button class="add-bullet-btn"><span class="add-icon">▶︎</span></button></div>
+    <div class="card-body">${bodyHTML}<button class="add-bullet-btn" onclick="addBullet('${cardId}')"><span class="add-icon">▶︎</span></button></div>
   `;
   return card;
 }
@@ -2106,8 +2082,7 @@ function buildRoomCard(clusterIdx, id, titleNum, roomType, isEntrance, diceHTML,
 function buildNotesCard(idx, savedNotes) {
   const cardId = `notescard-${idx}`;
   const card = document.createElement('div');
-  card.className = 'card';
-  card.dataset.cardType = 'dungeon';
+  card.className = 'room-card';
   card.id = cardId;
 
   const sn = savedNotes || {};
@@ -2120,7 +2095,7 @@ function buildNotesCard(idx, savedNotes) {
   const line6Text = sn.line6 !== undefined ? sn.line6 : 'Hallways are';
 
   card.innerHTML = `
-    <div class="card-header">
+    <div class="card-header" onclick="document.getElementById('notescard-${idx}').classList.toggle('expanded')">
       <span class="card-title">Notes</span>
     </div>
     <div class="card-body">
@@ -2133,7 +2108,7 @@ function buildNotesCard(idx, savedNotes) {
       <div class="key-line" data-bullet="none" data-tags=""><span class="key-bullet bullet-none">·</span><div class="editable notes-line notes-line-4" contenteditable="true">${line4Text}</div></div>
       <div class="key-line" data-bullet="none" data-tags=""><span class="key-bullet bullet-none">·</span><div class="editable notes-line notes-line-5" contenteditable="true">${line5Text}</div></div>
       <div class="key-line" data-bullet="none" data-tags=""><span class="key-bullet bullet-none">·</span><div class="editable notes-line notes-line-6" contenteditable="true">${line6Text}</div></div>
-      <button class="add-bullet-btn"><span class="add-icon">▶︎</span></button>
+      <button class="add-bullet-btn" onclick="addBullet('${cardId}')"><span class="add-icon">▶︎</span></button>
     </div>
   `;
   return card;
@@ -2141,24 +2116,49 @@ function buildNotesCard(idx, savedNotes) {
 
 function toggleMapCard(id) {
   const card = document.getElementById(id);
-  if (!card) return;
-  const body = card.querySelector('.map-card-body');
-  if (!body) return;
-  const isExpanded = card.classList.contains('expanded');
-  if (isExpanded) {
-    body.style.maxHeight = null;
-    card.classList.remove('expanded');
-  } else {
-    const h = body.scrollHeight;
-    body.style.maxHeight = (h > 50 ? h : 2000) + 'px';
-    card.classList.add('expanded');
-  }
+  if (card) card.classList.toggle('expanded');
 }
 
-// ── Phase 4 stub ──────────────────────────────────────────────────────────────
-// Print integration — not yet wired. extraCards is reserved for the Favorites
-// panel feature (medium-term roadmap item).
-function printCluster(clusterIdx, extraCards = []) {
-  // TODO: Phase 4 implementation
-  console.log('printCluster stub called for cluster', clusterIdx, 'with', extraCards.length, 'extra cards');
+// ── Phase 4: printCluster ─────────────────────────────────────────────────────
+// Prints all dungeon cards in a cluster to a single PDF.
+// extraCards is reserved for the future Favorites panel feature (see roadmap).
+async function printCluster(clusterIdx, extraCards = []) {
+  if (typeof jspdf === 'undefined') {
+    alert('jsPDF library not loaded. Please refresh and try again.');
+    return;
+  }
+
+  const block = document.getElementById(`block-${clusterIdx}`);
+  if (!block) {
+    console.warn('printCluster: no block found for cluster', clusterIdx);
+    return;
+  }
+
+  const dungeonCards = Array.from(block.querySelectorAll('.card[data-card-type="dungeon"]'));
+  const allCards = [...dungeonCards, ...extraCards];
+
+  if (allCards.length === 0) {
+    alert('No cards to print in this cluster.');
+    return;
+  }
+
+  const btn = block.querySelector('.cluster-print-btn');
+  let originalHTML;
+  if (btn) {
+    originalHTML = btn.innerHTML;
+    btn.innerHTML = 'generating...';
+    btn.disabled = true;
+  }
+
+  try {
+    await window.printCardsToPDF(allCards, `dungeon-cluster-${clusterIdx}.pdf`);
+  } catch (error) {
+    console.error('printCluster error:', error);
+    alert('Failed to generate PDF. Check console for details.');
+  } finally {
+    if (btn) {
+      btn.innerHTML = originalHTML;
+      btn.disabled = false;
+    }
+  }
 }
