@@ -962,3 +962,596 @@ p.header-area {
 .print-all-favorites .button-icon {
   margin-right: 8px;
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   DUNGEON GENERATOR
+   All rules below are scoped to dungeon.html.
+   Do not modify rules above this block.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Cluster builder (input form panel) ── */
+.cluster-builder {
+  background: var(--grey-medium);
+  border: 0.25px solid var(--blue-light);
+  border-radius: 5px;
+  padding: 12px;
+  margin: 10px auto;
+  width: 90%;
+  max-width: 5in;
+}
+
+.cluster-builder-title {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  border-bottom: 1px solid var(--red);
+  padding-bottom: 4px;
+  margin-bottom: 10px;
+}
+
+.cluster-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.cluster-name-row label {
+  font-weight: bold;
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.cluster-name-row input,
+.cluster-name-row select {
+  flex: 1;
+  padding: 4px 8px;
+  border: 0.25px solid var(--blue-light);
+  border-radius: 4px;
+  background: var(--grey-lighter);
+  font-family: 'National Park', sans-serif;
+  font-size: 0.9em;
+}
+
+/* ── Sparks (GM-seed inputs) ── */
+.sparks-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.spark-group { }
+
+.spark-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+  padding: 2px 0;
+}
+
+.spark-toggle label {
+  font-size: 0.8em;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--grey-dark);
+  cursor: pointer;
+  margin: 0;
+}
+
+.spark-plus {
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--blue-light);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--blue-dark);
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+  font-weight: 300;
+}
+
+.spark-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, margin-top 0.2s ease;
+  margin-top: 0;
+}
+
+.spark-group.open .spark-inputs {
+  max-height: 200px;
+  margin-top: 4px;
+}
+
+.spark-inputs input {
+  padding: 3px 6px;
+  border: 0.25px solid var(--blue-light);
+  border-radius: 3px;
+  background: var(--grey-lighter);
+  font-family: 'National Park', sans-serif;
+  font-size: 0.85em;
+}
+
+.spark-inputs input::placeholder {
+  color: var(--grey-dark);
+  font-style: italic;
+}
+
+/* ── Controls row ── */
+.controls-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+/* ── Roll button ── */
+.roll-btn {
+  font-size: 1em;
+  font-weight: bold;
+  color: var(--grey-darkest);
+  padding: 8px 20px;
+  background: var(--grey-lighter);
+  border: 0.25px solid var(--blue-light);
+  border-radius: 5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.roll-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 10px rgba(0,0,0,0.2);
+}
+
+.roll-btn:active {
+  transform: translateY(1px);
+}
+
+/* ── Cluster block (wrapper for a generated dungeon) ── */
+.cluster-block {
+  margin: 0 auto 20px;
+  width: 90%;
+  max-width: 5in;
+}
+
+/* ── Cluster header (red full-width group header — not an expandable card) ── */
+.cluster-header {
+  background: var(--red);
+  color: var(--grey-lightest);
+  border-radius: 5px;
+  padding: 6px 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.cluster-header * {
+  color: var(--grey-lightest);
+}
+
+.cluster-name-edit {
+  cursor: text;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  min-width: 40px;
+  display: inline-block;
+}
+
+.cluster-name-edit:focus {
+  outline: none;
+  border-bottom: 1px solid rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+}
+
+.cluster-env-select option {
+  color: var(--grey-darkest);
+  background: var(--grey-lightest);
+}
+
+/* ── Map card (stays as its own component, not unified with .card) ── */
+.map-card {
+  background: var(--grey-medium);
+  border: 0.25px solid var(--blue-light);
+  border-radius: 5px;
+  margin-bottom: 2px;
+  overflow: hidden;
+}
+
+.map-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.map-card-header:hover {
+  background: var(--grey-lighter);
+}
+
+.map-card.expanded .map-card-header {
+  border-bottom: 1px solid var(--red);
+}
+
+.map-card-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+/* Note: .map-card.expanded .map-card-body max-height is set via scrollHeight-based JS in Phase 3.
+   The CSS-only fallback (max-height: 2000px) is intentionally omitted here per the integration brief. */
+
+.map-tile-wrap {
+  padding: 8px;
+  overflow: hidden;
+}
+
+.map-tile-wrap svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.map-chevron {
+  font-size: 0.7em;
+  color: var(--grey-dark);
+  transition: transform 0.2s;
+}
+
+.map-card.expanded .map-chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Fullscreen map overlay ── */
+.map-fullscreen-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--grey-lightest);
+  flex-direction: column;
+}
+
+.map-fullscreen-overlay.active {
+  display: flex;
+}
+
+.map-fullscreen-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: var(--red);
+  flex-shrink: 0;
+}
+
+.map-fullscreen-toolbar span {
+  color: var(--grey-lightest);
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  letter-spacing: 1px;
+}
+
+.map-fullscreen-close {
+  background: var(--grey-lightest);
+  border: none;
+  border-radius: 3px;
+  color: var(--grey-darkest);
+  font-size: 1.1em;
+  padding: 3px 10px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.map-fullscreen-body {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.map-fullscreen-body svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Card header/title overrides for dungeon cards (within .cluster-block) ── */
+/* .card, .card-header, .card-body, .card-title are reused from main styles.css.
+   Scoped override for stacking margin within cluster blocks: */
+.cluster-block .card {
+  margin: 0 0 2px 0;
+}
+
+/* ── Card dice section ── */
+.card-dice {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.die-pip {
+  width: 18px;
+  height: 18px;
+  background: none;
+  border: 1px solid var(--blue-light);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75em;
+  color: var(--blue-dark);
+  font-weight: 300;
+}
+
+.die-sum {
+  font-size: 0.8em;
+  color: var(--grey-darkest);
+  margin-left: 2px;
+}
+
+.stat-tag {
+  font-size: 0.7em;
+  font-weight: bold;
+  color: var(--blue-dark);
+  background: rgba(63,181,204,0.12);
+  border: 0.5px solid var(--blue-light);
+  border-radius: 3px;
+  padding: 1px 4px;
+  margin-left: 4px;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+/* ── Card meta and prompts ── */
+.card-meta {
+  font-size: 0.75em;
+  color: var(--grey-dark);
+  font-weight: normal;
+  text-transform: none;
+}
+
+.room-type-edit {
+  display: inline;
+  min-width: 2em;
+}
+
+.room-type-edit:hover {
+  border-bottom: 1px solid var(--grey-dark);
+}
+
+.room-type-edit:focus {
+  outline: none;
+  border-bottom: 1px solid var(--grey-dark);
+  background: transparent;
+}
+
+.score-prompt {
+  color: var(--grey-dark);
+  font-size: 0.88em;
+}
+
+.score-prompt em {
+  color: var(--grey-darkest);
+  font-style: italic;
+}
+
+.enc-prompt {
+  color: var(--grey-dark);
+  font-size: 0.88em;
+}
+
+/* ── Key lines (room card content rows) ── */
+.key-line {
+  font-size: 0.95em;
+  line-height: 1.5;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  border-bottom: 0.5px solid var(--blue-light);
+  padding: 3px 0;
+}
+
+.key-line .editable {
+  font-weight: normal;
+  flex: 1;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.key-desc {
+  border-bottom: 0.5px solid var(--blue-light);
+  padding: 3px 0 6px;
+}
+
+.key-desc .editable {
+  white-space: normal;
+  word-break: break-word;
+  color: var(--grey-dark);
+}
+
+/* ── Bullet cycle system ── */
+.key-bullet {
+  width: 18px;
+  height: 18px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75em;
+  font-weight: 300;
+  flex-shrink: 0;
+  cursor: pointer;
+  opacity: 0.85;
+  user-select: none;
+  line-height: 1;
+  color: var(--red);
+}
+
+.key-bullet:hover {
+  opacity: 1;
+}
+
+/* arrow state — same geometry as TOMB squares, just no border */
+.key-bullet.bullet-arrow {
+  border-color: transparent;
+  color: var(--red);
+  opacity: 0.6;
+}
+
+/* TOMB letter states — match die-pip geometry, color-coded */
+.key-bullet.bullet-t { border-color: var(--red);          color: var(--red); }
+.key-bullet.bullet-m { border-color: var(--red);          color: var(--red); }
+.key-bullet.bullet-o { border-color: var(--grey-darkest); color: var(--grey-darkest); }
+.key-bullet.bullet-b { border-color: var(--blue-dark);    color: var(--blue-dark); }
+
+/* blank state — ghost square */
+.key-bullet.bullet-blank {
+  border-color: transparent;
+  color: transparent;
+  opacity: 0.2;
+}
+
+/* none state — invisible but clickable */
+.key-bullet.bullet-none {
+  border-color: transparent;
+  color: transparent;
+  opacity: 0;
+}
+
+.key-bullet.bullet-none:hover {
+  opacity: 0.25;
+  border-color: var(--grey-dark);
+  color: var(--grey-dark);
+}
+
+/* ── Hall section headers ── */
+.hall-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0 2px;
+  border-top: 1px solid var(--red);
+  margin-top: 2px;
+}
+
+.hall-section-header:first-of-type {
+  border-top: none;
+  margin-top: 0;
+}
+
+/* ── Encounter type color classes ── */
+.enc-obstacle   { color: #262626; }
+.enc-trap       { color: var(--red); }
+.enc-boon       { color: var(--blue-dark); }
+.enc-threat     { color: var(--red); }
+.enc-social     { color: #7a5c1e; }
+.enc-clue       { color: #4a6741; }
+.enc-opportunity{ color: #80a020; }
+.enc-trapboon   { color: var(--red); }
+.enc-nothing    { color: var(--grey-dark); }
+
+/* ── Editable contenteditable fields ── */
+.editable {
+  border: none;
+  background: transparent;
+  font-family: 'National Park', sans-serif;
+  font-size: inherit;
+  color: inherit;
+  width: 100%;
+  padding: 1px 2px;
+  cursor: text;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  min-height: 1.2em;
+}
+
+.editable:focus {
+  outline: none;
+  background: rgba(158,206,230,0.08);
+}
+
+.editable:empty:before {
+  content: attr(data-placeholder);
+  color: var(--grey-dark);
+  pointer-events: none;
+}
+
+/* ── Add bullet button ── */
+.add-bullet-btn {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px 0;
+  font-family: 'National Park', sans-serif;
+  font-size: 0.95em;
+  color: var(--red);
+  opacity: 0.4;
+  transition: opacity 0.15s;
+  border-bottom: 0.5px solid var(--blue-light);
+  width: 100%;
+}
+
+.add-bullet-btn:hover {
+  opacity: 1;
+}
+
+.add-bullet-btn .add-icon {
+  font-size: 0.7em;
+  flex-shrink: 0;
+  line-height: 1.8;
+}
+
+/* ── Map key ── */
+.map-key {
+  background: var(--grey-medium);
+  border: 0.25px solid var(--blue-light);
+  border-radius: 5px;
+  padding: 8px 12px;
+  margin: 10px auto;
+  width: 90%;
+  max-width: 5in;
+}
+
+.map-key-title {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.85em;
+  border-bottom: 1px solid var(--red);
+  padding-bottom: 3px;
+  margin-bottom: 6px;
+}
+
+.map-key-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-size: 0.82em;
+}
