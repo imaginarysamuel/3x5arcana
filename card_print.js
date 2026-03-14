@@ -108,11 +108,54 @@
   // ============================================
 
   /**
+   * Extracts structured content from a dungeon generator card (data-card-type="dungeon").
+   * Returns: { title, level, sections[] }
+   * Plain-text output only — Phase 4. Bold markup stripped via .textContent (acceptable).
+   */
+  function extractDungeonCardContent(card) {
+    const title = card.querySelector('.card-title')?.textContent?.trim() || 'Untitled';
+
+    // Dice meta line (room cards only — notes cards have no .stat-tag or .die-sum)
+    const statTag = card.querySelector('.stat-tag');
+    const dieSum  = card.querySelector('.die-sum');
+    const sections = [];
+
+    if (statTag || dieSum) {
+      const metaParts = [];
+      if (dieSum)  metaParts.push(dieSum.textContent.trim());
+      if (statTag) metaParts.push(statTag.textContent.trim());
+      const metaText = metaParts.join('  ');
+      if (metaText) sections.push({ type: 'text', content: metaText });
+    }
+
+    // Key lines (bullet rows) — skip description rows
+    const keyLines = card.querySelectorAll('.key-line:not(.key-desc) .editable');
+    keyLines.forEach(el => {
+      const text = el.textContent.trim();
+      if (text) sections.push({ type: 'text', content: text });
+    });
+
+    // Description line (key-desc)
+    const descEl = card.querySelector('.key-desc .editable');
+    if (descEl) {
+      const descText = descEl.textContent.trim();
+      if (descText) sections.push({ type: 'text', content: descText, italic: true });
+    }
+
+    return { title, level: '', sections };
+  }
+
+  /**
    * Extracts structured content from a card DOM element
    * Returns: { title, level, sections[] }
    * Each section: { type: 'text'|'rich'|'divider', content, italic? }
    */
   function extractCardContent(card) {
+    // Dungeon generator cards use their own extractor (authoritative detection via data-card-type)
+    if (card.dataset.cardType === 'dungeon') {
+      return extractDungeonCardContent(card);
+    }
+
     const title = card.querySelector('.card-title')?.textContent?.trim() || 'Untitled';
     const level = card.querySelector('.monster-level, .spell-tier, .spell-level')?.textContent?.trim() || '';
     
@@ -495,6 +538,41 @@
   }
 
   /**
+   * Print an arbitrary array of card elements to a single PDF.
+   * Used by printCluster (dungeon page) and available for other multi-card print needs.
+   */
+  async function printCardsToPDF(cards, filename) {
+    if (!cards || cards.length === 0) {
+      alert('No cards to print.');
+      return;
+    }
+
+    const doc = await createCardDoc();
+    let isFirstCard = true;
+
+    for (const card of cards) {
+      const content = extractCardContent(card);
+
+      if (!isFirstCard) {
+        doc.addPage([CARD_WIDTH, CARD_HEIGHT], 'landscape');
+      }
+      isFirstCard = false;
+
+      let pageNum = 1;
+      let result = renderCardPage(doc, { ...content, startIndex: 0 }, pageNum, 1);
+
+      while (result.overflow && result.nextIndex !== undefined) {
+        doc.addPage([CARD_WIDTH, CARD_HEIGHT], 'landscape');
+        pageNum++;
+        result = renderCardPage(doc, { ...content, startIndex: result.nextIndex }, pageNum, pageNum);
+      }
+    }
+
+    const safeName = filename || ('3x5_cards_' + new Date().toISOString().slice(0, 10) + '.pdf');
+    doc.save(safeName);
+  }
+
+  /**
    * Print all favorited cards to a single PDF
    */
   async function printAllFavorites() {
@@ -596,6 +674,7 @@
   
   window.printSingleCard = printSingleCard;
   window.printAllFavorites = printAllFavorites;
+  window.printCardsToPDF = printCardsToPDF;
   window.updatePrintAllButton = updatePrintAllButton;
 
 })();
