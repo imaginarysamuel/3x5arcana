@@ -2,11 +2,13 @@
 // Extracted from 3x5Tomb_Beta_0_14.html for integration into dungeon.html.
 //
 // CONFLICT RESOLUTION:
-//   - toggleCard(id): Prototype calls toggleCard('clusterIdx-roomId') with a string ID.
-//     list_script.js defines toggleCard(card) with a DOM element. This file redefines
-//     toggleCard to handle the string-ID calling convention used by dungeon.html.
-//     list_script.js's version is never called on dungeon.html, so the override is safe.
+//   - toggleCard: list_script.js defines toggleCard(cardElement). Dungeon cards use
+//     the same element-based toggleCard via delegated click listeners scoped to
+//     .cluster-block. No override needed — the string-ID calling convention from the
+//     prototype has been removed entirely in Phase 3.
 //   - All other functions are dungeon-specific and do not conflict with shared scripts.
+//   - MARGIN: card_print.js defines MARGIN for PDF page margins (inches). This file
+//     uses MARGIN in SVG map code for pixel padding. Different scopes, no collision.
 //
 // Phase 4 stub: printCluster(clusterIdx, extraCards) — defined at bottom, not yet wired.
 
@@ -1620,24 +1622,46 @@ function toggleSpark(id) {
   group.classList.toggle('open');
 }
 
-// toggleCard: overrides list_script.js version for dungeon.html.
-// Called as toggleCard('clusterIdx-roomId') from card header onclick attributes.
-// list_script.js's toggleCard(cardElement) is never called on dungeon.html.
-function toggleCard(id) {
-  const card = document.getElementById(`card-${id}`);
+// ── Card expansion delegation ──────────────────────────────────────────────────
+// Handles click on .card-header within .cluster-block.
+// Uses list_script.js's toggleCard(cardElement) — no local override needed.
+document.addEventListener('click', function(e) {
+  const header = e.target.closest('.cluster-block .card .card-header');
+  if (!header) return;
+  // Don't toggle if user is clicking into a contenteditable field
+  if (e.target.isContentEditable) return;
+  const card = header.closest('.card');
   if (!card) return;
-  card.classList.toggle('expanded');
-}
+  toggleCard(card);
+});
+
+// ── Dungeon interaction delegation ────────────────────────────────────────────
+// add-bullet-btn: appends a new editable key-line to the card body.
+// key-bullet mousedown: cycles TOMB states, only on already-expanded cards.
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('.add-bullet-btn');
+  if (!btn) return;
+  const card = btn.closest('.card');
+  if (!card) return;
+  addBullet(card);
+});
 
 const BULLET_CYCLE = ['arrow', 'T', 'O', 'M', 'B', 'blank'];
 const BULLET_DISPLAY = { arrow: '▶︎', T: 'T', O: 'O', M: 'M', B: 'B', blank: '·', none: '' };
 const BULLET_CLASSES = { arrow: 'bullet-arrow', T: 'bullet-t', O: 'bullet-o', M: 'bullet-m', B: 'bullet-b', blank: 'bullet-blank', none: 'bullet-none' };
 const BULLET_CYCLE_FROM_NONE = ['none', 'arrow', 'T', 'O', 'M', 'B', 'blank'];
 
-// Delegated: clicking a bullet cycles through TOMB states
+// Delegated: clicking a bullet cycles through TOMB states.
+// Only fires when the parent .card is already expanded — collapsed bullet states
+// are invisible so there's no reason to cycle them. Never fires on .card-header.
 document.addEventListener('mousedown', function(e) {
   const bullet = e.target.closest('.key-bullet');
   if (!bullet) return;
+  // Must not be inside a card-header
+  if (bullet.closest('.card-header')) return;
+  // Parent card must already be expanded
+  const parentCard = bullet.closest('.card');
+  if (!parentCard || !parentCard.classList.contains('expanded')) return;
   e.preventDefault();
   const line = bullet.closest('.key-line');
   if (!line) return;
@@ -1719,12 +1743,11 @@ function scrollToCard(cardId) {
   }
   const card = document.getElementById(cardId);
   if (!card) return;
-  card.classList.add('expanded');
+  if (!card.classList.contains('expanded')) toggleCard(card);
   setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
 }
 
-function addBullet(cardId) {
-  const card = document.getElementById(cardId);
+function addBullet(card) {
   if (!card) return;
   const body = card.querySelector('.card-body');
   const btn = body.querySelector('.add-bullet-btn');
@@ -1904,12 +1927,14 @@ function restoreDungeons(clusters) {
     block.appendChild(mapCard);
 
     const notesCard = buildNotesCard(idx, saved.notes || null);
-    if (saved.notes && saved.notes.open) notesCard.classList.add('expanded');
     block.appendChild(notesCard);
 
     renderRoomCards(block, idx, saved.rooms, saved.cardSnaps);
 
     out.appendChild(block);
+
+    // Open notes card after block is in the live DOM so scrollHeight is valid
+    if (saved.notes && saved.notes.open) toggleCard(notesCard);
   });
 
   clusterCount = Math.max(clusterCount, clusters.length);
@@ -2064,15 +2089,16 @@ function applyCardSnap(card, snap) {
 
 function buildRoomCard(clusterIdx, id, titleNum, roomType, isEntrance, diceHTML, bodyHTML) {
   const card = document.createElement('div');
-  card.className = 'room-card';
+  card.className = 'card';
+  card.dataset.cardType = 'dungeon';
   const cardId = `card-${clusterIdx}-${id}`;
   card.id = cardId;
   card.innerHTML = `
-    <div class="card-header" onclick="toggleCard('${clusterIdx}-${id}')">
-      <span class="card-title">${titleNum}. <span class="editable room-type-edit" contenteditable="true" onclick="event.stopPropagation()" spellcheck="false">${roomType}</span>${isEntrance ? ' ▲' : ''}</span>
+    <div class="card-header">
+      <span class="card-title">${titleNum}. <span class="editable room-type-edit" contenteditable="true" spellcheck="false">${roomType}</span>${isEntrance ? ' ▲' : ''}</span>
       ${diceHTML}
     </div>
-    <div class="card-body">${bodyHTML}<button class="add-bullet-btn" onclick="addBullet('${cardId}')"><span class="add-icon">▶︎</span></button></div>
+    <div class="card-body">${bodyHTML}<button class="add-bullet-btn"><span class="add-icon">▶︎</span></button></div>
   `;
   return card;
 }
@@ -2080,7 +2106,8 @@ function buildRoomCard(clusterIdx, id, titleNum, roomType, isEntrance, diceHTML,
 function buildNotesCard(idx, savedNotes) {
   const cardId = `notescard-${idx}`;
   const card = document.createElement('div');
-  card.className = 'room-card';
+  card.className = 'card';
+  card.dataset.cardType = 'dungeon';
   card.id = cardId;
 
   const sn = savedNotes || {};
@@ -2093,7 +2120,7 @@ function buildNotesCard(idx, savedNotes) {
   const line6Text = sn.line6 !== undefined ? sn.line6 : 'Hallways are';
 
   card.innerHTML = `
-    <div class="card-header" onclick="document.getElementById('notescard-${idx}').classList.toggle('expanded')">
+    <div class="card-header">
       <span class="card-title">Notes</span>
     </div>
     <div class="card-body">
@@ -2106,7 +2133,7 @@ function buildNotesCard(idx, savedNotes) {
       <div class="key-line" data-bullet="none" data-tags=""><span class="key-bullet bullet-none">·</span><div class="editable notes-line notes-line-4" contenteditable="true">${line4Text}</div></div>
       <div class="key-line" data-bullet="none" data-tags=""><span class="key-bullet bullet-none">·</span><div class="editable notes-line notes-line-5" contenteditable="true">${line5Text}</div></div>
       <div class="key-line" data-bullet="none" data-tags=""><span class="key-bullet bullet-none">·</span><div class="editable notes-line notes-line-6" contenteditable="true">${line6Text}</div></div>
-      <button class="add-bullet-btn" onclick="addBullet('${cardId}')"><span class="add-icon">▶︎</span></button>
+      <button class="add-bullet-btn"><span class="add-icon">▶︎</span></button>
     </div>
   `;
   return card;
@@ -2114,7 +2141,18 @@ function buildNotesCard(idx, savedNotes) {
 
 function toggleMapCard(id) {
   const card = document.getElementById(id);
-  if (card) card.classList.toggle('expanded');
+  if (!card) return;
+  const body = card.querySelector('.map-card-body');
+  if (!body) return;
+  const isExpanded = card.classList.contains('expanded');
+  if (isExpanded) {
+    body.style.maxHeight = null;
+    card.classList.remove('expanded');
+  } else {
+    const h = body.scrollHeight;
+    body.style.maxHeight = (h > 50 ? h : 2000) + 'px';
+    card.classList.add('expanded');
+  }
 }
 
 // ── Phase 4 stub ──────────────────────────────────────────────────────────────
