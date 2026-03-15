@@ -1280,7 +1280,7 @@ p.header-area {
 /* .card, .card-header, .card-body, .card-title are reused from main styles.css.
    Scoped override for stacking margin within cluster blocks: */
 .cluster-block .card {
-  margin: 0 0 2px 0;
+  width: 100%;
 }
 
 /* ── Card dice section ── */
@@ -1555,4 +1555,8 @@ p.header-area {
   flex-wrap: wrap;
   gap: 4px 16px;
   font-size: 0.82em;
+}
+
+.card-body p {
+  margin: 0;
 }
