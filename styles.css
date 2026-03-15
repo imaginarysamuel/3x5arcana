@@ -105,7 +105,7 @@ p.header-area {
 .menu-card {
   background-color: var(--grey-lighter);
   border: 0.5px solid var(--blue-light);
-  border-radius: 5px;
+  border-radius: 4px;
   padding: 10px;
   width: 90%;
   max-width: 5in;
@@ -151,7 +151,7 @@ p.header-area {
   max-width: 3in;
   background-color: var(--grey-lighter);
   border: 0.5px solid var(--blue-light);
-  border-radius: 5px;
+  border-radius: 4px;
   text-transform: uppercase;
   text-align: center !important;
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
@@ -190,7 +190,7 @@ p.header-area {
 #search-bar {
   padding: 8px;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   width: 100%;
   max-width: 5in;
   font-size: 1em;
@@ -216,7 +216,7 @@ p.header-area {
 #spell-search-bar {
   padding: 8px;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   width: 100%;
   max-width: 5in;
   font-size: 1em;
@@ -290,7 +290,7 @@ p.header-area {
   height: 10px;
   background: var(--grey-medium);
   border: 2px solid var(--grey-darkest);
-  border-radius: 5px;
+  border-radius: 4px;
   outline: none;
   padding: 10px;
   cursor: pointer;
@@ -303,7 +303,7 @@ p.header-area {
   height: 20px;
   background: var(--grey-darkest);
   border: 2px solid var(--grey-lightest);
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
@@ -314,7 +314,7 @@ p.header-area {
   height: 20px;
   background: var(--grey-darkest);
   border: 2px solid var(--grey-lightest);
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
@@ -472,7 +472,7 @@ p.header-area {
 .card {
   background-color: var(--grey-medium);
   border: 0.25px solid var(--blue-light);
-  border-radius: 5px;
+  border-radius: 4px;
   padding: 10px;
   margin: -7px auto 0;
   width: 90%;
@@ -553,7 +553,7 @@ p.header-area {
 
 .card.bookmark {
   border: 0.25px solid var(--blue-light);
-  border-radius: 5px;
+  border-radius: 4px;
   background-color: var(--red);
   padding: 10px;
   margin: 7px auto 4px;
@@ -763,7 +763,7 @@ p.header-area {
   width: 3in;
   background-color: var(--grey-lighter);
   border: 0.25px solid var(--blue-light);
-  border-radius: 5px;
+  border-radius: 4px;
   text-transform: uppercase;
   text-align: center !important;
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
@@ -863,7 +863,7 @@ p.header-area {
 .card-action-btn {
   background-color: var(--grey-lighter);
   border: 1px solid var(--blue-light);
-  border-radius: 5px;
+  border-radius: 4px;
   width: 32px;
   height: 32px;
   display: flex;
@@ -919,7 +919,7 @@ p.header-area {
   padding: 12px 24px;
   background-color: var(--grey-lighter);
   border: 1px solid var(--blue-dark);
-  border-radius: 5px;
+  border-radius: 4px;
   font-family: 'National Park', sans-serif;
   font-size: 1em;
   font-weight: bold;
@@ -975,7 +975,7 @@ p.header-area {
 .cluster-builder {
   background: var(--grey-medium);
   border: 0.25px solid var(--blue-light);
-  border-radius: 5px;
+  border-radius: 4px;
   padding: 12px;
   margin: 10px auto;
   width: 90%;
@@ -1105,7 +1105,7 @@ p.header-area {
   padding: 8px 20px;
   background: var(--grey-lighter);
   border: 0.25px solid var(--blue-light);
-  border-radius: 5px;
+  border-radius: 4px;
   text-transform: uppercase;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -1131,7 +1131,7 @@ p.header-area {
 .cluster-header {
   background: var(--red);
   color: var(--grey-lightest);
-  border-radius: 5px;
+  border-radius: 4px;
   padding: 6px 12px;
   font-weight: bold;
   text-transform: uppercase;
@@ -1169,7 +1169,7 @@ p.header-area {
 .map-card {
   background: var(--grey-medium);
   border: 0.25px solid var(--blue-light);
-  border-radius: 5px;
+  border-radius: 4px;
   margin-bottom: 2px;
   overflow: hidden;
 }
@@ -1534,7 +1534,7 @@ p.header-area {
 .map-key {
   background: var(--grey-medium);
   border: 0.25px solid var(--blue-light);
-  border-radius: 5px;
+  border-radius: 4px;
   padding: 8px 12px;
   margin: 10px auto;
   width: 90%;
