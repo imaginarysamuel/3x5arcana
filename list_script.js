@@ -19,6 +19,14 @@ function toggleCard(card) {
   }
 }
 
+// Keep maxHeight in sync when contenteditable fields grow (e.g. line wrap).
+// Single delegated listener — covers all card types site-wide.
+document.addEventListener("input", function (e) {
+  const body = e.target.closest(".card.expanded .card-body");
+  if (body) body.style.maxHeight = body.scrollHeight + "px";
+});
+
+
 // ============================================
 // 🏠 STATIC CARDS (index.html, license cards, etc.)
 // ============================================

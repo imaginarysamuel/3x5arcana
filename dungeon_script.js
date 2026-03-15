@@ -8,7 +8,7 @@
 //     list_script.js's version is never called on dungeon.html, so the override is safe.
 //   - All other functions are dungeon-specific and do not conflict with shared scripts.
 //
-// Phase 4 stub: printCluster(clusterIdx, extraCards) — defined at bottom, not yet wired.
+// Phase 4: printCluster(clusterIdx, extraCards) — implemented at bottom of file.
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 
@@ -1272,6 +1272,7 @@ function rollCluster() {
   hdr.innerHTML = `
     <span contenteditable="true" class="cluster-name-edit" spellcheck="false">${clusterName}</span>
     <span style="display:flex;align-items:center;gap:8px">
+      <button class="cluster-print-btn" onclick="printCluster(${clusterCount})" style="background:none;border:1px solid rgba(255,255,255,0.5);border-radius:3px;color:var(--grey-lightest);font-size:0.75em;padding:2px 7px;cursor:pointer;font-family:'National Park',sans-serif;text-transform:uppercase;letter-spacing:1px">⎙ Print</button>
       <button onclick="confirmDeleteCluster('${blockId}')" style="background:none;border:1px solid rgba(255,255,255,0.5);border-radius:3px;color:var(--grey-lightest);font-size:0.75em;padding:2px 7px;cursor:pointer;font-family:'National Park',sans-serif;text-transform:uppercase;letter-spacing:1px">✕</button>
     </span>
   `;
@@ -1881,6 +1882,7 @@ function restoreDungeons(clusters) {
     hdr.innerHTML = `
       <span contenteditable="true" class="cluster-name-edit" spellcheck="false">${saved.name}</span>
       <span style="display:flex;align-items:center;gap:8px">
+        <button class="cluster-print-btn" onclick="printCluster(${idx})" style="background:none;border:1px solid rgba(255,255,255,0.5);border-radius:3px;color:var(--grey-lightest);font-size:0.75em;padding:2px 7px;cursor:pointer;font-family:'National Park',sans-serif;text-transform:uppercase;letter-spacing:1px">⎙ Print</button>
         <button onclick="confirmDeleteCluster('${blockId}')" style="background:none;border:1px solid rgba(255,255,255,0.5);border-radius:3px;color:var(--grey-lightest);font-size:0.75em;padding:2px 7px;cursor:pointer;font-family:'National Park',sans-serif;text-transform:uppercase;letter-spacing:1px">✕ Delete</button>
       </span>
     `;
@@ -2064,15 +2066,16 @@ function applyCardSnap(card, snap) {
 
 function buildRoomCard(clusterIdx, id, titleNum, roomType, isEntrance, diceHTML, bodyHTML) {
   const card = document.createElement('div');
-  card.className = 'room-card';
+  card.className = 'card';
+  card.dataset.cardType = 'dungeon';
   const cardId = `card-${clusterIdx}-${id}`;
   card.id = cardId;
   card.innerHTML = `
-    <div class="card-header" onclick="toggleCard('${clusterIdx}-${id}')">
-      <span class="card-title">${titleNum}. <span class="editable room-type-edit" contenteditable="true" onclick="event.stopPropagation()" spellcheck="false">${roomType}</span>${isEntrance ? ' ▲' : ''}</span>
+    <div class="card-header">
+      <span class="card-title">${titleNum}. <span class="editable room-type-edit" contenteditable="true" spellcheck="false">${roomType}</span>${isEntrance ? ' ▲' : ''}</span>
       ${diceHTML}
     </div>
-    <div class="card-body">${bodyHTML}<button class="add-bullet-btn" onclick="addBullet('${cardId}')"><span class="add-icon">▶︎</span></button></div>
+    <div class="card-body">${bodyHTML}<button class="add-bullet-btn"><span class="add-icon">▶︎</span></button></div>
   `;
   return card;
 }
@@ -2080,7 +2083,8 @@ function buildRoomCard(clusterIdx, id, titleNum, roomType, isEntrance, diceHTML,
 function buildNotesCard(idx, savedNotes) {
   const cardId = `notescard-${idx}`;
   const card = document.createElement('div');
-  card.className = 'room-card';
+  card.className = 'card';
+  card.dataset.cardType = 'dungeon';
   card.id = cardId;
 
   const sn = savedNotes || {};
@@ -2093,7 +2097,7 @@ function buildNotesCard(idx, savedNotes) {
   const line6Text = sn.line6 !== undefined ? sn.line6 : 'Hallways are';
 
   card.innerHTML = `
-    <div class="card-header" onclick="document.getElementById('notescard-${idx}').classList.toggle('expanded')">
+    <div class="card-header">
       <span class="card-title">Notes</span>
     </div>
     <div class="card-body">
@@ -2106,7 +2110,7 @@ function buildNotesCard(idx, savedNotes) {
       <div class="key-line" data-bullet="none" data-tags=""><span class="key-bullet bullet-none">·</span><div class="editable notes-line notes-line-4" contenteditable="true">${line4Text}</div></div>
       <div class="key-line" data-bullet="none" data-tags=""><span class="key-bullet bullet-none">·</span><div class="editable notes-line notes-line-5" contenteditable="true">${line5Text}</div></div>
       <div class="key-line" data-bullet="none" data-tags=""><span class="key-bullet bullet-none">·</span><div class="editable notes-line notes-line-6" contenteditable="true">${line6Text}</div></div>
-      <button class="add-bullet-btn" onclick="addBullet('${cardId}')"><span class="add-icon">▶︎</span></button>
+      <button class="add-bullet-btn"><span class="add-icon">▶︎</span></button>
     </div>
   `;
   return card;
@@ -2114,13 +2118,60 @@ function buildNotesCard(idx, savedNotes) {
 
 function toggleMapCard(id) {
   const card = document.getElementById(id);
-  if (card) card.classList.toggle('expanded');
+  if (!card) return;
+  const body = card.querySelector('.map-card-body');
+  if (!body) return;
+  const isExpanded = card.classList.contains('expanded');
+  if (isExpanded) {
+    body.style.maxHeight = null;
+    card.classList.remove('expanded');
+  } else {
+    const h = body.scrollHeight;
+    body.style.maxHeight = (h > 50 ? h : 2000) + 'px';
+    card.classList.add('expanded');
+  }
 }
 
-// ── Phase 4 stub ──────────────────────────────────────────────────────────────
-// Print integration — not yet wired. extraCards is reserved for the Favorites
-// panel feature (medium-term roadmap item).
-function printCluster(clusterIdx, extraCards = []) {
-  // TODO: Phase 4 implementation
-  console.log('printCluster stub called for cluster', clusterIdx, 'with', extraCards.length, 'extra cards');
+// ── Phase 4: printCluster ─────────────────────────────────────────────────────
+// Prints all dungeon cards in a cluster to a single PDF.
+// extraCards is reserved for the future Favorites panel feature (see roadmap).
+async function printCluster(clusterIdx, extraCards = []) {
+  if (typeof jspdf === 'undefined') {
+    alert('jsPDF library not loaded. Please refresh and try again.');
+    return;
+  }
+
+  const block = document.getElementById(`block-${clusterIdx}`);
+  if (!block) {
+    console.warn('printCluster: no block found for cluster', clusterIdx);
+    return;
+  }
+
+  const dungeonCards = Array.from(block.querySelectorAll('.card[data-card-type="dungeon"]'));
+  const allCards = [...dungeonCards, ...extraCards];
+
+  if (allCards.length === 0) {
+    alert('No cards to print in this cluster.');
+    return;
+  }
+
+  const btn = block.querySelector('.cluster-print-btn');
+  let originalHTML;
+  if (btn) {
+    originalHTML = btn.innerHTML;
+    btn.innerHTML = 'generating...';
+    btn.disabled = true;
+  }
+
+  try {
+    await window.printCardsToPDF(allCards, `dungeon-cluster-${clusterIdx}.pdf`);
+  } catch (error) {
+    console.error('printCluster error:', error);
+    alert('Failed to generate PDF. Check console for details.');
+  } finally {
+    if (btn) {
+      btn.innerHTML = originalHTML;
+      btn.disabled = false;
+    }
+  }
 }

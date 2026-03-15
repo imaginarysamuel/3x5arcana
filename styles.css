@@ -674,6 +674,7 @@ p.header-area {
 .card.expanded .card-body {
   max-height: 1000px;
   padding-bottom: 10px;
+  margin-bottom: 0;
 }
 
 .card.expanded .card-header {
