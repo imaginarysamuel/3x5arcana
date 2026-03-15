@@ -2071,11 +2071,11 @@ function buildRoomCard(clusterIdx, id, titleNum, roomType, isEntrance, diceHTML,
   const cardId = `card-${clusterIdx}-${id}`;
   card.id = cardId;
   card.innerHTML = `
-    <div class="card-header">
-      <span class="card-title">${titleNum}. <span class="editable room-type-edit" contenteditable="true" spellcheck="false">${roomType}</span>${isEntrance ? ' ▲' : ''}</span>
+    <div class="card-header" onclick="toggleCard('${clusterIdx}-${id}')" style="cursor:pointer">
+      <span class="card-title">${titleNum}. <span class="editable room-type-edit" contenteditable="true" spellcheck="false" onclick="event.stopPropagation()">${roomType}</span>${isEntrance ? ' ▲' : ''}</span>
       ${diceHTML}
     </div>
-    <div class="card-body">${bodyHTML}<button class="add-bullet-btn"><span class="add-icon">▶︎</span></button></div>
+    <div class="card-body">${bodyHTML}<button class="add-bullet-btn" onclick="addBullet('${cardId}')"><span class="add-icon">▶︎</span></button></div>
   `;
   return card;
 }
@@ -2097,8 +2097,7 @@ function buildNotesCard(idx, savedNotes) {
   const line6Text = sn.line6 !== undefined ? sn.line6 : 'Hallways are';
 
   card.innerHTML = `
-    <div class="card-header">
-      <span class="card-title">Notes</span>
+    <div class="card-header" onclick="this.closest('.card').classList.toggle('expanded')" style="cursor:pointer">      <span class="card-title">Notes</span>
     </div>
     <div class="card-body">
       <div class="key-line key-desc" style="margin-top:4px">
@@ -2110,7 +2109,7 @@ function buildNotesCard(idx, savedNotes) {
       <div class="key-line" data-bullet="none" data-tags=""><span class="key-bullet bullet-none">·</span><div class="editable notes-line notes-line-4" contenteditable="true">${line4Text}</div></div>
       <div class="key-line" data-bullet="none" data-tags=""><span class="key-bullet bullet-none">·</span><div class="editable notes-line notes-line-5" contenteditable="true">${line5Text}</div></div>
       <div class="key-line" data-bullet="none" data-tags=""><span class="key-bullet bullet-none">·</span><div class="editable notes-line notes-line-6" contenteditable="true">${line6Text}</div></div>
-      <button class="add-bullet-btn"><span class="add-icon">▶︎</span></button>
+      <button class="add-bullet-btn" onclick="addBullet('notescard-${idx}')"><span class="add-icon">▶︎</span></button>
     </div>
   `;
   return card;
