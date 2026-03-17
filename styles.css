@@ -122,7 +122,7 @@ p.header-area {
   justify-content: center;
   align-items: center;
   background-color: var(--grey-lighter);
-  border-bottom: 1px solid var(--red);
+
   padding-bottom: 5px;
   position: sticky;
   top: 0;
@@ -529,7 +529,7 @@ p.header-area {
 }
 
 .card-title {
-  font-size: 1.1em;
+
   color: var(--grey-darkest);
 }
 
@@ -678,6 +678,9 @@ p.header-area {
 }
 
 .card.expanded .card-header {
+  border-bottom: 1px solid var(--red);
+}
+.map-card.expanded .map-card-header {
   border-bottom: 1px solid var(--red);
 }
 
@@ -1170,8 +1173,7 @@ p.header-area {
   background: var(--grey-medium);
   border: 0.25px solid var(--blue-light);
   border-radius: 4px;
-  margin-bottom: 2px;
-  overflow: hidden;
+  margin-bottom: -7px auto 2px;
 }
 
 .map-card-header {
@@ -1182,14 +1184,21 @@ p.header-area {
   font-weight: bold;
   text-transform: uppercase;
   cursor: pointer;
+  color: var(--grey-darkest);
+  font-weight: bold;
+  min-height: 35px;
+  margin-bottom: 12px;
+  padding-bottom: 1px;
+}
 }
 
 .map-card-header:hover {
   background: var(--grey-lighter);
 }
 
-.map-card.expanded .map-card-header {
-  border-bottom: 1px solid var(--red);
+.map-card.expanded {
+  box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.2);
+  margin-bottom: 15px;
 }
 
 .map-card-body {
