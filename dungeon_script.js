@@ -495,9 +495,69 @@ const clusterState = {};
 // Registry of zoom functions keyed by clusterIdx+fullscreen
 const svgZoomControls = {};
 
+// Active floor index per tower node in fullscreen: key = `${clusterIdx}-${nodeIdx}`
+const towerActiveFloor = {};
+
 function zoomSVG(clusterIdx, fullscreen, delta) {
   const key = clusterIdx + (fullscreen ? '-fs' : '');
   if (svgZoomControls[key]) svgZoomControls[key](delta);
+}
+
+// Per-floor detail line builder — used by rollCluster and syncDetailLinesFromCards
+function buildFloorLines(f) {
+  const lines = [];
+  if (f.size) lines.push({ text: 'Size: ' + f.size, bullet: 'none' });
+  if (f.roomFeature) lines.push({ text: fmtContent(f.roomFeature), bullet: 'arrow' });
+  if (f.encType.kind === 'trap' || f.encType.kind === 'trapboon') lines.push({ text: f.encContent, bullet: 'T' });
+  if (f.encType.kind === 'obstacle') lines.push({ text: fmtContent(f.obstacleContent || f.encContent), bullet: 'O' });
+  if (f.encType.kind === 'opportunity') lines.push({ text: fmtContent(f.obstacleContent), bullet: 'O' });
+  if (f.monster) lines.push({ text: fmtContent(f.monster), bullet: 'M' });
+  if (f.encType.kind === 'boon' || f.encType.kind === 'trapboon') lines.push({ text: fmtContent(f.boonContent || f.encContent), bullet: 'B' });
+  if (f.encType.kind === 'opportunity') lines.push({ text: fmtContent(f.boonContent), bullet: 'B' });
+  return lines;
+}
+
+// Cycle active floor for a tower node in fullscreen and redraw
+function cycleTowerFloor(clusterIdx, nodeIdx, floorIdx) {
+  towerActiveFloor[`${clusterIdx}-${nodeIdx}`] = floorIdx;
+  const rooms = clusterRooms[clusterIdx];
+  if (!rooms) return;
+  syncDetailLinesFromCards(clusterIdx, rooms);
+  const body = document.getElementById('map-fullscreen-body');
+  if (body) {
+    // Preserve current viewBox before rebuild
+    const existingSvg = body.querySelector('svg');
+    const savedViewBox = existingSvg ? existingSvg.getAttribute('viewBox') : null;
+
+    body.innerHTML = '';
+    const svg = buildSVGMap(rooms, clusterIdx, true);
+    svg.style.width = '100%';
+    svg.style.height = '100%';
+    body.appendChild(svg);
+
+    // Restore viewBox so pan/zoom position is unchanged
+    if (savedViewBox) {
+      const [x, y, w, h] = savedViewBox.split(' ').map(Number);
+      const restoreFn = svgZoomControls[`${clusterIdx}-fs-restore`];
+      if (restoreFn) restoreFn(x, y, w, h);
+      else svg.setAttribute('viewBox', savedViewBox);
+    }
+
+    // Fade in the new front card content immediately
+    const nodeG = svg.querySelector(`.node-group[data-idx="${nodeIdx}"]`);
+    if (nodeG) {
+      const fo = nodeG.querySelector('foreignObject');
+      const headerText = nodeG.querySelector('[data-front-card] text');
+      [fo && fo.firstChild, headerText].forEach(el => {
+        if (!el) return;
+        el.style.opacity = '0';
+        requestAnimationFrame(() => {
+          el.style.transition = 'opacity 0.15s ease';
+          el.style.opacity = '1';
+        });
+      });
+    }
+  }
 }
 
 function buildSVGMap(nodes, clusterIdx, fullscreen = false) {
@@ -750,32 +810,171 @@ function buildSVGMap(nodes, clusterIdx, fullscreen = false) {
       const HEADER_H = 28;
       const isHighlighted = highlightedNode === i;
 
+      // Tower stack setup (fullscreen only)
+      const isTowerStack = fullscreen && node.kind === 'tower' && node.floors && node.floors.length > 1;
+      const stackKey = `${clusterIdx}-${i}`;
+      const activeFloorIdx = isTowerStack ? (towerActiveFloor[stackKey] || 0) : 0;
+      const peekCount = isTowerStack ? node.floors.length - 1 : 0;
+      const peekH = peekCount * HEADER_H;
+      // Peek tabs sit above the front card: total visual top = y - peekH
+      const totalVisualH = boxH + peekH;
+
       const g = svgEl('g', {
         class: 'node-group',
         'data-idx': i,
         style: 'cursor:grab'
       });
 
+      // Shadow — covers full visual height including peek tabs
       g.appendChild(svgEl('rect', {
-        x: x+3, y: y+3, width: boxW, height: boxH, rx: 5,
+        x: x+3, y: y - peekH + 3, width: boxW, height: totalVisualH, rx: 5,
         fill: 'rgba(0,0,0,0.08)'
       }));
 
       const fillColor = isHighlighted ? '#e8f8fc' : '#fffefd';
       const strokeColor = isHighlighted ? '#3fb5cc' : '#9ecee6';
       const strokeW = isHighlighted ? '1.5' : '0.75';
-      g.appendChild(svgEl('rect', {
+      const letters = 'abcdefghij';
+
+      // ── Peek tabs (rendered before front card so front card paints over the bottom of each tab) ──
+      if (isTowerStack) {
+        // Collect non-active floors in order, assign tab slots top-to-bottom
+        const otherFloors = node.floors.map((f, fi) => ({ f, fi })).filter(({ fi }) => fi !== activeFloorIdx);
+        otherFloors.forEach(({ f, fi }, tabSlot) => {
+          const tabY = y - peekH + tabSlot * HEADER_H;
+          // Wrap visual elements so animateTransform moves them together
+          const tabVisualGroup = svgEl('g');
+          // Tab background — full card height, no border at rest
+          tabVisualGroup.appendChild(svgEl('rect', {
+            x, y: tabY, width: boxW, height: boxH, rx: 5,
+            fill: '#f0f4f6', stroke: 'none'
+          }));
+          // Tab label
+          const tabLabel = svgEl('text', {
+            x: x + 10, y: tabY + HEADER_H / 2 + 1,
+            'text-anchor': 'start', 'dominant-baseline': 'central',
+            'font-size': fullscreen ? '14' : '22', 'font-weight': 'bold', fill: '#999',
+            'font-family': '"National Park",sans-serif',
+            'pointer-events': 'none'
+          });
+          tabLabel.textContent = `${node.roomNum}${letters[fi]}. ${f.roomType}`;
+          tabVisualGroup.appendChild(tabLabel);
+          g.appendChild(tabVisualGroup);
+          // Clickable hit target — stopPropagation prevents connect-mode trigger
+          const tabHit = svgEl('rect', {
+            x, y: tabY, width: boxW, height: HEADER_H,
+            fill: 'transparent', style: 'cursor:pointer'
+          });
+          // Hover: show blue border and whiten fill
+          tabHit.addEventListener('mouseenter', () => {
+            const r = tabVisualGroup.querySelector('rect');
+            if (r) {
+              r.setAttribute('fill', '#ffffff');
+              r.setAttribute('stroke', strokeColor);
+              r.setAttribute('stroke-width', '0.75');
+            }
+          });
+          tabHit.addEventListener('mouseleave', () => {
+            const r = tabVisualGroup.querySelector('rect');
+            if (r) {
+              r.setAttribute('fill', '#f0f4f6');
+              r.setAttribute('stroke', 'none');
+            }
+          });
+          tabHit.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+            const PHASE1_DUR = 80;
+            const PHASE2_DUR = 200;
+
+            const PEEK_LEFT = boxW * 0.45;
+            const slideDownY = peekH - tabSlot * HEADER_H;
+
+            // On click: swap borders immediately
+            const tabRect = tabVisualGroup.querySelector('rect');
+            if (tabRect) tabRect.setAttribute('stroke', strokeColor);
+            const frontRect = frontCardGroup.querySelector('rect');
+            if (frontRect) frontRect.setAttribute('stroke', '#d0dde5');
+
+            // Fade out front card content AND header text
+            const fo = frontCardGroup.querySelector('foreignObject');
+            if (fo && fo.firstChild) {
+              fo.firstChild.style.transition = 'opacity 0.08s ease';
+              fo.firstChild.style.opacity = '0';
+            }
+            const frontHeaderText = frontCardGroup.querySelector('text');
+            if (frontHeaderText) {
+              frontHeaderText.style.transition = 'opacity 0.08s ease';
+              frontHeaderText.style.opacity = '0';
+            }
+
+            function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+            function easeInOut(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2; }
+
+            // Phase 1: incoming tab slides left only
+            const p1Start = performance.now();
+            function phase1(now) {
+              const t = Math.min((now - p1Start) / PHASE1_DUR, 1);
+              const e = easeOut(t);
+              tabVisualGroup.setAttribute('transform', `translate(${-PEEK_LEFT * e} 0)`);
+              if (t < 1) {
+                requestAnimationFrame(phase1);
+              } else {
+                // Phase 1 done — start phase 2
+                const p2Start = performance.now();
+                function phase2(now) {
+                  const t = Math.min((now - p2Start) / PHASE2_DUR, 1);
+                  const e = easeInOut(t);
+
+                  // Incoming: from (-PEEK_LEFT, 0) arc diagonally to (0, slideDownY)
+                  const inX = -PEEK_LEFT * (1 - e);
+                  const inY = slideDownY * e;
+                  tabVisualGroup.setAttribute('transform', `translate(${inX} ${inY})`);
+
+                  // Outgoing: slides straight up by slideDownY to its new peek slot
+                  const outY = -slideDownY * e;
+                  frontCardGroup.setAttribute('transform', `translate(0 ${outY})`);
+
+                  if (t < 1) {
+                    requestAnimationFrame(phase2);
+                  } else {
+                    cycleTowerFloor(clusterIdx, i, fi);
+                  }
+                }
+                requestAnimationFrame(phase2);
+              }
+            }
+            requestAnimationFrame(phase1);
+          });
+          g.appendChild(tabHit);
+        });
+      }
+
+      // ── Front card ──
+      // Wrap in a group so rAF animation can transform it as one unit
+      const frontCardGroup = svgEl('g', isTowerStack ? { 'data-front-card': '1' } : {});
+
+      // Main rect — sits at normal y, covers boxH (peek tabs extend above it)
+      frontCardGroup.appendChild(svgEl('rect', {
         x, y, width: boxW, height: boxH, rx: 5,
         fill: fillColor, stroke: strokeColor, 'stroke-width': strokeW
       }));
 
-      g.appendChild(svgEl('line', {
+      // Header divider
+      frontCardGroup.appendChild(svgEl('line', {
         x1: x+5, y1: y+HEADER_H, x2: x+boxW-5, y2: y+HEADER_H,
         stroke: 'rgba(250,128,114,0.5)', 'stroke-width': '0.75'
       }));
 
-      const nodeRoomType = node.roomType || (node.kind === 'tower' ? 'Tower' : node.kind === 'hall' ? 'Hall' : '');
-      const headerLabel = `${node.roomNum ? node.roomNum + '. ' : ''}${nodeRoomType}${node.isEntrance ? ' ▲' : ''}`;
+      // Header label — shows active floor for tower stacks
+      let headerLabel;
+      if (isTowerStack) {
+        const af = node.floors[activeFloorIdx];
+        headerLabel = `${node.roomNum}${letters[activeFloorIdx]}. ${af.roomType}${node.isEntrance && activeFloorIdx === 0 ? ' ▲' : ''}`;
+      } else {
+        const nodeRoomType = node.roomType || (node.kind === 'tower' ? 'Tower' : node.kind === 'hall' ? 'Hall' : '');
+        headerLabel = `${node.roomNum ? node.roomNum + '. ' : ''}${nodeRoomType}${node.isEntrance ? ' ▲' : ''}`;
+      }
       const headerText = svgEl('text', {
         x: x+7, y: y+HEADER_H/2+1,
         'text-anchor': 'start', 'dominant-baseline': 'central',
@@ -783,12 +982,15 @@ function buildSVGMap(nodes, clusterIdx, fullscreen = false) {
         'font-family': '"National Park",sans-serif'
       });
       headerText.textContent = headerLabel;
-      g.appendChild(headerText);
+      frontCardGroup.appendChild(headerText);
 
       if (fullscreen) {
-        const editCardId = node.kind === 'tower'
-          ? `card-${clusterIdx}-${nodes.indexOf(node)}-f0`
-          : `card-${clusterIdx}-${nodes.indexOf(node)}`;
+        // EDIT button links to active floor for tower stacks
+        const editCardId = isTowerStack
+          ? `card-${clusterIdx}-${i}-f${activeFloorIdx}`
+          : node.kind === 'tower'
+            ? `card-${clusterIdx}-${i}-f0`
+            : `card-${clusterIdx}-${i}`;
         const btnW = 36, btnH = 16, btnX = x + boxW - btnW - 6, btnY = y + (HEADER_H - btnH) / 2;
         const editBtn = svgEl('g', { style: 'cursor:pointer', onclick: `scrollToCard('${editCardId}')` });
         editBtn.appendChild(svgEl('rect', {
@@ -803,8 +1005,10 @@ function buildSVGMap(nodes, clusterIdx, fullscreen = false) {
         });
         editLabel.textContent = 'EDIT';
         editBtn.appendChild(editLabel);
-        g.appendChild(editBtn);
+        frontCardGroup.appendChild(editBtn);
       }
+
+      g.appendChild(frontCardGroup);
 
       const lines = [];
 
@@ -836,7 +1040,15 @@ function buildSVGMap(nodes, clusterIdx, fullscreen = false) {
       }
 
       if (fullscreen) {
-        if (node._detailLines && node._detailLines.length > 0) {
+        if (isTowerStack) {
+          // Show only the active floor's lines
+          const floorLines = node._floorDetailLines && node._floorDetailLines[activeFloorIdx];
+          if (floorLines && floorLines.length > 0) {
+            lines.push(...floorLines);
+          } else {
+            extractCompact(node.floors[activeFloorIdx]);
+          }
+        } else if (node._detailLines && node._detailLines.length > 0) {
           lines.push(...node._detailLines);
         } else {
           if (node.kind === 'hall') node.sections.forEach(s => extractCompact(s));
@@ -1008,7 +1220,7 @@ function buildSVGMap(nodes, clusterIdx, fullscreen = false) {
         }
 
         fo.appendChild(wrap);
-        g.appendChild(fo);
+        frontCardGroup.appendChild(fo);
       }
 
       // Drag interaction
@@ -1229,6 +1441,10 @@ function buildSVGMap(nodes, clusterIdx, fullscreen = false) {
     vb.h = vb.w * H / W;
     applyViewBox();
   };
+  svgZoomControls[svgKey + '-restore'] = (x, y, w, h) => {
+    vb.x = x; vb.y = y; vb.w = w; vb.h = h;
+    applyViewBox();
+  };
 
   return svg;
 }
@@ -1280,12 +1496,12 @@ function rollCluster() {
 
   const mapCardId = `mapcard-${clusterCount}`;
   const mapCard = document.createElement('div');
-  mapCard.className = 'map-card expanded';
+  mapCard.className = 'map-card';
   mapCard.id = mapCardId;
   mapCard.innerHTML = `
-    <div class="map-card-header">
-      <span onclick="toggleMapCard('${mapCardId}')" style="cursor:pointer;flex:1">Map <span class="map-chevron">▼</span></span>
-      <span style="display:flex;align-items:center;gap:4px">
+    <div class="map-card-header" onclick="toggleMapCard('${mapCardId}')">
+      <span style="cursor:pointer;flex:1">Map <span class="map-chevron">▼</span></span>
+      <span style="display:flex;align-items:center;gap:4px" onclick="event.stopPropagation()">
         <button onclick="zoomSVG('${clusterCount}', false, -0.2)" style="background:var(--grey-lightest);border:none;border-radius:3px;font-size:0.85em;padding:1px 7px;cursor:pointer;font-family:'National Park',sans-serif;color:var(--grey-darkest);line-height:1.4">−</button>
         <button onclick="zoomSVG('${clusterCount}', false, 0.2)" style="background:var(--grey-lightest);border:none;border-radius:3px;font-size:0.85em;padding:1px 7px;cursor:pointer;font-family:'National Park',sans-serif;color:var(--grey-darkest);line-height:1.4">+</button>
         <button onclick="openFullscreen('${mapCardId}')" style="background:none;border:1px solid var(--blue-light);border-radius:3px;font-size:0.75em;padding:2px 8px;cursor:pointer;font-family:'National Park',sans-serif;text-transform:uppercase;letter-spacing:1px;color:var(--grey-darkest);">⛶ Fullscreen</button>
@@ -1297,6 +1513,7 @@ function rollCluster() {
   clusterRooms[clusterCount] = rooms;
   mapCard.querySelector('.map-tile-wrap').appendChild(buildSVGMap(rooms, clusterCount, false));
   block.appendChild(mapCard);
+  toggleMapCard(mapCardId); // open on load; must be in DOM for scrollHeight to be readable
 
   block.appendChild(buildNotesCard(clusterCount, null));
 
@@ -1356,6 +1573,7 @@ function rollCluster() {
     if (entry.isTowerFloor) {
       const room = entry.parentRoom;
       if (!room._detailLines) room._detailLines = [];
+      if (!room._floorDetailLines) room._floorDetailLines = [];
       if (entry.floorIdx > 0) room._detailLines.push({ text: '───', color: '#9ecee6' });
       room._detailLines.push({ text: 'Floor ' + (entry.floorIdx+1), color: '#262626', bold: true, bullet: 'none' });
       const f = entry.floor;
@@ -1367,6 +1585,8 @@ function rollCluster() {
       if (f.monster) room._detailLines.push({ text: fmtContent(f.monster), bullet: 'M' });
       if (f.encType.kind === 'boon' || f.encType.kind === 'trapboon') room._detailLines.push({ text: fmtContent(f.boonContent || f.encContent), bullet: 'B' });
       if (f.encType.kind === 'opportunity') room._detailLines.push({ text: fmtContent(f.boonContent), bullet: 'B' });
+      // Per-floor lines for tower stack UI
+      room._floorDetailLines[entry.floorIdx] = buildFloorLines(f);
     } else if (entry.isHallSection && entry.isFirst) {
       const room = entry.parentRoom;
       room._detailLines = [];
@@ -1503,6 +1723,7 @@ function syncDetailLinesFromCards(idx, rooms) {
   rooms.forEach((room, roomIdx) => {
     if (room.kind === 'tower') {
       room._detailLines = [];
+      room._floorDetailLines = [];
       room.floors.forEach((floor, fi) => {
         const cardId = `card-${idx}-${roomIdx}-f${fi}`;
         const card = document.getElementById(cardId);
@@ -1512,6 +1733,8 @@ function syncDetailLinesFromCards(idx, rooms) {
         const descEl = card.querySelector('.card-body .desc-input');
         const descText = descEl ? (descEl.tagName === 'INPUT' ? descEl.value : descEl.textContent).trim() : '';
         if (descText) room._detailLines.push({ text: descText, isDesc: true, bullet: "none" });
+        const floorLines = [];
+        if (descText) floorLines.push({ text: descText, isDesc: true, bullet: 'none' });
         card.querySelectorAll('.card-body .key-line:not(.key-desc)').forEach(line => {
           const el = line.querySelector('.editable');
           if (!el) return;
@@ -1519,7 +1742,9 @@ function syncDetailLinesFromCards(idx, rooms) {
           if (!text) return;
           const bullet = line.dataset.bullet || 'arrow';
           room._detailLines.push({ text, bullet });
+          floorLines.push({ text, bullet });
         });
+        room._floorDetailLines[fi] = floorLines;
         room._detailLines.push(...readLineTags(card, room));
       });
     } else if (room.kind === 'hall') {
@@ -1691,16 +1916,34 @@ function placeCursorAtEnd(el) {
   sel.addRange(range);
 }
 
+// Tracks which cluster indices have had text edits
+const dirtyClusterIds = new Set();
+
+// Delegated input listener — marks a cluster dirty when any contenteditable is changed
+document.addEventListener('input', function(e) {
+  if (!e.target.matches('[contenteditable]')) return;
+  const block = e.target.closest('.cluster-block');
+  if (!block) return;
+  const idx = block.id.replace('block-', '');
+  dirtyClusterIds.add(idx);
+});
+
 function confirmDeleteCluster(blockId) {
-  const result = confirm('Are you sure you want to delete this dungeon? You will lose your work.');
-  if (result) {
-    deleteCluster(blockId);
+  const idx = blockId.replace('block-', '');
+  if (dirtyClusterIds.has(idx)) {
+    const result = confirm('Are you sure you want to delete this dungeon? You will lose your work.');
+    if (!result) return;
   }
+  deleteCluster(blockId);
 }
 
 function deleteCluster(blockId) {
   const block = document.getElementById(blockId);
-  if (block) block.remove();
+  if (block) {
+    const idx = blockId.replace('block-', '');
+    dirtyClusterIds.delete(idx);
+    block.remove();
+  }
 }
 
 function scrollToCard(cardId) {
@@ -1860,11 +2103,13 @@ function restoreDungeons(clusters) {
   out.innerHTML = '';
   for (const k in clusterRooms) delete clusterRooms[k];
   for (const k in clusterState) delete clusterState[k];
+  dirtyClusterIds.clear();
   clusterCount = 0;
 
   clusters.forEach(saved => {
     clusterCount++;
     const idx = clusterCount;
+    dirtyClusterIds.add(String(idx)); // loaded clusters have user data worth protecting
 
     clusterRooms[idx] = saved.rooms;
     const rawEdges = saved.state.edges || [];
