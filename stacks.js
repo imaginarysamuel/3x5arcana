@@ -51,7 +51,7 @@ function detectCardType(item) {
   if (item.Class || item.Tier || item.Duration || item.Range) return "spell";
   
   // Item (has Description, Bonus, Benefit, Curse, Personality, Reference)
-  if (item.Bonus || item.Benefit || item.Curse || item.Personality || item.Reference) return "item";
+  if (item.Description || item.Bonus || item.Benefit || item.Curse || item.Personality || item.Reference) return "item";
   
   // Generic (numbered columns or fallback)
   return "generic";
