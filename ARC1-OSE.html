@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PFMKRV8VBN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PFMKRV8VBN');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="/styles.css">
+
+      <!-- 🔔 ══════════════════════════════ Update! ══════════════════════════════ -->
+  <title>The Spear of Horrendous Iron - 3x5 Arcana</title>
+
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="header">
+     <div id="menu-container"></div>
+
+    <!-- 🔔 ══════════════════════════════ Update! ══════════════════════════════ -->
+    <h1 class="main-title">The Spear of Horrendous Iron</h1>
+    <p>By 3x5 Arcana - Playtest</p>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="spacer"></div>
+  <div id="favorites-list"></div>
+  <div class="spacer"></div>
+  <div id="cards-list"></div>
+
+  <!-- License Card -->
+  <div id="license-container"></div>
+
+  <!-- FOOTER -->
+  <div class="spacer"></div>
+  <img
+    src="/designed-for-use-with_SDRPG-black-transparent.png"
+    alt="Designed for use with Shadowdark Logo"
+    class="share-icon">
+  <div class="spacer"></div>
+
+  <!-- SCRIPTS -->
+      <!-- 🔔 ══════════════════════════════ Update! ══════════════════════════════ -->
+  <script>
+    const STACK_DATA_URL = [
+      "https://opensheet.elk.sh/1hyysIJol042aXXo6lSzWo0sy6lOPAeE5VyVUMEbTVj8/ARC1_Monsters_OSE",
+      "https://opensheet.elk.sh/1hyysIJol042aXXo6lSzWo0sy6lOPAeE5VyVUMEbTVj8/ARC1_Items"
+    ];
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="/scripts/card_print.js"></script>
+  <script src="/scripts/burgermenu_script.js"></script>
+  <script src="/scripts/list_script.js"></script>
+  <script src="/scripts/script.js"></script>
+  <script src="/scripts/monsters_rendering.js"></script>
+  <script src="/scripts/stacks.js"></script>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+       🔔 TO ADD A NEW ADVENTURE STACK:
+       ═══════════════════════════════════════════════════════════════════════════
+       1. Copy this HTML file
+       2. Update as directed above
+       4. That's it! stacks.js handles the rest automatically.
+       -> you can use multiple sheets. just format them like this:
+          const STACK_DATA_URL = [
+            "https://opensheet.elk.sh/YOUR_ID/Monsters",
+            "https://opensheet.elk.sh/YOUR_ID/Spells",
+            "https://opensheet.elk.sh/YOUR_ID/Items",
+            "https://opensheet.elk.sh/YOUR_ID/Rules"
+          ];
+       ═══════════════════════════════════════════════════════════════════════════ -->
+
+</body>
+</html>
