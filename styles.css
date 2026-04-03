@@ -1566,8 +1566,8 @@ p.header-area {
   font-size: 0.82em;
 }
 
-.card-body p {
-  margin: 0;
+.card.expanded .card-body p {
+  margin: 1 0;
 }
 
 /* ── Tower stack (fullscreen card list view) ── */
