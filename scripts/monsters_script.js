@@ -78,7 +78,7 @@ function getFilteredData(sortedData) {
     const nameMatches = monster["Name"].toLowerCase().includes(currentSearchQuery);
     const levelRaw = monster["Level"];
     if (levelRaw === "*") return nameMatches;
-    
+
     const level = parseFloat(levelRaw) || 0;
     const levelMatches = level >= currentMinLevel && level <= currentMaxLevel;
     return nameMatches && levelMatches;

@@ -18,7 +18,7 @@ if (typeof STACK_DATA_URL === "undefined") {
 } else {
   // Support both single URL and array of URLs
   const urls = Array.isArray(STACK_DATA_URL) ? STACK_DATA_URL : [STACK_DATA_URL];
-  
+
   // Fetch all URLs and combine the data
   Promise.all(urls.map(url => fetch(url).then(r => r.json())))
     .then(results => {
@@ -43,16 +43,16 @@ if (typeof STACK_DATA_URL === "undefined") {
 function detectCardType(item) {
   // bookmark (highest priority)
   if (item.Name && item.Name.startsWith("★")) return "bookmark";
-  
+
   // Monster (has combat stats: AC, HP, STR/S)
   if (item.AC || item.HP || item.STR || item.S) return "monster";
-  
+
   // Spell (has Class, Tier, Duration, Range)
   if (item.Class || item.Tier || item.Duration || item.Range) return "spell";
-  
+
   // Item (has Description, Bonus, Benefit, Curse, Personality, Reference)
   if (item.Description || item.Bonus || item.Benefit || item.Curse || item.Personality || item.Reference) return "item";
-  
+
   // Generic (numbered columns or fallback)
   return "generic";
 }
@@ -78,7 +78,6 @@ function renderMonster(item, cardId, useAlt = false) {
   if (typeof window.getMonsterCardHTML === 'function') {
     return window.getMonsterCardHTML(item, cardId, useAlt);
   }
-  
   console.error('monsters_rendering.js not loaded!');
   return `<div class="card-body"><p>Error: Monster rendering unavailable</p></div>`;
 }
@@ -114,29 +113,29 @@ function renderSpell(item, cardId, useAlt = false) {
 function renderItem(item, cardId, useAlt = false) {
   // Build sections based on what exists
   const sections = [];
-  
+
   if (item.Description) {
     sections.push(`<p class="item-description">${item.Description}</p>`);
   }
-  
+
   if (item.Bonus) {
     sections.push(`<p><strong>Bonus:</strong> ${item.Bonus}</p>`);
   }
-  
+
   if (item.Benefit) {
     sections.push(`<p><strong>Benefit:</strong> ${item.Benefit}</p>`);
   }
-  
+
   if (item.Curse) {
     sections.push(`<p><strong>Curse:</strong> ${item.Curse}</p>`);
   }
-  
+
   if (item.Personality) {
     sections.push(`<p><strong>Personality:</strong> ${item.Personality}</p>`);
   }
-  
+
   const content = sections.length > 0 ? sections.join('<div class="divider"></div>') : "<p>No description available.</p>";
-  
+
   return `
     ${getCardActionButtonsHTML()}
     <div class="card-header">
@@ -157,15 +156,15 @@ function renderGeneric(item, cardId, useAlt = false) {
   const paragraphs = getContentChunks(item)
     .map(text => `<p>${parseMarkdown(text)}</p>`)
     .join("");
-  
+
   // Check for button (case-insensitive to handle ButtonText, buttontext, etc.)
   const buttonText = item.ButtonText || item.buttontext || item.Buttontext;
   const buttonLink = item.ButtonLink || item.buttonlink || item.Buttonlink;
   const hasButton = buttonText && buttonLink;
-  const buttonHTML = hasButton 
+  const buttonHTML = hasButton
     ? `<div class="divider"></div><p><a href="${buttonLink}" class="card-button" onclick="event.stopPropagation();">${buttonText}</a></p>`
     : '';
-  
+
   return `
     ${getCardActionButtonsHTML()}
     <div class="card-header">
@@ -202,7 +201,7 @@ function getContentChunks(row) {
     .sort((a, b) => parseInt(a, 10) - parseInt(b, 10))
     .map(k => String(row[k]).trim())
     .filter(s => s.length > 0);
-  
+
   return chunks;
 }
 
@@ -222,7 +221,7 @@ function parseMarkdown(text) {
 // ===============================
 function getCardInnerHTML(item, cardId, useAlt = false) {
   const type = detectCardType(item);
-  
+
   switch(type) {
     case "bookmark":
       return renderBookmark(item, cardId);
@@ -250,22 +249,19 @@ function getSortedData() {
 function getFilteredData(sortedData) {
   const q = (typeof currentSearchQuery === "string" ? currentSearchQuery : "").toLowerCase();
   if (!q) return sortedData;
-  
-  return sortedData.filter(item => {
-    // Search in Name
+
+ return sortedData.filter(item => {
     const nameHit = (item.Name || "").toLowerCase().includes(q);
-    
-    // Search in generic content (numbered columns)
     const contentHit = getContentChunks(item).some(txt => txt.toLowerCase().includes(q));
-    
-    // Search in type-specific fields
-    const monsterHit = (item["Flavor Text"] || "").toLowerCase().includes(q);
-    const spellHit = (item.Description || "").toLowerCase().includes(q) || 
+    const monsterHit = (item.Description || "").toLowerCase().includes(q) ||
+                       ["Ability 1","Ability 2","Ability 3","Ability 4","Ability 5","Ability 6"]
+                         .some(k => (item[k] || "").toLowerCase().includes(q));
+    const spellHit = (item.Description || "").toLowerCase().includes(q) ||
                      (item.Class || "").toLowerCase().includes(q);
     const itemHit = (item.Description || "").toLowerCase().includes(q) ||
                     (item.Benefit || "").toLowerCase().includes(q) ||
                     (item.Bonus || "").toLowerCase().includes(q);
-    
+
     return nameHit || contentHit || monsterHit || spellHit || itemHit;
   });
 }

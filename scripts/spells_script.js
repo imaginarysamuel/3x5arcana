@@ -33,7 +33,7 @@ fetch(spellSheetUrl)
     showError("Failed to load spells. Please refresh."); // ← Add this
   });
 
-// getting sorted data 
+// getting sorted data
 function getSortedData() {
   const arr = data.slice(); // don’t mutate original
 
@@ -61,7 +61,7 @@ function getFilteredData(sortedData) {
   return sortedData.filter(spell => {
     const nameMatches = spell["Name"]?.toLowerCase().includes(currentSearchQuery);
     const tierMatches = spell["Tier"] >= currentMinTier && spell["Tier"] <= currentMaxTier;
-    
+
     const spellClass = spell["Class"]?.trim().toLowerCase();  // Ensure class is trimmed and lowercase for comparison
     const classMatches =
       (filterWizard && spellClass.includes("wizard")) ||

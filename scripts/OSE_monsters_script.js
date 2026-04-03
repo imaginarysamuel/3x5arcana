@@ -22,7 +22,7 @@ fetch('OSE_monsters.json')
         Name: name,
         ...monsterData
       }));
-    
+
     updateRangeDisplay();
     displayList();
   })
@@ -65,9 +65,9 @@ function getFilteredData(sortedData) {
 function getCardInnerHTML(monster, monsterId) {
   const stats = monster.stats;
   const abilities = monster.special_abilities || [];
-  
+
   // Format special abilities with bold titles
-  const abilitiesHTML = abilities.length > 0 
+  const abilitiesHTML = abilities.length > 0
     ? abilities.map(ability => `<p>${formatAbility(ability)}</p>`).join("")
     : "<p>No special abilities.</p>";
 
@@ -87,18 +87,18 @@ function getCardInnerHTML(monster, monsterId) {
 
     <div class="card-body" id="${monsterId}-body">
       <p class="flavor-text">${monster.description || "No description available."}</p>
-      
+
       <div class="divider"></div>
-      
+
       <div class="ose-stats">
-        <p><strong>AC</strong> ${stats["Armour Class"] || "-"}, 
-        <strong>HD</strong> ${stats["Hit Dice"] || "-"}, <br> 
-        <strong>ATK</strong> ${stats["Attacks"] || "-"}, 
+        <p><strong>AC</strong> ${stats["Armour Class"] || "-"},
+        <strong>HD</strong> ${stats["Hit Dice"] || "-"}, <br>
+        <strong>ATK</strong> ${stats["Attacks"] || "-"},
         <strong>THAC0</strong> ${stats["THAC0"] || "-"}, <br>
         <strong>MV</strong> ${stats["Movement"] || "-"}, ${formatSaves(stats["Saving Throws"]) || "-"}, <br>
-        <strong>Morale</strong> ${stats["Morale"] || "-"}, <strong>AL</strong> ${stats["Alignment"] || "-"}, 
+        <strong>Morale</strong> ${stats["Morale"] || "-"}, <strong>AL</strong> ${stats["Alignment"] || "-"},
         <strong>XP</strong> ${stats["XP"] || "-"}, <br>
-        <strong># Appearing</strong> ${stats["Number Appearing"] || "-"}, 
+        <strong># Appearing</strong> ${stats["Number Appearing"] || "-"},
         <strong>Treasure Type</strong> ${stats["Treasure Type"] || "-"}</p>
       </div>
 

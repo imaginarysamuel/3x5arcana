@@ -15,7 +15,7 @@ function printPDF() {
 function loadLicenseCard() {
   const container = document.getElementById("license-container");
   if (!container) return;
-  
+
   fetch("/license_card.html")
     .then(response => response.text())
     .then(html => {

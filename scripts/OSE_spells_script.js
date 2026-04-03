@@ -27,7 +27,7 @@ fetch('OSE_spells.json')
         Name: name,
         ...spellData
       }));
-    
+
     console.log("✅ Loaded OSE Spell Data:", data);
     loadFavorites();
     updateRangeDisplay();
@@ -61,7 +61,7 @@ function getFilteredData(sortedData) {
     const nameMatches = spell.Name.toLowerCase().includes(currentSearchQuery);
     const level = parseInt(spell["level"]) || 0;
     const levelMatches = level >= currentMinLevel && level <= currentMaxLevel;
-    
+
     const spellClass = spell["class"]?.trim().toLowerCase();
     const classMatches =
       (filterMagicUser && spellClass === "magic-user") ||
@@ -75,7 +75,7 @@ function getFilteredData(sortedData) {
 function getCardInnerHTML(spell, spellId) {
   let classLabel = spell["class"] === "Magic-User" ? "M" : "C";
   let levelDisplay = spell["level"] || "?";
-  
+
   // Clean the spell name by removing (MU) or (C) suffix
   let cleanName = spell["Name"]
     .replace(/\s*\(MU\)\s*$/i, '')

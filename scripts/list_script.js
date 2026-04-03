@@ -34,18 +34,18 @@ document.addEventListener("input", function (e) {
 function initStaticCards() {
   // Select all cards explicitly marked as static
   const staticCards = document.querySelectorAll(".card[data-static]");
-  
+
   staticCards.forEach(card => {
     // Skip bookmarks - they never expand
     if (card.classList.contains("bookmark")) return;
-    
+
     // Avoid double-binding
     if (card.dataset.boundStatic) return;
     card.dataset.boundStatic = "true";
-    
+
     card.addEventListener("click", function (event) {
       // Don't expand if clicking buttons or links
-      if (event.target.classList.contains("card-button") || 
+      if (event.target.classList.contains("card-button") ||
           event.target.tagName === "A") {
         return;
       }
@@ -125,17 +125,17 @@ function displayFavorites(useAlt = false) {
   let favoriteData = sortedData.filter(item => favoritesIdList.includes(item["Name"]));
   addCardsToList(favoriteData, favoritesListContainer, "-fav", useAlt);
 
-  updatePrintAllButton(); 
+  updatePrintAllButton();
 }
 
 function addCardsToList(list, container, suffix, useAlt = false) {
   list.forEach((item, index) => {
     const card = document.createElement("div");
     card.classList.add("card", "collapsed");
-    
+
     // Store the item name directly on the element for favorites
     card.dataset.itemName = item["Name"];
-    
+
     // 🎯 Bookmarks don't expand
     if (isBookmark(item)) {
       card.classList.add("bookmark");
@@ -143,8 +143,8 @@ function addCardsToList(list, container, suffix, useAlt = false) {
       // Regular cards get click listener - element-based, no ID needed
       card.addEventListener("click", (e) => {
         // Prevent expansion if clicking on favorite icon or links
-        if (e.target.classList.contains("favorite-icon") || 
-            e.target.classList.contains("card-button") || 
+        if (e.target.classList.contains("favorite-icon") ||
+            e.target.classList.contains("card-button") ||
             e.target.classList.contains("card-action-btn") ||
             e.target.closest('.card-actions') ||
             e.target.tagName === "A") {
@@ -153,11 +153,11 @@ function addCardsToList(list, container, suffix, useAlt = false) {
         toggleCard(card);
       });
     }
-    
+
     // Generate unique ID only for the HTML content rendering
     const cardId = `card-${item["Name"] + suffix}`;
     card.innerHTML = getCardInnerHTML(item, cardId, useAlt);
-    
+
     // 🎯 Only add favorite functionality to non-bookmark cards
     if (!isBookmark(item)) {
       const favoriteIcon = card.querySelector(".favorite-icon");
@@ -171,7 +171,7 @@ function addCardsToList(list, container, suffix, useAlt = false) {
         });
       }
     }
-    
+
     container.appendChild(card);
   });
 }
@@ -180,7 +180,7 @@ function addCardsToList(list, container, suffix, useAlt = false) {
 function toggleFavorite(name) {
   const idx = favoritesIdList.indexOf(name);
   const isNowFav = idx === -1;
-  
+
   if (isNowFav) {
     favoritesIdList.push(name);
   } else {
@@ -198,7 +198,7 @@ function toggleFavorite(name) {
   saveFavorites();
   displayFavorites(true);
 
-  updatePrintAllButton(); 
+  updatePrintAllButton();
 }
 
 // ============================================
@@ -247,10 +247,10 @@ if (searchBar) {
  */
 
 function getCardActionButtonsHTML() {
-  const printBtn = typeof jspdf !== 'undefined' 
+  const printBtn = typeof jspdf !== 'undefined'
     ? `<button class="card-action-btn print-btn" title="Print as 3x5 PDF"><img src="/files/printer_icon.png" alt="Print"></button>`
     : '';
-  
+
   return `
     <div class="card-actions">
       <button class="card-action-btn copy-btn" title="Copy to clipboard"><img src="/files/copy_icon.png" alt="Copy"></button>
@@ -281,7 +281,7 @@ window.getCardActionButtonsHTML = getCardActionButtonsHTML;
       const card = e.target.closest('.card');
       if (card) copyCardContent(card);
     }
-    
+
     // Handle Print Button
     if (e.target.closest('.print-btn')) {
       e.stopPropagation();
@@ -302,18 +302,18 @@ function copyCardContent(card) {
   try {
     const title = card.querySelector('.card-title')?.textContent || 'Untitled';
     const body = card.querySelector('.card-body');
-    
+
     if (!body) {
       console.warn('No card body found');
       return;
     }
-    
+
     let text = `${title}\n${'='.repeat(title.length)}\n\n`;
-    
+
     // Gather text from common content elements
     const elements = body.querySelectorAll('p, .flavor-text, .statline, .spell-stats p, .ose-stats p, .abilities p, td, th');
     const seen = new Set();
-    
+
     elements.forEach(el => {
       const content = el.textContent.trim();
       if (content && !seen.has(content)) {
@@ -321,7 +321,7 @@ function copyCardContent(card) {
         text += content + '\n\n';
       }
     });
-    
+
     navigator.clipboard.writeText(text.trim()).then(() => {
       showCopyFeedback(card);
     }).catch(err => {
@@ -339,11 +339,11 @@ function copyCardContent(card) {
 function showCopyFeedback(card) {
   const btn = card.querySelector('.copy-btn');
   if (!btn) return;
-  
+
   const originalText = btn.textContent;
   btn.textContent = '✓';
   btn.classList.add('copied');
-  
+
   setTimeout(() => {
     btn.textContent = originalText;
     btn.classList.remove('copied');
@@ -361,13 +361,13 @@ function fallbackCopyTextToClipboard(text, card) {
   document.body.appendChild(textArea);
   textArea.focus();
   textArea.select();
-  
+
   try {
     document.execCommand('copy');
     showCopyFeedback(card);
   } catch (err) {
     console.error('Fallback copy failed:', err);
   }
-  
+
   document.body.removeChild(textArea);
 }

@@ -12,7 +12,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="/styles.css">
-  
+
       <!-- 🔔 ══════════════════════════════ Update! ══════════════════════════════ -->
   <title>The Spear of Horrendous Iron - 3x5 Arcana</title>
 
@@ -22,10 +22,10 @@
   <!-- HEADER -->
   <header class="header">
      <div id="menu-container"></div>
-          
+
     <!-- 🔔 ══════════════════════════════ Update! ══════════════════════════════ -->
     <h1 class="main-title">The Spear of Horrendous Iron</h1>
-    <p>By 3x5 Arcana - Playtest</p>
+    <p>By Samuel Taylor - OSE (B/X) Version</p>
   </header>
 
   <!-- CONTENT -->
@@ -33,14 +33,14 @@
   <div id="favorites-list"></div>
   <div class="spacer"></div>
   <div id="cards-list"></div>
-  
+
   <!-- License Card -->
   <div id="license-container"></div>
 
   <!-- FOOTER -->
   <div class="spacer"></div>
   <img
-    src="/designed-for-use-with_SDRPG-black-transparent.png"
+    src="/designed_for_use_with_OSE_white.png"
     alt="Designed for use with Shadowdark Logo"
     class="share-icon">
   <div class="spacer"></div>
@@ -49,17 +49,17 @@
       <!-- 🔔 ══════════════════════════════ Update! ══════════════════════════════ -->
   <script>
     const STACK_DATA_URL = [
-      "https://opensheet.elk.sh/1hyysIJol042aXXo6lSzWo0sy6lOPAeE5VyVUMEbTVj8/ARC1_Monsters",
+      "https://opensheet.elk.sh/1hyysIJol042aXXo6lSzWo0sy6lOPAeE5VyVUMEbTVj8/ARC1_Monsters_OSE",
       "https://opensheet.elk.sh/1hyysIJol042aXXo6lSzWo0sy6lOPAeE5VyVUMEbTVj8/ARC1_Items"
     ];
-  </script> 
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="/card_print.js"></script>
-  <script src="/burgermenu_script.js"></script>
-  <script src="/list_script.js"></script>
-  <script src="/script.js"></script>
-  <script src="/monsters_rendering.js"></script>
-  <script src="/stacks.js"></script>
+  <script src="/scripts/card_print.js"></script>
+  <script src="/scripts/burgermenu_script.js"></script>
+  <script src="/scripts/list_script.js"></script>
+  <script src="/scripts/script.js"></script>
+  <script src="/scripts/monsters_rendering.js"></script>
+  <script src="/scripts/stacks.js"></script>
 
     <!-- ═══════════════════════════════════════════════════════════════════════════
        🔔 TO ADD A NEW ADVENTURE STACK:
@@ -67,7 +67,7 @@
        1. Copy this HTML file
        2. Update as directed above
        4. That's it! stacks.js handles the rest automatically.
-       -> you can use multiple sheets. just format them like this: 
+       -> you can use multiple sheets. just format them like this:
           const STACK_DATA_URL = [
             "https://opensheet.elk.sh/YOUR_ID/Monsters",
             "https://opensheet.elk.sh/YOUR_ID/Spells",
