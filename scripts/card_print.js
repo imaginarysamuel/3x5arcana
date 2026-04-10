@@ -253,6 +253,12 @@
           segments.push({ text: text, bold: false, italic: ancestorItalic });
         }
       } else if (node.nodeType === Node.ELEMENT_NODE) {
+        // Handle <br> as a line break
+        if (node.tagName === 'BR') {
+          segments.push({ text: '\n', bold: false, italic: ancestorItalic });
+          return;
+        }
+
         const isBold = node.tagName === 'STRONG' || node.tagName === 'B';
         const isItalic = ancestorItalic ||
                          node.tagName === 'EM' ||
@@ -445,6 +451,7 @@
 
   /**
    * Renders rich text (with bold AND italic segments) handling word wrap
+   * Respects \n characters as forced line breaks (from <br> tags in source HTML)
    */
   function renderRichText(doc, segments, x, y, maxWidth, maxY) {
     let currentLine = [];
@@ -452,25 +459,38 @@
 
     for (const segment of segments) {
       doc.setFont('NationalPark', segment.bold ? 'bold' : 'light');
-      const words = segment.text.split(' ');
 
-      for (let i = 0; i < words.length; i++) {
-        const word = words[i] + (i < words.length - 1 ? ' ' : '');
-        const wordWidth = doc.getTextWidth(word);
+      // Split on newlines first, then words
+      const lines = segment.text.split('\n');
 
-        if (currentLineWidth + wordWidth > maxWidth && currentLine.length > 0) {
-          // Render current line
-          if (y + LINE_HEIGHT > maxY) {
-            return { y, overflow: true };
+      for (let l = 0; l < lines.length; l++) {
+        // If this isn't the first line chunk, force a line break
+        if (l > 0) {
+          if (currentLine.length > 0) {
+            if (y + LINE_HEIGHT > maxY) return { y, overflow: true };
+            renderLine(doc, currentLine, x, y);
+            y += LINE_HEIGHT;
+            currentLine = [];
+            currentLineWidth = 0;
           }
-          renderLine(doc, currentLine, x, y);
-          y += LINE_HEIGHT;
-          currentLine = [];
-          currentLineWidth = 0;
         }
 
-        currentLine.push({ text: word, bold: segment.bold, italic: segment.italic });
-        currentLineWidth += wordWidth;
+        const words = lines[l].split(' ');
+        for (let i = 0; i < words.length; i++) {
+          const word = words[i] + (i < words.length - 1 ? ' ' : '');
+          const wordWidth = doc.getTextWidth(word);
+
+          if (currentLineWidth + wordWidth > maxWidth && currentLine.length > 0) {
+            if (y + LINE_HEIGHT > maxY) return { y, overflow: true };
+            renderLine(doc, currentLine, x, y);
+            y += LINE_HEIGHT;
+            currentLine = [];
+            currentLineWidth = 0;
+          }
+
+          currentLine.push({ text: word, bold: segment.bold, italic: segment.italic });
+          currentLineWidth += wordWidth;
+        }
       }
     }
 
