@@ -544,7 +544,6 @@ p.header-area {
 .statline {
   font-size: 1em;
   line-height: 1.4;
-  padding-top: .75rem;
 }
 
 /* ----------------------------------------------------------
@@ -1598,4 +1597,7 @@ p.header-area {
 
 .tower-peek-header:hover {
   background: var(--grey-lighter);
+}
+.card-body > :first-child {
+  margin-top: 0;
 }

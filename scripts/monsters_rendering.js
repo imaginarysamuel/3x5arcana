@@ -64,30 +64,32 @@ function renderShadowdarkMonster(monster, monsterId, useAlt = false) {
     ? abilities.join("")
     : "<p>No special abilities.</p>";
 
-  const statLine = [
-    ["AC", monster["AC"]],
-    ["HP", monster["HP"]],
-    ["ATK", monster["ATK"]],
-    ["MV", monster["MV"]],
-    ["S", monster["S"]],
-    ["D", monster["D"]],
-    ["C", monster["C"]],
-    ["I", monster["I"]],
-    ["W", monster["W"]],
-    ["Ch", monster["Ch"]],
-    ["AL", monster["AL"]],
-    ["LV", monster["Level"]],
-  ]
-    .filter(item =>
-      item === "<br>" ||
-      (Array.isArray(item) && item[1] !== undefined && item[1] !== "")
-    )
-    .map(item =>
-      item === "<br>"
-        ? "<br>"
-        : `<strong>${item[0]}</strong> ${item[1]}`
-    )
-    .join(", ");
+  // Build stat pairs with &nbsp; to prevent orphan line breaks
+  function statPair(label, value) {
+    if (value === undefined || value === "") return null;
+    return `<strong>${label}</strong>&nbsp;${value}`;
+  }
+
+  const combatLine = [
+    statPair("AC", monster["AC"]),
+    statPair("HP", monster["HP"]),
+    statPair("ATK", monster["ATK"]),
+    statPair("MV", monster["MV"]),
+  ].filter(Boolean).join(", ");
+
+  const statsLine = [
+    statPair("S", monster["S"]),
+    statPair("D", monster["D"]),
+    statPair("C", monster["C"]),
+    statPair("I", monster["I"]),
+    statPair("W", monster["W"]),
+    statPair("Ch", monster["Ch"]),
+  ].filter(Boolean).join(", ");
+
+  const identityLine = [
+    statPair("AL", monster["AL"]),
+    statPair("LV", monster["Level"]),
+  ].filter(Boolean).join(", ");
 
   return `
     ${getCardActionButtonsHTML()}
@@ -106,7 +108,7 @@ function renderShadowdarkMonster(monster, monsterId, useAlt = false) {
       </p>
       <div class="divider"></div>
       <p class="statline">
-        ${statLine}
+        ${[combatLine, statsLine, identityLine].filter(Boolean).join("<br>")}
       </p>
       <div class="divider"></div>
       <div class="abilities">
@@ -140,17 +142,17 @@ function renderOSEFlatMonster(monster, monsterId) {
       <p class="flavor-text">${monster.Description || ""}</p>
       <div class="divider"></div>
       <div class="ose-stats"><p>
-        <strong>AC</strong> ${monster.AC || "-"},
-        <strong>HD</strong> ${monster["Hit Dice"] || "-"},<br>
-        <strong>ATK</strong> ${monster.Attacks || "-"},
-        <strong>THAC0</strong> ${monster.THAC0 || "-"},<br>
-        <strong>MV</strong> ${monster.Movement || "-"},<br>
+        <strong>AC</strong>&nbsp;${monster.AC || "-"},
+        <strong>HD</strong>&nbsp;${monster["Hit Dice"] || "-"},<br>
+        <strong>ATK</strong>&nbsp;${monster.Attacks || "-"},
+        <strong>THAC0</strong>&nbsp;${monster.THAC0 || "-"},<br>
+        <strong>MV</strong>&nbsp;${monster.Movement || "-"},<br>
         ${formatSavingThrows(monster["Saving Throws"] || "-")},<br>
-        <strong>Morale</strong> ${monster.Morale || "-"},
-        <strong>AL</strong> ${monster.Alignment || "-"},
-        <strong>XP</strong> ${monster.XP || "-"},<br>
-        <strong>#</strong> ${monster["Number Appearing"] || "-"},
-        <strong>TT</strong> ${monster["Treasure Type"] || "-"}
+        <strong>Morale</strong>&nbsp;${monster.Morale || "-"},
+        <strong>AL</strong>&nbsp;${monster.Alignment || "-"},
+        <strong>XP</strong>&nbsp;${monster.XP || "-"},<br>
+        <strong>#</strong>&nbsp;${monster["Number Appearing"] || "-"},
+        <strong>TT</strong>&nbsp;${monster["Treasure Type"] || "-"}
       </p></div>
       ${abilities ? `<div class="divider"></div><div class="abilities">${abilities}</div>` : ""}
     </div>
