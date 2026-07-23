@@ -1601,3 +1601,152 @@ p.header-area {
 .card-body > :first-child {
   margin-top: 0;
 }
+/* ══════════════════════════════════════════════════════════════════════
+   UNDERCRAWL GENERATOR — additions for undercrawl.html
+   Append to styles.css. Everything else on the page reuses existing
+   classes: .card, .card-header, .card-title, .card-body, .card-dice,
+   .die-pip, .die-sum, .key-line, .key-desc, .editable, .card-actions,
+   .cluster-block, .cluster-header, .cluster-name-edit, .cluster-builder,
+   .cluster-name-row, .map-card, .map-card-header, .map-tile-wrap,
+   .map-key, .map-fullscreen-*, .roll-btn, .empty-state.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* Area count presets */
+.uc-presets {
+  display: inline-flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.uc-preset {
+  background: none;
+  border: 1px solid var(--blue-light);
+  border-radius: 3px;
+  color: var(--grey-darkest);
+  font-family: 'National Park', sans-serif;
+  font-size: 0.75em;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+
+.uc-preset.selected {
+  background: var(--blue-light);
+  border-color: var(--blue-dark);
+  font-weight: bold;
+}
+
+/* Per-card buttons (History / Here & There).
+   Uses .card-actions alongside this class so card_print.js's extractor
+   skips the row — do not rename without updating that check. */
+.uc-btn-row {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  padding-top: 6px;
+}
+
+.uc-btn {
+  background: none;
+  border: 1px solid var(--blue-light);
+  border-radius: 3px;
+  color: var(--grey-darkest);
+  font-family: 'National Park', sans-serif;
+  font-size: 0.7em;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  cursor: pointer;
+}
+
+.uc-btn:hover {
+  background: var(--blue-light);
+}
+
+/* Area number + depth, right-aligned in the card header, per the book's card
+   layout (NAME .... 15 | D4). .card-header is already flex/space-between, so
+   this just needs to not wrap. card_print.js reads .uc-level as the card's
+   right-hand slot and renders it right-aligned in the PDF too. */
+.uc-level {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+/* Depth Level tag. Blue + bold; colour comes from .pdf-blue so screen and PDF
+   can't drift apart. */
+.uc-depth {
+  font-weight: bold;
+}
+
+/* Colour markers shared by the screen and the PDF. card_print.js looks for
+   these two classes and resolves the actual ink from the CSS variables below,
+   so styles.css stays the single source of truth for both. Area numbers are
+   red; direction arrows and the Hidden type are blue. */
+.pdf-red { color: var(--red); }
+.pdf-blue { color: var(--blue-dark); }
+
+/* AREA DESIGN GUIDE */
+.uc-guide {
+  background-color: var(--grey-lighter);
+  border: 0.5px solid var(--blue-light);
+  border-radius: 4px;
+  margin: 0 auto 14px;
+  max-width: 5in;
+  padding: 8px 12px;
+}
+
+.uc-guide-summary {
+  color: var(--grey-darkest);
+  cursor: pointer;
+  font-size: 0.8em;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.uc-guide-body {
+  padding-top: 8px;
+}
+
+.uc-guide-list {
+  margin: 0;
+}
+
+.uc-guide-list dt {
+  color: var(--red);
+  font-size: 0.78em;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  margin-top: 7px;
+  text-transform: uppercase;
+}
+
+.uc-guide-list dd {
+  font-size: 0.82em;
+  line-height: 1.35;
+  margin: 1px 0 0;
+}
+
+.uc-guide-note {
+  border-top: 0.5px solid var(--blue-light);
+  font-size: 0.75em;
+  font-style: italic;
+  margin: 10px 0 0;
+  padding-top: 6px;
+}
+
+/* The title defaults to the Area Type's category and is meant to be typed
+   over, so it needs to read as an editable field rather than as fixed text. */
+.uc-name {
+  border-bottom: 0.5px dashed var(--blue-light);
+  display: inline-block;
+  min-width: 5em;
+}
+
+.uc-name:focus {
+  border-bottom-color: var(--blue-dark);
+  outline: none;
+}

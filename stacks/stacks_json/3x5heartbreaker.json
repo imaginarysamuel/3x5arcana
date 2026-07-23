@@ -1,0 +1,329 @@
+[
+  {
+    "1": "**A bonkers dungeon game on index cards.**",
+    "2": "It's designed for GMs and their kids. \u003Cbr\u003E(It's also perfect for the co-worker lunch break game.)",
+    "3": "Players need to know almost nothing to play. \u003Cbr\u003E It's got kid logic and OSR design. ",
+    "4": "**You'll need:** \u003Cbr\u003E**1.** A few index cards \u003Cbr\u003E\n**2.** 3d12 (or 3d6)\u003Cbr\u003E\n**3.** A pocket (optional)",
+    "5": "**Get ye into that darkness, ye mad fools!**",
+    "Name": "3x5 💔"
+  },
+  {
+    "Name": "★ The Basics"
+  },
+  {
+    "1": "90 seconds tops. Fits on a 3x5 index card.",
+    "2": "Make a Character Card (see above).",
+    "3": "**Best Ability.** Choose one Ability and color in its hearts. You always have *1 Advantage* on rolls of that type.",
+    "4": "**Description.** Two descriptive words, and a **who** / **with** statement. Like *Space Knight who can't go home*, or *Secret Witch with a heart of gold*. You might get advantage on rolls related to your description.",
+    "5": "**Armor.** Reserve a line for armor. If you get any, you'll draw circles next to it for as many hits as it can block.",
+    "6": "**Might.** 2-10. \u003Cbr\u003E 10 = Bonkers \u003Cbr\u003E 5 = Gritty \u003Cbr\u003E 2 = Horror Survival \u003Cbr\u003E(See *Modes of Play*)",
+    "7": "**Gear.** Pick a weapon or signature piece of gear. You have it; write it down.",
+    "8": "**Coin.** Start with 3d12 coin. See *Gear*. ",
+    "9": "**Feature.** Choose 1 Feature. ",
+    "Name": "Character Creation"
+  },
+  {
+    "1": "**Body:** Strength, Dexterity, physical skill. \u003Cbr\u003EAll Physical Combat Rolls are Body.",
+    "2": "**Mind.** Intelligence, wisdom, skill at learning. \u003Cbr\u003EAll Spellcasting rolls are Mind.",
+    "3": "**Spirit.** Charisma, grit, connection to mysterious powers. \u003Cbr\u003EAll Saves are Spirit.",
+    "Name": "Abilities"
+  },
+  {
+    "1": "Take turns, starting with the youngest player. ",
+    "2": "Say what you do. Roll dice if you need to. ",
+    "3": "Resolve what happens and move to the next player. ",
+    "4": "The ref goes on a turn, just like players. ",
+    "Name": "Gameplay"
+  },
+  {
+    "1": "When the outcome is uncertain and failure has consequences, roll.",
+    "2": "Ref sets a **Dice Number** (the number of **d12s** you start with, or DN) and an **Ability** (Body, Mind, Spirit). The standard roll is *Risky*.",
+    "3": "",
+    "4": "**0 = Extreme** (Impossible without Advantages.) \u003Cbr\u003E **2 = Risky** \u003Cbr\u003E **4 = It Just Works** (No roll.)",
+    "5": "**Success.** If any d12 shows 9-12, the action succeeds. \u003Cbr\u003E (If using d6s: 5-6. The math is the same, but d12s are better and cooler. Fight me.) ",
+    "6": "",
+    "7": "",
+    "8": "**Opposed Rolls.** When in direct opposition (like arm-wrestling), players roll **Risky (DN2)**, and Monsters roll their **Power Level**. Apply applicable Advantages & Disadvantages. Highest number of successes wins. On a tie, the highest rolled number wins. ",
+    "Name": "Rolling Dice"
+  },
+  {
+    "1": "**Advantage = +1 die.** \u003Cbr\u003E Anything that makes the task easier (like a rope for climbing) gives 1 ADV.",
+    "2": "**Disadvantage = -1 die.** \u003Cbr\u003E Anything that makes something harder (like the wall being on fire) gives 1 DIS. ",
+    "3": "",
+    "4": "",
+    "5": "**Stacking.**\n2 ADV + 1 DIS = 1 ADV.",
+    "6": "If a DIS brings the DN to 0, it's not possible without another Advantage. ",
+    "7": "If an ADV brings it to 4+, it just works, no roll.",
+    "Name": "Advantage and Disadvantage"
+  },
+  {
+    "1": "**The universal resource!** \u003Cbr\u003EA combination of luck, health, grit, and mojo.",
+    "2": "**Spending Might.** Players can spend 1 Might to",
+    "3": "▸ Re-roll up to 3 dice from any roll \u003Cbr\u003E▸ Roll a Save (see *Saves*) \u003Cbr\u003E▸ Use a Power (see *Powers*)",
+    "4": "",
+    "5": "",
+    "6": "*Optional.* Kids 7 & under can use 1 Might to block 1 Damage. ",
+    "7": "",
+    "8": "",
+    "9": "You **can** spend more than 1 Might at a time.",
+    "10": "You can **not** spend Might to get an ADV / remove a DIS; you must take actions or use environmental resources.",
+    "Name": "Might"
+  },
+  {
+    "Name": "★ Danger!"
+  },
+  {
+    "1": "When in Danger, you take turns, starting with the youngest player. You can move and do one major thing on your turn. The ref might let you do minor things, too.",
+    "2": "**Attacks.** Weapon Attacks are Risky (DN2) Body, ± DIS/ADV",
+    "3": "**Each success = 1 hit.**",
+    "Name": "Combat & Danger"
+  },
+  {
+    "1": "**1 Hit = 1 Damage** (usually)",
+    "2": "(Special weapons or abilities might do more damage per hit. Monsters might do more too.)",
+    "3": "**Heartbreaking.** Each point of Damage is a Heartbreaker. Cross off (break) one ♥. You have 1 Disadvantage on that roll type for each broken ♥.  Mark 1 XP. \n",
+    "4": "You can spend Might to roll Saves against Damage, or block it with Armor. See *Saves* & *Armor*.",
+    "5": "",
+    "6": "*Body ♥:* damage from physical harm. Probably the most common type by a mile.",
+    "7": "*Mind ♥:* damage from mental harm.",
+    "8": "*Spirit ♥:* damage from magical harm.",
+    "9": "",
+    "10": "**Broken Hearted.** \u003Cbr\u003E An ability with 3 broken ♥s is *Broken Hearted*. ",
+    "11": "*Broken Hearted Body.* You're dead. Make a new character. ",
+    "12": "*Broken Hearted Mind.* You're stupefied: can't think, can't speak or use magic. You can follow simple instructions from people you trust.",
+    "13": "*Broken Hearted Spirit.* The lights are on but no one is home. You can't take actions. You might become a mindless minion of whatever did it. ",
+    "Name": "Damage"
+  },
+  {
+    "1": "**Might.** Might heals at a rate of 1/Hour of rest.",
+    "2": "**♥s.** 1 of each type / night of rest. ",
+    "3": "**Magic Healing.** Always costs 2 Might / ♥. Magic can't heal Might. ",
+    "Name": "Healing"
+  },
+  {
+    "1": "**Power = 0-4** Power = a creature's starting DN. Monsters usually have  1 ADV on one roll type.",
+    "2": "",
+    "3": "**Might = Power x 2**",
+    "4": "**Damage.** Monsters may do more than 1 Damage / Hit.",
+    "5": "**Special.** Monsters may also have Powers, Spells or Extraordinary Abilities.",
+    "6": "**Morale.** At 0 Might, Roll Risky (DN2) Spirit. If no successes, run away or surrender.  \n",
+    "7": "**♥s.** Like Characters, Monsters have 3 ♥s each in Body, Mind and Spirit.",
+    "8": "**No Saves for the Wicked.** Monsters don’t roll any Saves. They may pay 1 Might to block 1 Damage. They can't block other effects. (So make sure powerful magic vs Monsters has the right DN to use.)",
+    "Name": "Monsters"
+  },
+  {
+    "1": "**Power.** 3 (rolls 3d12) \u003Cbr\u003E\n**Might.** 6 \u003Cbr\u003E **Advantage.** Mind.",
+    "2": "**Extraordinary Ability.** *Electric Gaze.* If you meet its gaze, break 1 Body ♥. (No Save)",
+    "3": "**Spell** Screaming Snakes. \u003Cbr\u003E (No Roll unless there is a DIS: P3 + ADV on Mind)",
+    "4": "**Carries** a whip.",
+    "5": "**Wants** revenge.",
+    "Name": "Example Monster: Electric Medusa"
+  },
+  {
+    "1": "Converting monsters from other dungeon-adjacent game systems is dead simple.",
+    "2": "Power = HD ÷ 2 (round down)",
+    "Name": "Converting Monsters"
+  },
+  {
+    "Name": "★ Stuff"
+  },
+  {
+    "1": "Under *Gear*, each line is a Gear Slot. (Most 3x5 cards have ~ 10.)",
+    "2": "Most items take up 1 slot. \u003Cbr\u003E Some take up more (as Armor does). \u003Cbr\u003E Some might bundle: 10 candles / slot, etc.",
+    "3": "**Price Benchmarks**",
+    "4": "Mundane Items - 5c \u003Cbr\u003E Complex / High Quality Items - 20c \u003Cbr\u003E Exotic / Specialty Items - 100c",
+    "5": "Gear is important! Refs should reward clever use of gear.",
+    "Name": "Gear"
+  },
+  {
+    "1": "**Armor** allows you to choose to block Hits from physical sources.",
+    "2": "Armor takes as many Gear Slots as it can block Hits.\u003Cbr\u003E (Shields are a little different.)",
+    "3": "Using armor to block a Hit blocks *all* damage from that Hit. Cross off one of your Armor circles.",
+    "4": "When it's taken all its Hits, Armor is useless until repaired.",
+    "5": "**Suggested: **",
+    "6": "**Leather:** 2 Hits, 2 gear slots, 200 coin",
+    "7": "**Chain:** 4 hits, 4 gear slots, 400 coin",
+    "8": "**Plate:** 6 hits, 6 gear slots, 600 coin",
+    "9": "**Shields:** 3 hits, 2 gear slots, 50 coin. Occupies a hand. (No Spells.)",
+    "10": "**Cost (new)** = 100 coin per # of hits blocked.",
+    "11": "**Cost to repair** = 50 coin per # of hits repaired.",
+    "12": "*Optional.* DIS on Spellcasting when Armor \u003E 5.*",
+    "Name": "Armor"
+  },
+  {
+    "1": "Scroll: Any Spell, 1 use",
+    "2": "Wand: Any Spell, 4 uses",
+    "3": "Potion: Any Power, 1 use",
+    "4": "Ring: Any Power, 4 uses",
+    "5": "Weapon: +1 Damage",
+    "6": "Gear: Living Rope, Scrying Mirror, etc",
+    "7": "Using most magic items doesn't cost might, but does require Mind rolls. ",
+    "Name": "Magic Treasure"
+  },
+  {
+    "Name": "★ Magic"
+  },
+  {
+    "1": "Spells are powerful, but tricky! It's why Wizards are so strange, and so few.",
+    "2": "You need 2 hands free to cast spells. \u003Cbr\u003E\nThey take up 1 line each under Magic.",
+    "3": "",
+    "4": "Spells are 2 words, and do what they say. They don't do *one* thing. They do whatever you can make the two words mean when you cast the spell.",
+    "5": "**Using Spells.** ",
+    "6": "1. Say what you want the spell to do, and how.  ",
+    "7": "2. The Referee sets the DN for a Mind roll based on what you say.",
+    "8": "3. Roll Mind. ",
+    "9": "If you succeed, it happens. If you fail, *something* happens, but not what was intended.",
+    "10": "**Examples.** \u003Cbr\u003E*It Just Works. (No Roll)* Using *Fire Hands* to light a candle.",
+    "11": "*Risky (DN2).* Shoot fire from your hands \u003Cbr\u003Emake someone's hands so hot they drop what they're holding \u003Cbr\u003Emake your hands impervious to heat \u003Cbr\u003Ecreate a giant fiery hand \u003Cbr\u003Egive a bonfire grasping hands",
+    "12": "*Impossible without Advantages.* Cursing someone to light everything they touch on fire, forever.",
+    "13": "**Limits.** \u003Cbr\u003EIf you're like \"I use my Lightning Ball spell to make solid lightning that turns into an invincible dragon and makes me the Empress\" then the referee will be like \"No. Try again.\"",
+    "14": "**Damage.**\u003Cbr\u003ESpells that do damage directly do **1 Damage / Success**. ",
+    "15": "Spell damage can break Body, Mind, or Spirit, depending on the spell and its use.",
+    "Name": "Spellcasting"
+  },
+  {
+    "1": "**Example Spells.** ",
+    "2": "*Air Walk* \u003Cbr\u003E\n*Big Hammer* \u003Cbr\u003E\n*Body Swap* \u003Cbr\u003E\n*Destroy Magic* \u003Cbr\u003E\n*Elastic Body* \u003Cbr\u003E\n*Electric Breath* \u003Cbr\u003E\n*Fire Hands* \u003Cbr\u003E\n*Floating Hand* \u003Cbr\u003E\n*Force Field* \u003Cbr\u003E\n*Greasy Stuff* \u003Cbr\u003E\n*Ice Vision* \u003Cbr\u003E\n*Immovable Object* \u003Cbr\u003E\n*Living Fog* \u003Cbr\u003E\n*Magic Missile* \u003Cbr\u003E\n*Magic Rope* \u003Cbr\u003E\n*Mirror Dream* \u003Cbr\u003E\n*Protect Other* \u003Cbr\u003E\n*Smoke Self* \u003Cbr\u003E\n*Stone Rain* \u003Cbr\u003E\n*Terrible Speed* \u003Cbr\u003E\n*Wizard Lock* \u003Cbr\u003E",
+    "3": "Make up your own! Spells should make the world weirder. ",
+    "Name": "Spells"
+  },
+  {
+    "1": "Powers always work, but they are exhausting.",
+    "2": "",
+    "3": "**Costs Might, Always Works.** Pay 1 Might to use your power. It works. For extreme uses, it may cost more Might. ",
+    "4": "**Damage.** Powers that do damage do 1 Damage. Powers that add to damage (like a Venomous Claw) might add 1 Damage. ",
+    "5": "**Good Examples.** \u003Cbr\u003E *I turn into a wolf.* \u003Cbr\u003E *I teleport a short distance. BANG!* \u003Cbr\u003E *I sing to stones, and they sing back.* \u003Cbr\u003E *I transfer my urine to someone else.*",
+    "6": "**Bad Examples.** \u003Cbr\u003E *I turn into anything I want!* \u003Cbr\u003E *I'm invincible.* \u003Cbr\u003E *I know everything!* \u003Cbr\u003E *I get infinite Might!* \u003Cbr\u003E *I succeed at everything!*",
+    "7": "Make up your own! Powers should be limited, specific, and fun. They should *not* reference a game mechanic.",
+    "Name": "Powers"
+  },
+  {
+    "1": "**Extraordinary Ability:** Power that costs 0 Might. \u003Cbr\u003E(Mostly for Monsters.)",
+    "2": "*Optional.* Kids 7 & under get one Extraordinary Ability.",
+    "3": "",
+    "4": "",
+    "5": "",
+    "6": "",
+    "7": "",
+    "8": "Ref decides what’s allowed.",
+    "Name": "Extraordinary Abilities"
+  },
+  {
+    "1": "When you try to avoid harm, you roll a *Save*. It **costs 1 Might** to roll a Save. There are two types. They are both resolved with a **Risky (DN2) Spirit** roll.",
+    "2": "**Damage Saves** \u003Cbr\u003E When you would take damage, you can spend 1 Might to roll a Damage Save. Prevent 1 Damage to yourself for each success.",
+    "3": "**Magic Saves** \u003Cbr\u003E When you would be affected against your will by magic, roll a Save. (Damage from spells is a Damage Save.)",
+    "4": "**1 Success.** You lessen the effect.",
+    "5": "**2 Successes.** You avoid it.",
+    "6": "",
+    "7": "",
+    "8": "Ref decides the precise effect.",
+    "Name": "Saves"
+  },
+  {
+    "Name": "★ Progression"
+  },
+  {
+    "1": "You gain Experience Points (XP) when you fail, when you break a heart, when you find treasure, and when you achieve quests. The ref awards it, but they'll often forget to award it for failed rolls and broken hearts. Remind them.",
+    "2": "**1 XP** for every failed roll.",
+    "3": "**1 XP** for every Heartbreaker.",
+    "4": "**2 XP** for every Treasure Find",
+    "5": "**5 XP** for every Quest completed. (Choose a new quest!)",
+    "6": "**At 10XP**, choose a *Feature*. Reset your XP to 0.",
+    "Name": "Experience"
+  },
+  {
+    "1": "**Not Today, Death.** When at 0 Might and in danger: on your turn, roll Risky (DN2) Spirit. On a success, gain 1 Might.",
+    "2": "",
+    "3": "**Powerful.** Gain a power. (Must have 2 free lines under *Magic*)",
+    "4": "**Learned.** Learn a Spell. (Must have 1 free line under Magic.)",
+    "5": "**Mighty.** Gain 3 Might. (Max 20)",
+    "6": "**Dangerous.** When you do Damage, do 1 extra Damage.",
+    "7": "**Tough.** When you are hit, take 1 less Damage (Minimum 1 / Hit).",
+    "8": "**Hauler.** You can use free lines under *Magic* as extra gear slots.",
+    "9": "You can invent others! Everyone has to agree on it.",
+    "Name": "Features"
+  },
+  {
+    "Name": "★ Design"
+  },
+  {
+    "1": "3x5 💔 is a bonkers dungeon game on index cards, designed for GMs and their kids. ",
+    "2": "If by some miracle this is your first RPG you're running, wow! How did you get here!?",
+    "3": "I've left out the kinds of things that are universal to all RPGs, like the relationship between players and GM. ",
+    "4": "You can probably pick them up, you're clever. The internet exists!",
+    "Name": "This Game"
+  },
+  {
+    "1": "",
+    "2": "3x5 💔 is dead simple and imagination-forward for players, but with OSR depth of choice and resource management.",
+    "3": "**Mechanically,** it's organized around three key resources: *Might*, *Gear Slots*, and *Advantages*. ",
+    "4": "**Spiritually,** it's about enabling the bonkers, imaginative way you played before you really understood the rules. How magic and powers work is central to this. ",
+    "5": "You shouldn't be like *Which of my spells do I cast?* You should be all *I turn into a dire wolf. Fire Hands makes fire burst out of my paws, and then I run around setting everything on fire.*",
+    "6": "**Might** creates the essential gameplay loop of tough choices and escalating tension. At 10 Might, you're king of a zany world. At 5, every decision you make matters. At 2, you are running scared. ",
+    "7": "**Gear Slots** matter! Ten foot poles save lives! Gear lets you do (and therefore be) different things. Carrying a magic Crystal Ball is very different from wearing Plate Mail. So is lugging around a tool for every dungeon danger. ",
+    "8": "**Advantages & Disadvantages** are where the game is played. Foolish players will rely on Might to give them re-rolls. Wise ones will create situations where they don't have to roll at all. That *is* the game. ",
+    "9": "Nothing should replace the earned Advantage as the game's most powerful resource. It keeps the game rooted in creative problem solving. If they want an Advantage, they have to describe how they get it!",
+    "Name": "Design Pillars"
+  },
+  {
+    "1": "Take turns. ",
+    "2": "Get weird. ",
+    "3": "Say yes to madcap ideas. ",
+    "4": "Make creativity and decisions matter. ",
+    "5": "Avoid single-solution problems. ",
+    "6": "Telegraph danger. ",
+    "7": "Let kids nope out of things that freak them out. ",
+    "8": "Failure - especially magical failure - should make the world stranger and more wonderful. ",
+    "Name": "GM Advice"
+  },
+  {
+    "Name": "★ Modes of Play"
+  },
+  {
+    "1": "Heroic, slightly absurd. Start with 10 Might.",
+    "2": "Play fast and loose. ",
+    "3": "Use the **Bonkers Loop**: ",
+    "4": "Ref calls for all rolls, and sets their kind & difficulty. ",
+    "5": "Everyone takes turns adjudicating the results of the rolls. (It's a game of saying **Yes, and...** to the dice. ",
+    "6": "Ref says what the world is like and what it does. ",
+    "7": "P1 says what PC1 does. *Roll if needed*. ",
+    "8": "P2 says what results, and what PC2 does. *Roll if needed*.",
+    "9": "P3 says what results, and what PC3 does. *Roll if needed*.",
+    "10": "Ref says what results, and what the world does. *Roll if needed*.",
+    "11": "Repeat. Slip in and out of the Bonkers Loop as needed. ",
+    "Name": "Bonkers"
+  },
+  {
+    "1": "Low-level Oldschool RPG feels. Start with 5 Might.",
+    "2": "Make armor hard to get.",
+    "3": "Make darkness matter - torches last half an hour and take a gear slot. ",
+    "Name": "Classic"
+  },
+  {
+    "1": "Horror survival feel. As above, but start with 2 Might.",
+    "Name": "Gritty"
+  },
+  {
+    "Name": "★ Bolt-Ons"
+  },
+  {
+    "1": "I've left out a lot of the usual RPG stuff.",
+    "2": "If you need one of those things, just write your favorite version on an index card and bolt it on. A partial list might include rules for:",
+    "3": "*initiative*\u003Cbr\u003E *action economy*\u003Cbr\u003E *movement rules*\u003Cbr\u003E *vision/light*\u003Cbr\u003E *reaction rolls*\u003Cbr\u003E *alignment* \u003Cbr\u003E\n*item costs* \u003Cbr\u003E\n*wandering monsters*",
+    "Name": "Bolt-Ons"
+  },
+  {
+    "1": "3x5 💔 is essentially in the Blackmoors lineage of RPGs: Tunnels & Trolls, Knave, Into the Odd, Cairn, Lasers & Feelings, and so on.",
+    "2": "I got *Might* from Have Axe Will Travel.",
+    "3": "But at root, 3x5 💔 is the 2e of the game my friend Warren invented it when we were 9, after *sort of* reading the Basic \"Holmes\" D&D rules. ",
+    "4": "I made it because I wanted a game I could fit in my pocket for a long train ride that my six year old kid would play.",
+    "5": "It was a full year before he was interested. That's one of the four reasons I call it Heartbreaker.",
+    "6": "Now, he plays a talking Dire Wolf named Shadoesckul with venomous claws. ",
+    "Name": "Receipts"
+  },
+  {
+    "1": "3x5 Heartbreaker is copyright Samuel Taylor and 3x5 Arcana. 2025.",
+    "2": "It's possible I'm missing some legal attribution from other licenses here. This is a private Beta, and in progress!",
+    "Name": "Copyright"
+  }
+]
