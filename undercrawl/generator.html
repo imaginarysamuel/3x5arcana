@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <link rel="stylesheet" href="/styles.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PFMKRV8VBN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PFMKRV8VBN');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3x5 Undercrawl Generator</title>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div id="menu-container"></div>
+    <h1 class="main-title">3x5 Undercrawl Generator</h1>
+    <p class="header-area">A 3x5 Arcana Joint in Beta Testing</p>
+  </header>
+
+  <!-- AREA DESIGN GUIDE — text from Undercrawl, "Making Crawls" (Area Design).
+       Open by default: the generator hands you scaffolding, and this is the
+       page that tells you what to do with it. -->
+  <details class="uc-guide" open>
+    <summary class="uc-guide-summary">Area Design — what goes in each field</summary>
+    <div class="uc-guide-body">
+      <dl class="uc-guide-list">
+        <dt>Name</dt>
+        <dd>Easter eggs of world lore. Be specific; avoid flavorless options like 'Caves', or 'Mines'. Also, Area Number &amp; Depth Level.</dd>
+
+        <dt>Description</dt>
+        <dd>What becomes obvious to the players as they explore. Seed clues as to what the Area's Hidden Feature type might be, so the Caller can guess at it.</dd>
+
+        <dt>Landmark Feature</dt>
+        <dd>What's casually obvious at a glance. Simple and sensory.</dd>
+
+        <dt>Hidden Feature</dt>
+        <dd>What the players find by searching, spending time: information, interactive elements, or items. Hidden features should usually be beneficial.</dd>
+
+        <dt>Secret Feature</dt>
+        <dd>What Players may never find. Place one in about 3:6 rooms. Because players may be locked out of this info, never place anything here that is necessary to their progress.</dd>
+
+        <dt>Encounters</dt>
+        <dd>If any. How empty is your Undercrawl? Forsaken is 1:6 rooms, Forgotten is 1:12, Lost is 1:20.</dd>
+
+        <dt>Adjacent</dt>
+        <dd>List the adjacent Areas, their Landmark Features, and whether they are up, down, or even with the current Area. (This section is helpful but not necessary; it is repeated from the map and other Area cards.)</dd>
+      </dl>
+      <p class="uc-guide-note">Fun Fact! → Landmark, Hidden, Secret is a term of design originally coined by Anne of the DIY &amp; Dragons blog!</p>
+    </div>
+  </details>
+
+  <!-- CRAWL BUILDER -->
+  <div class="cluster-builder" id="crawlBuilder">
+    <div class="cluster-name-row">
+      <label>Name:</label>
+      <input type="text" id="crawlName" placeholder="e.g. Dverdaghar">
+    </div>
+
+    <div class="cluster-name-row" style="margin-top:8px">
+      <label>Areas:</label>
+      <span class="uc-presets">
+        <button type="button" class="uc-preset" data-count="10" onclick="setAreaPreset(this)">10 · Scenic Jaunt</button>
+        <button type="button" class="uc-preset selected" data-count="25" onclick="setAreaPreset(this)">25 · Taxing Journey</button>
+        <button type="button" class="uc-preset" data-count="50" onclick="setAreaPreset(this)">50 · Perilous Descent</button>
+      </span>
+      <input type="number" id="areaCount" min="2" max="99" value="25" style="width:4em" oninput="clearAreaPreset()">
+    </div>
+
+    <div class="cluster-name-row" style="margin-top:8px">
+      <label>Depths:</label>
+      <input type="number" id="depthCount" min="1" max="12" value="4" style="width:4em">
+    </div>
+
+    <div class="controls-row" style="justify-content:center;flex-direction:column;align-items:center;gap:6px;margin-top:12px">
+      <button class="roll-btn" style="width:3in" onclick="rollCrawl()">Roll an Undercrawl</button>
+      <div style="display:flex;gap:6px;width:3in">
+        <button class="roll-btn" style="flex:1" onclick="saveCrawls()">Save</button>
+        <button class="roll-btn" style="flex:1" onclick="document.getElementById('loadFileInput').click()">Load</button>
+      </div>
+      <input type="file" id="loadFileInput" accept=".json" style="display:none" onchange="loadCrawls(event)">
+    </div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div id="output"></div>
+
+  <!-- MAP KEY -->
+  <div class="map-key">
+    <div class="map-key-title">Map Key</div>
+    <div class="map-key-items">
+      <span><strong>——</strong> Connection (click to cycle)</span>
+      <span><strong>· ·</strong> Secret Connection</span>
+      <span><strong>✕</strong> Click again (or right-click) to delete</span>
+      <span>Click an area, then another, to draw a new connection</span>
+      <span>Drag the salmon handles to reshape Depth Levels</span>
+      <span>On a card, press <strong>Enter</strong> for a new line</span>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- License Card -->
+  <div id="license-container"></div>
+
+  <div class="spacer"></div>
+
+  <div class="site-footer">
+    Based on <em>Undercrawl: Travel Rules for Dungeon Games</em>, a 3x5 Arcana joint.
+  </div>
+
+  <!-- Fullscreen map overlay — explicit last child of body -->
+  <div id="map-fullscreen-overlay" class="map-fullscreen-overlay">
+    <div class="map-fullscreen-toolbar">
+      <span id="map-fullscreen-title">Map</span>
+      <span style="display:flex;align-items:center;gap:6px">
+        <button onclick="zoomUC(fullscreenCrawlIdx, true, -0.2)" style="background:var(--grey-lightest);border:none;border-radius:3px;color:var(--grey-darkest);font-size:1em;padding:1px 9px;cursor:pointer;font-family:'National Park',sans-serif;line-height:1.4">−</button>
+        <button onclick="zoomUC(fullscreenCrawlIdx, true, 0.2)" style="background:var(--grey-lightest);border:none;border-radius:3px;color:var(--grey-darkest);font-size:1em;padding:1px 9px;cursor:pointer;font-family:'National Park',sans-serif;line-height:1.4">+</button>
+        <button class="map-fullscreen-close" onclick="closeUCFullscreen()">✕</button>
+      </span>
+    </div>
+    <div class="map-fullscreen-body" id="map-fullscreen-body"></div>
+  </div>
+
+  <!-- Scripts — load order matters; undercrawl_script.js depends on card_print.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="/scripts/card_print.js"></script>
+  <script src="/scripts/list_script.js"></script>
+  <script src="/scripts/script.js"></script>
+  <script src="/scripts/burgermenu_script.js"></script>
+  <script src="/scripts/undercrawl_script.js"></script>
+
+</body>
+</html>

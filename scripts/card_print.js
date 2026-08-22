@@ -104,6 +104,51 @@
   const MAX_BODY_HEIGHT = CONTENT_HEIGHT - HEADER_HEIGHT - FOOTER_HEIGHT;
 
   // ============================================
+  // 🎨 COLOUR
+  // ============================================
+
+  /**
+   * Maps a marker class to a CSS custom property. Colours are read from
+   * styles.css at print time so the PDF can't drift from the screen.
+   * Opt-in: an element must carry .pdf-red / .pdf-blue to be coloured, so
+   * cards that don't use these classes print exactly as they did before.
+   */
+  const PDF_COLOR_VARS = { red: '--red', blue: '--blue-dark' };
+  let _pdfColorCache = null;
+
+  function hexToRgb(hex) {
+    if (!hex) return null;
+    let h = hex.replace('#', '').trim();
+    if (h.length === 3) h = h.split('').map(c => c + c).join('');
+    if (h.length !== 6 || /[^0-9a-f]/i.test(h)) return null;
+    const n = parseInt(h, 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+
+  function pdfColor(key) {
+    if (!_pdfColorCache) {
+      _pdfColorCache = {};
+      const cs = getComputedStyle(document.documentElement);
+      for (const [k, varName] of Object.entries(PDF_COLOR_VARS)) {
+        _pdfColorCache[k] = hexToRgb(cs.getPropertyValue(varName)) || [0, 0, 0];
+      }
+    }
+    return _pdfColorCache[key] || [0, 0, 0];
+  }
+
+  function colorClassOf(node) {
+    if (!node.classList) return null;
+    if (node.classList.contains('pdf-red')) return 'red';
+    if (node.classList.contains('pdf-blue')) return 'blue';
+    return null;
+  }
+
+  function applyColor(doc, color) {
+    if (color) { const [r, g, b] = pdfColor(color); doc.setTextColor(r, g, b); }
+    else doc.setTextColor(0, 0, 0);
+  }
+
+  // ============================================
   // 📄 CONTENT EXTRACTION
   // ============================================
 
@@ -156,13 +201,21 @@
       return extractDungeonCardContent(card);
     }
 
-    const title = card.querySelector('.card-title')?.textContent?.trim() || 'Untitled';
-    const level = card.querySelector('.monster-level, .spell-tier, .spell-level')?.textContent?.trim() || '';
+    const titleEl = card.querySelector('.card-title');
+    const title = titleEl?.textContent?.trim() || 'Untitled';
+    // Opt-in rich title (coloured segments). Cards that don't set
+    // data-pdf-rich-title keep the original plain-title rendering exactly.
+    const titleSegments = (card.dataset.pdfRichTitle === '1' && titleEl)
+      ? extractTextWithBold(titleEl) : null;
+    const levelEl = card.querySelector('.monster-level, .spell-tier, .spell-level, .uc-level');
+    const level = levelEl?.textContent?.trim() || '';
+    const levelSegments = (card.dataset.pdfRichTitle === '1' && levelEl)
+      ? extractTextWithBold(levelEl) : null;
 
     const body = card.querySelector('.card-body');
     const sections = [];
 
-    if (!body) return { title, level, sections };
+    if (!body) return { title, titleSegments, level, levelSegments, sections };
 
     // Walk through body children and extract content
     for (const child of body.children) {
@@ -232,7 +285,7 @@
       }
     }
 
-    return { title, level, sections };
+    return { title, titleSegments, level, levelSegments, sections };
   }
 
   /**
@@ -242,7 +295,7 @@
   function extractTextWithBold(element) {
     const segments = [];
 
-    function walk(node, ancestorItalic = false) {
+    function walk(node, ancestorItalic = false, ancestorColor = null) {
       if (node.nodeType === Node.TEXT_NODE) {
         // Replace newlines/tabs with spaces, but keep leading/trailing spaces
         let text = node.textContent.replace(/[\n\r\t]+/g, ' ');
@@ -250,15 +303,16 @@
         text = text.replace(/  +/g, ' ');
 
         if (text) {  // Don't check trim() - we need those spaces!
-          segments.push({ text: text, bold: false, italic: ancestorItalic });
+          segments.push({ text: text, bold: false, italic: ancestorItalic, color: ancestorColor });
         }
       } else if (node.nodeType === Node.ELEMENT_NODE) {
         // Handle <br> as a line break
         if (node.tagName === 'BR') {
-          segments.push({ text: '\n', bold: false, italic: ancestorItalic });
+          segments.push({ text: '\n', bold: false, italic: ancestorItalic, color: ancestorColor });
           return;
         }
 
+        const color = colorClassOf(node) || ancestorColor;
         const isBold = node.tagName === 'STRONG' || node.tagName === 'B';
         const isItalic = ancestorItalic ||
                          node.tagName === 'EM' ||
@@ -269,12 +323,12 @@
           // For bold elements, we can safely trim since they're inline
           const text = node.textContent.replace(/\s+/g, ' ').trim();
           if (text) {
-            segments.push({ text: text, bold: true, italic: isItalic });
+            segments.push({ text: text, bold: true, italic: isItalic, color: color });
           }
         } else {
           // Recurse into children
           for (const child of node.childNodes) {
-            walk(child, isItalic);
+            walk(child, isItalic, color);
           }
         }
       }
@@ -334,7 +388,7 @@
    * Returns true if content continues to another page
    */
   function renderCardPage(doc, content, pageNum, totalPages) {
-    const { title, level, sections, startIndex = 0 } = content;
+    const { title, titleSegments, level, levelSegments, sections, startIndex = 0 } = content;
     const isContinuation = pageNum > 1;
 
     let y = MARGIN;
@@ -344,11 +398,19 @@
     doc.setFont('NationalPark', 'bold');
 
     const displayTitle = title.toUpperCase() + (isContinuation ? " (cont'd)" : "");
-    doc.text(displayTitle, MARGIN, y + 0.15);
+    if (titleSegments && titleSegments.length) {
+      renderTitleSegments(doc, titleSegments, MARGIN, y + 0.15, isContinuation ? " (cont'd)" : "");
+    } else {
+      doc.text(displayTitle, MARGIN, y + 0.15);
+    }
 
     if (level && !isContinuation) {
       doc.setFontSize(FONT_SIZE_LEVEL);
-      doc.text(level, CARD_WIDTH - MARGIN, y + 0.15, { align: 'right' });
+      if (levelSegments && levelSegments.length) {
+        renderSegmentsRight(doc, levelSegments, CARD_WIDTH - MARGIN, y + 0.15);
+      } else {
+        doc.text(level, CARD_WIDTH - MARGIN, y + 0.15, { align: 'right' });
+      }
     }
 
     y += 0.22;
@@ -488,7 +550,7 @@
             currentLineWidth = 0;
           }
 
-          currentLine.push({ text: word, bold: segment.bold, italic: segment.italic });
+          currentLine.push({ text: word, bold: segment.bold, italic: segment.italic, color: segment.color });
           currentLineWidth += wordWidth;
         }
       }
@@ -510,6 +572,7 @@
     let currentX = x;
     for (const seg of segments) {
       doc.setFont('NationalPark', seg.bold ? 'bold' : 'light');
+      applyColor(doc, seg.color);
 
       if (seg.italic) {
         renderItalicText(doc, seg.text, currentX, y);
@@ -519,6 +582,46 @@
 
       currentX += doc.getTextWidth(seg.text);
     }
+    doc.setTextColor(0, 0, 0);
+  }
+
+  /**
+   * Right-aligned coloured segments. jsPDF's { align: 'right' } can only place
+   * one string, so measure the run first and lay it out forwards from there.
+   */
+  function renderSegmentsRight(doc, segs, xRight, y) {
+    doc.setFont('NationalPark', 'bold');
+    let total = 0;
+    for (const seg of segs) total += doc.getTextWidth(seg.text.toUpperCase());
+    let cx = xRight - total;
+    for (const seg of segs) {
+      applyColor(doc, seg.color);
+      const t = seg.text.toUpperCase();
+      if (t) doc.text(t, cx, y);
+      cx += doc.getTextWidth(t);
+    }
+    doc.setTextColor(0, 0, 0);
+  }
+
+  /**
+   * Renders a title built from coloured segments. Everything stays bold and
+   * uppercase, matching the plain-title path; only the colour varies.
+   */
+  function renderTitleSegments(doc, segs, x, y, suffix) {
+    let cx = x;
+    doc.setFont('NationalPark', 'bold');
+    for (const seg of segs) {
+      applyColor(doc, seg.color);
+      const t = seg.text.toUpperCase();
+      if (!t) continue;
+      doc.text(t, cx, y);
+      cx += doc.getTextWidth(t);
+    }
+    if (suffix) {
+      doc.setTextColor(0, 0, 0);
+      doc.text(suffix, cx, y);
+    }
+    doc.setTextColor(0, 0, 0);
   }
 
   // ============================================
