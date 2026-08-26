@@ -340,13 +340,20 @@ function showCopyFeedback(card) {
   const btn = card.querySelector('.copy-btn');
   if (!btn) return;
 
-  const originalText = btn.textContent;
+  // The button's only child is an <img>, so textContent is '' — capturing and
+  // restoring that would wipe the icon permanently. Save innerHTML instead.
+  // The guard stops a second copy within the 1.5s window from capturing the
+  // checkmark as the "original" and replacing the icon for good.
+  if (btn.dataset.copyFeedback === '1') return;
+  const originalHTML = btn.innerHTML;
+  btn.dataset.copyFeedback = '1';
   btn.textContent = '✓';
   btn.classList.add('copied');
 
   setTimeout(() => {
-    btn.textContent = originalText;
+    btn.innerHTML = originalHTML;
     btn.classList.remove('copied');
+    delete btn.dataset.copyFeedback;
   }, 1500);
 }
 
