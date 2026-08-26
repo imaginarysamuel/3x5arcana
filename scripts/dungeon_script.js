@@ -1376,7 +1376,7 @@ function buildSVGMap(nodes, clusterIdx, fullscreen = false) {
   svg.addEventListener('wheel', (e) => {
     e.preventDefault();
     const rect = svg.getBoundingClientRect();
-    if (e.ctrlKey) {
+    if (e.ctrlKey || e.metaKey) {
       const { x: mx, y: my } = toSVGCoords(e.clientX, e.clientY);
       const delta = -e.deltaY * 0.01;
       const scale = 1 / (1 + delta);
@@ -1500,7 +1500,7 @@ function rollCluster() {
   mapCard.id = mapCardId;
   mapCard.innerHTML = `
     <div class="map-card-header" onclick="toggleMapCard('${mapCardId}')">
-      <span style="cursor:pointer;flex:1">Map <span class="map-chevron">▼</span></span>
+      <span style="cursor:pointer;flex:1">Map</span>
       <span style="display:flex;align-items:center;gap:4px" onclick="event.stopPropagation()">
         <button onclick="zoomSVG('${clusterCount}', false, -0.2)" style="background:var(--grey-lightest);border:none;border-radius:3px;font-size:0.85em;padding:1px 7px;cursor:pointer;font-family:'National Park',sans-serif;color:var(--grey-darkest);line-height:1.4">−</button>
         <button onclick="zoomSVG('${clusterCount}', false, 0.2)" style="background:var(--grey-lightest);border:none;border-radius:3px;font-size:0.85em;padding:1px 7px;cursor:pointer;font-family:'National Park',sans-serif;color:var(--grey-darkest);line-height:1.4">+</button>
@@ -1846,13 +1846,33 @@ function toggleSpark(id) {
   group.classList.toggle('open');
 }
 
-// toggleCard: overrides list_script.js version for dungeon.html.
-// Called as toggleCard('clusterIdx-roomId') from card header onclick attributes.
-// list_script.js's toggleCard(cardElement) is never called on dungeon.html.
-function toggleCard(id) {
-  const card = document.getElementById(`card-${id}`);
-  if (!card) return;
-  card.classList.toggle('expanded');
+// toggleCard: shadows list_script.js's version on dungeon.html (this file loads
+// last), so BOTH calling conventions land here and both must work:
+//   - a string 'clusterIdx-roomId', from card header onclick attributes
+//   - a DOM element, from list_script.js's initStaticCards — which binds every
+//     .card[data-static], including the License card injected by script.js
+// Passing an element to the string form silently no-ops (getElementById on
+// "card-[object HTMLDivElement]"), which is what used to leave the License
+// card unexpandable here. Each branch keeps its own original behaviour:
+// dungeon cards toggle the class only (their height comes from CSS), static
+// cards get the scrollHeight sizing list_script applies elsewhere.
+function toggleCard(idOrCard) {
+  if (typeof idOrCard === 'string' || typeof idOrCard === 'number') {
+    const card = document.getElementById(`card-${idOrCard}`);
+    if (card) card.classList.toggle('expanded');
+    return;
+  }
+  const card = idOrCard;
+  if (!card || typeof card.querySelector !== 'function') return;
+  const body = card.querySelector('.card-body');
+  if (!body) return;
+  if (card.classList.contains('expanded')) {
+    body.style.maxHeight = null;
+    card.classList.remove('expanded');
+  } else {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    card.classList.add('expanded');
+  }
 }
 
 const BULLET_CYCLE = ['arrow', 'T', 'O', 'M', 'B', 'blank'];
@@ -2137,15 +2157,15 @@ function restoreDungeons(clusters) {
     mapCard.className = 'map-card' + (saved.mapOpen ? ' expanded' : '');
     mapCard.id = mapCardId;
     mapCard.innerHTML = `
-      <div class="map-card-header">
-        <span onclick="toggleMapCard('${mapCardId}')" style="cursor:pointer;flex:1">Map <span class="map-chevron">▼</span></span>
-        <span style="display:flex;align-items:center;gap:4px">
-          <button onclick="zoomSVG('${idx}', false, -0.2)" style="background:var(--grey-lightest);border:none;border-radius:3px;font-size:0.85em;padding:1px 7px;cursor:pointer;font-family:'National Park',sans-serif;color:var(--grey-darkest);line-height:1.4">−</button>
-          <button onclick="zoomSVG('${idx}', false, 0.2)" style="background:var(--grey-lightest);border:none;border-radius:3px;font-size:0.85em;padding:1px 7px;cursor:pointer;font-family:'National Park',sans-serif;color:var(--grey-darkest);line-height:1.4">+</button>
-          <button onclick="openFullscreen('${mapCardId}')" style="background:none;border:1px solid var(--blue-light);border-radius:3px;font-size:0.75em;padding:2px 8px;cursor:pointer;font-family:'National Park',sans-serif;text-transform:uppercase;letter-spacing:1px;color:var(--grey-darkest);">⛶ Fullscreen</button>
-        </span>
-      </div>
-      <div class="map-card-body"><div class="map-tile-wrap"></div></div>
+          <div class="map-card-header" onclick="toggleMapCard('${mapCardId}')">
+      <span style="cursor:pointer;flex:1">Map <span class="map-chevron">▼</span></span>
+      <span style="display:flex;align-items:center;gap:4px" onclick="event.stopPropagation()">
+        <button onclick="zoomSVG('${idx}', false, -0.2)" style="background:var(--grey-lightest);border:none;border-radius:3px;font-size:0.85em;padding:1px 7px;cursor:pointer;font-family:'National Park',sans-serif;color:var(--grey-darkest);line-height:1.4">−</button>
+        <button onclick="zoomSVG('${idx}', false, 0.2)" style="background:var(--grey-lightest);border:none;border-radius:3px;font-size:0.85em;padding:1px 7px;cursor:pointer;font-family:'National Park',sans-serif;color:var(--grey-darkest);line-height:1.4">+</button>
+        <button onclick="openFullscreen('${mapCardId}')" style="background:none;border:1px solid var(--blue-light);border-radius:3px;font-size:0.75em;padding:2px 8px;cursor:pointer;font-family:'National Park',sans-serif;text-transform:uppercase;letter-spacing:1px;color:var(--grey-darkest);">⛶ Fullscreen</button>
+      </span>
+    </div>
+    <div class="map-card-body" style="display:block"><div class="map-tile-wrap"></div></div>
     `;
     mapCard.querySelector('.map-tile-wrap').appendChild(buildSVGMap(saved.rooms, idx, false));
     block.appendChild(mapCard);
