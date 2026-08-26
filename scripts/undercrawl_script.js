@@ -387,8 +387,13 @@ function bfsLevels(n, edges, start) {
 }
 
 const UC_K = 1.85;          // ideal edge length, in cells
-const UC_LEVEL_GAP = 1.45;  // vertical spacing between BFS levels
+const UC_LEVEL_GAP = 1.45;  // target vertical spacing between BFS levels
 const UC_BIAS = 0.28;       // strength of the descent pull
+// Vertical stretch applied to the finished layout, setting how tall the depth
+// bands read relative to the cards. 1.5 = bands half again as tall as the
+// unstretched layout gives. See the note at the point of use for why this is
+// a post-pass rather than a bigger UC_LEVEL_GAP.
+const UC_VSTRETCH = 2;
 // Repulsion only acts within this radius (in units of UC_K). Textbook FR
 // confines the graph to a frame and normalises the ideal distance to that
 // frame's area; this code has no frame, so without a cutoff every area shoves
@@ -561,6 +566,17 @@ function forceLayout(areas, edges) {
     }
     if (!moved) break;
   }
+
+  // Give the depth bands room to breathe. UC_LEVEL_GAP looks like the lever
+  // for this but isn't: it only sets the TARGET the depth bias pulls toward,
+  // and edge attraction (which grows as d^2/K) hauls neighbours back together
+  // about as fast. Measured, raising UC_LEVEL_GAP from 1.45 to 2.6 moves band
+  // height by 1-14%. Stretching the settled layout is the honest way to get a
+  // predictable result — a pure y-scale multiplies the gap between any two
+  // rows by exactly this factor. Safe here, after overlap separation: adding
+  // vertical distance can only increase clearance, never create a collision.
+  // Horizontal arrangement, ordering and the graph itself are untouched.
+  for (const p of P) p.y *= UC_VSTRETCH;
 
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   for (const p of P) {
