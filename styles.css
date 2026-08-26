@@ -1025,8 +1025,6 @@ p.header-area {
   gap: 8px;
 }
 
-.spark-group { }
-
 .spark-toggle {
   display: flex;
   align-items: center;
@@ -1134,14 +1132,18 @@ p.header-area {
   background: var(--red);
   color: var(--grey-lightest);
   border-radius: 4px;
-  padding: 6px 12px;
+  padding: 10px;
+  margin: 7px auto 4px;
+  width: 150%;
+  max-width: 5.25in;
+  max-height: .5in;
   font-weight: bold;
   text-transform: uppercase;
   font-size: 1em;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2px;
+  transform: translateX(-.235in);
 }
 
 .cluster-header * {
@@ -1180,15 +1182,16 @@ p.header-area {
   justify-content: space-between;
   align-items: center;
   padding: 6px 10px;
-  font-weight: bold;
   text-transform: uppercase;
   cursor: pointer;
-  color: var(--grey-darkest);
   font-weight: bold;
   min-height: 35px;
   margin-bottom: 12px;
   padding-bottom: 1px;
 }
+
+.map-card-header * {
+  color: var(--blue-dark) !important;
 }
 
 .map-card-header:hover {
@@ -1639,12 +1642,22 @@ p.header-area {
 
 /* Per-card buttons (History / Here & There).
    Uses .card-actions alongside this class so card_print.js's extractor
-   skips the row — do not rename without updating that check. */
+   skips the row — do not rename without updating that check.
+   .card-actions is opacity:0 until hovered but stays position:absolute,
+   overlapping the header — without pointer-events:none here it silently
+   eats clicks meant for the header underneath even while invisible. Only
+   re-enabled once it's actually shown (below), so it's never a click target
+   while it can't be seen. */
 .uc-btn-row {
   display: flex;
   gap: 5px;
   flex-wrap: wrap;
   padding-top: 6px;
+  pointer-events: none;
+}
+
+.card.expanded:hover .uc-btn-row {
+  pointer-events: auto;
 }
 
 .uc-btn {
@@ -1741,7 +1754,6 @@ p.header-area {
 /* The title defaults to the Area Type's category and is meant to be typed
    over, so it needs to read as an editable field rather than as fixed text. */
 .uc-name {
-  border-bottom: 0.5px dashed var(--blue-light);
   display: inline-block;
   min-width: 5em;
 }

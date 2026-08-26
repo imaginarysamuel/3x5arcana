@@ -65,14 +65,14 @@ const UC_AREA_TYPES = [
   { category: 'Excavated Chambers', entries: [
     ['A wizard did it', 'Non-euclidean geometry, sickening'],
     ['Religious Origin', 'Beautiful, sculptures and frescoes'],
-    ['Purple Worms', 'Huge, rough spherical tunnels'],
+    ['Purple Worms', 'Huge, smooth, spherical tunnels'],
     ['Necropolis or Catacomb', 'Religious artifacts, dead-end rooms'],
     ['Unknowable Horrors', 'Dripping with slime, sentient walls'],
     ['Sewer or storage', 'Utilitarian, rooms and narrow tunnels'],
   ]},
   { category: 'Tunnels', entries: [
     ['Dug by creatures', 'Sized for one creature at a time'],
-    ['Lava Tubes', 'Smooth tunnels, descending maze'],
+    ['Lava Tubes', 'Weird tunnels, descending maze'],
     ['Eaten away', 'Tight, twisting, often too narrow'],
     ['Extraplanar origins', 'Vast, howling with dark wind'],
     ['Underground river', 'Lakes, low ceilings, strange creatures'],
@@ -105,7 +105,7 @@ const UC_WAS = [
   'hopefully', 'famously', 'lovingly', 'suddenly', 'thoroughly', 'hastily',
   'intentionally', 'carefully', 'fearfully', 'slowly', 'gently', 'terrifyingly',
   'callously', 'vengefully', 'steadily', 'haphazardly', 'spiritually', 'greedily',
-  'studiously', 'strictly', 'brutally', 'peacefully', 'unevenly', 'cheaply',
+  'studiously', 'strictly', 'brutally', 'quietly', 'unevenly', 'cheaply',
   'peacefully', 'poorly', 'incompletely', 'cheerfully', 'rapidly', 'heroically',
   'partially', 'religiously', 'audaciously', 'secretly', 'blithely', 'horrifically',
 ];
@@ -609,6 +609,336 @@ function countCrossings(edges, nodeRatios, baseW, baseH) {
   return c;
 }
 
+// Route a divider's baseline around any card it would otherwise run behind, so
+// the printed line always reads as passing BETWEEN areas rather than through
+// one. This is a rendering-only concern: it operates on the pixel-space path
+// already built from a divider's handle points, and never touches the handles
+// themselves (state.dividers) or depth assignment (which still tests against
+// the raw, undetoured line in dividerYAt/depthOfRatio). Each card's detour is
+// resolved from its own x-span rather than from processing order, so cards
+// close together in x can still interact (a later detour reshaping an earlier
+// one), but the map's own card-separation pass keeps that rare in practice.
+function routeDividerPixels(basePts, areas, nodePos) {
+  let pts = basePts.map(p => ({ x: p.x, y: p.y }));
+
+  function yOnPath(x) {
+    for (let k = 0; k < pts.length - 1; k++) {
+      const a = pts[k], b = pts[k + 1];
+      if (x >= a.x && x <= b.x) {
+        const t = (x - a.x) / ((b.x - a.x) || 1e-9);
+        return a.y + t * (b.y - a.y);
+      }
+    }
+    return x <= pts[0].x ? pts[0].y : pts[pts.length - 1].y;
+  }
+
+  const DODGE = 20; // clearance beyond the card's edge, in px
+
+  areas.forEach((a, i) => {
+    const cx = nodePos[i].x, cy = nodePos[i].y;
+    const hw = (UC_CELL_W - UC_MARGIN * 2) / 2 + DODGE;
+    const hh = (UC_CELL_H - UC_MARGIN * 2) / 2 + DODGE;
+    const left = cx - hw, right = cx + hw, top = cy - hh, bottom = cy + hh;
+
+    // Sample the box's left/mid/right, PLUS every real vertex that falls
+    // inside its x-range. The fixed 3 samples alone can miss a crossing when
+    // points sit close together (a hand-shaped stretch of the line, or a
+    // previous card's detour) and the path spikes into the box only between
+    // them — a card must never be able to hide behind a gap in the sampling,
+    // whether the nearby points are auto-generated or user-placed.
+    const vertexXs = pts.filter(p => p.x >= left && p.x <= right).map(p => p.x);
+    const crosses = [left, (left + right) / 2, right, ...vertexXs]
+      .some(x => { const y = yOnPath(x); return y > top && y < bottom; });
+    if (!crosses) return;
+
+    // Keep the line on whichever side of the card it's naturally already on —
+    // route over the top if it's riding above the card's center, under if not.
+    const goAbove = yOnPath((left + right) / 2) <= cy;
+    const detourY = goAbove ? top - 3 : bottom + 3;
+
+    // Just two points, one on each side of the card — the same move a GM
+    // makes by hand: click the line on either side and drag each point clear.
+    // No anchor points pinned to the card's edges, so each side runs one real
+    // diagonal all the way back to whatever point actually precedes/follows
+    // it, instead of a short vertical stub into a flat plateau. The result
+    // reads the same whether a person dragged these points or the code did.
+    const before = pts.filter(p => p.x <= left);
+    const after = pts.filter(p => p.x >= right);
+    pts = [
+      ...before,
+      { x: left, y: detourY },
+      { x: right, y: detourY },
+      ...after,
+    ];
+  });
+
+  return pts;
+}
+
+// Runs the same card-avoidance search as routeDividerPixels above, but writes
+// the result back into the REAL divider points instead of throwing it away
+// after one render — so a bend around a card gets an actual handle, draggable
+// and right-click-deletable exactly like a point the GM placed by hand,
+// rather than an invisible render-only artifact. Each inserted point carries
+// auto:true; the moment the GM drags or deletes one, it sheds the flag (see
+// the handle's mousedown handler) and becomes permanent. Crucially, "auto" is
+// only ever a note about how a point CAME to exist — it changes nothing about
+// how the point is treated afterward. Both auto and GM-placed points feed the
+// exact same routeDividerPixels pass at render time (below, in drawDividers),
+// so a manually placed point can never pin the line through a card that moves
+// onto it later: routing always re-runs against whatever real points exist,
+// with no special case for where they came from. This function only decides
+// which of those bends are worth making into real, editable points; it is
+// never the thing guaranteeing the line clears a card — routeDividerPixels
+// still does that unconditionally at render time regardless of what happens
+// here.
+function syncDividerAutoPoints(idx) {
+  const state = crawlState[idx], areas = crawlAreas[idx];
+  if (!state || !areas || !areas.length) return;
+  const W = (state.cols + UC_PAD * 2) * UC_CELL_W;
+  const H = (state.rows + UC_PAD * 2) * UC_CELL_H;
+  const nodePos = state.nodeRatios.map(r => ({ x: r.rx * W, y: r.ry * H }));
+  const DODGE = 20;
+
+  state.dividers.forEach((pts, dIdx) => {
+    const real = pts.filter(p => !p.auto).sort((a, b) => a.rx - b.rx);
+    if (!real.length) return;
+
+    // Each real entry keeps `ref` pointing at its ORIGINAL point object, not
+    // a copy. This runs on every drawDividers() call — including every
+    // mousemove frame of an in-progress drag — so a fresh object here would
+    // silently orphan a live dividerDrag.pt reference mid-drag. Auto points
+    // carry no such reference and are safe to discard and rebuild each pass.
+    let work = real.map(p => ({ ref: p, x: p.rx * W, y: p.ry * H, auto: false }));
+
+    function yOnPath(x) {
+      for (let k = 0; k < work.length - 1; k++) {
+        const a = work[k], b = work[k + 1];
+        if (x >= a.x && x <= b.x) {
+          const t = (x - a.x) / ((b.x - a.x) || 1e-9);
+          return a.y + t * (b.y - a.y);
+        }
+      }
+      return x <= work[0].x ? work[0].y : work[work.length - 1].y;
+    }
+
+    areas.forEach((a, i) => {
+      const cx = nodePos[i].x, cy = nodePos[i].y;
+      const hw = (UC_CELL_W - UC_MARGIN * 2) / 2 + DODGE;
+      const hh = (UC_CELL_H - UC_MARGIN * 2) / 2 + DODGE;
+      const left = cx - hw, right = cx + hw, top = cy - hh, bottom = cy + hh;
+
+      const vertexXs = work.filter(p => p.x >= left && p.x <= right).map(p => p.x);
+      const crosses = [left, (left + right) / 2, right, ...vertexXs]
+        .some(x => { const y = yOnPath(x); return y > top && y < bottom; });
+      if (!crosses) return;
+
+      const goAbove = yOnPath((left + right) / 2) <= cy;
+      const detourY = goAbove ? top - 3 : bottom + 3;
+
+      const before = work.filter(p => p.x <= left);
+      const after = work.filter(p => p.x >= right);
+      work = [
+        ...before,
+        { x: left, y: detourY, auto: true },
+        { x: right, y: detourY, auto: true },
+        ...after,
+      ];
+    });
+
+    state.dividers[dIdx] = work.map(p => {
+      if (!p.auto) return p.ref;   // same object as before — identity preserved
+      return { rx: p.x / W, ry: p.y / H, auto: true };
+    });
+  });
+}
+
+// Pixel-space divider polylines, extended to the canvas edges the same way
+// drawDividers renders them — used so edges know roughly where the red lines
+// actually are, to lean away from them. Approximate on purpose: it reads the
+// real (auto + GM-placed) divider points directly rather than re-running
+// routeDividerPixels's own card-avoidance detour, since this only needs to
+// know "where's the divider," not "exactly how it bends around a card."
+function dividerPixelPolylines(state, W, H) {
+  const x0 = -UC_CELL_W * 0.5, x1 = W + UC_CELL_W * 0.5;
+  return state.dividers.map(pts => {
+    const sorted = [...pts].sort((a, b) => a.rx - b.rx);
+    return [
+      { x: x0, y: sorted[0].ry * H },
+      ...sorted.map(p => ({ x: p.rx * W, y: p.ry * H })),
+      { x: x1, y: sorted[sorted.length - 1].ry * H },
+    ];
+  });
+}
+
+// Route a straight area-to-area connection around any OTHER card it would
+// otherwise pass behind — same idea and same rendering-only guarantee as
+// routeDividerPixels above (never touches state.edges, only how a connection
+// is drawn), but generalised for direction: a divider is always roughly
+// horizontal, so it can use x as the "along" axis and plain y as "across".
+// An edge can point any way — including near-vertical, between adjacent
+// depth bands — so this works in a frame anchored to the edge's own
+// direction: s = distance along the original straight line from A, o =
+// signed perpendicular offset from it. A card is skipped near the two ends
+// it actually connects to (skipI, skipJ) — the line is meant to run into
+// those. `dividers` (optional) is a list of pixel-space divider polylines —
+// see below for what it's used for.
+function routeEdgePixels(ax, ay, bx, by, areas, nodePos, skipI, skipJ, dividers) {
+  const dx = bx - ax, dy = by - ay;
+  const len = Math.hypot(dx, dy) || 1e-9;
+  const ux = dx / len, uy = dy / len;   // unit vector along the line
+  const nx = -uy, ny = ux;              // unit vector across the line
+
+  function yOnDivider(div, x) {
+    for (let k = 0; k < div.length - 1; k++) {
+      const a = div[k], b = div[k + 1];
+      if (x >= a.x && x <= b.x) {
+        const t = (x - a.x) / ((b.x - a.x) || 1e-9);
+        return a.y + t * (b.y - a.y);
+      }
+    }
+    return x <= div[0].x ? div[0].y : div[div.length - 1].y;
+  }
+
+  // Softly lean the connection away from any depth divider it runs close to,
+  // BEFORE card avoidance runs on top of this baseline. This addresses two
+  // related complaints: a connection nearly parallel to a divider reads as
+  // ambiguous rather than a clean crossing, and a card-avoidance bend that
+  // happens to land right where the line crosses a divider reads as the line
+  // changing its mind exactly at the crossing. Reshaping the baseline first
+  // means both problems tend to resolve on their own — the crossing point
+  // itself shifts, so a bend from an unrelated card is far less likely to
+  // land on top of it — without hand-coding either rule directly, which
+  // would risk undermining the hard card-clearance guarantee built below.
+  // The push is computed in real vertical distance (dividers are ~horizontal
+  // by construction) but applied along this edge's own perpendicular axis
+  // scaled by |ny|, so a steep, already-clean crossing (near-vertical edge,
+  // ny near 0) is left alone — exactly the case with no overlap problem to
+  // begin with — while a near-horizontal edge (ny near 1, the case that
+  // actually runs parallel to a divider) gets the full effect. REPEL_RANGE,
+  // REPEL_MAX and REPEL_SAMPLES are eyeballing constants — worth tuning once
+  // this is actually seen rendered, this codebase's usual way of picking
+  // these.
+  const REPEL_SAMPLES = 8, REPEL_RANGE = 30, REPEL_MAX = 12;
+  let path = [{ s: 0, o: 0 }];
+  if (dividers && dividers.length && len > REPEL_RANGE * 2) {
+    for (let k = 1; k < REPEL_SAMPLES; k++) {
+      const s = (len * k) / REPEL_SAMPLES;
+      const px = ax + s * ux, py = ay + s * uy;
+      let o = 0;
+      for (const div of dividers) {
+        const vertDist = yOnDivider(div, px) - py;
+        const dist = Math.abs(vertDist);
+        if (dist >= REPEL_RANGE) continue;
+        const strength = REPEL_MAX * (1 - dist / REPEL_RANGE) * Math.abs(ny);
+        o += -Math.sign(vertDist || 1) * Math.sign(ny || 1) * strength;
+      }
+      path.push({ s, o });
+    }
+  }
+  path.push({ s: len, o: 0 });
+
+  function oOnPath(s) {
+    for (let k = 0; k < path.length - 1; k++) {
+      const p = path[k], q = path[k + 1];
+      if (s >= p.s && s <= q.s) {
+        const t = (s - p.s) / ((q.s - p.s) || 1e-9);
+        return p.o + t * (q.o - p.o);
+      }
+    }
+    return s <= path[0].s ? path[0].o : path[path.length - 1].o;
+  }
+  function pointAt(s) {
+    const o = oOnPath(s);
+    return { x: ax + s * ux + o * nx, y: ay + s * uy + o * ny };
+  }
+
+  const DODGE = 20;
+  const HW = (UC_CELL_W - UC_MARGIN * 2) / 2 + DODGE;
+  const HH = (UC_CELL_H - UC_MARGIN * 2) / 2 + DODGE;
+
+  // Loop-invariant: how far a card box reaches along each of THIS line's own
+  // axes (projection of an axis-aligned box's half-extents onto a rotated
+  // axis). Identical for every card, so hoisted out of the scan below.
+  const perpExtent = HW * Math.abs(nx) + HH * Math.abs(ny);
+  const alongExtent = HW * Math.abs(ux) + HH * Math.abs(uy);
+  // Largest sideways deviation anywhere on the path so far, kept current as
+  // detours are added, so the cheap reject stays correct once the path is no
+  // longer straight.
+  let maxO = 0;
+  for (const p of path) maxO = Math.max(maxO, Math.abs(p.o));
+
+  areas.forEach((a, i) => {
+    if (i === skipI || i === skipJ) return;
+    const cx = nodePos[i].x, cy = nodePos[i].y;
+
+    // Cheapest possible reject first — two dot products, no allocation. A card
+    // whose centre sits farther to the side than the path can reach, or wholly
+    // beyond either end, cannot be hit however the path bends. This runs for
+    // every (edge x area) pair, so it's what keeps big crawls tractable.
+    const relX = cx - ax, relY = cy - ay;
+    const cs = relX * ux + relY * uy;
+    const co = relX * nx + relY * ny;
+    if (Math.abs(co) > perpExtent + maxO) return;
+    if (cs < -alongExtent || cs > len + alongExtent) return;
+
+    const left = cx - HW, right = cx + HW, top = cy - HH, bottom = cy + HH;
+
+    // Quick reject: does the card's footprint even overlap the segment's own
+    // span, once projected onto the line's direction?
+    const corners = [[left, top], [right, top], [left, bottom], [right, bottom]];
+    let sMin = Infinity, sMax = -Infinity;
+    for (const [px, py] of corners) {
+      const s = (px - ax) * ux + (py - ay) * uy;
+      sMin = Math.min(sMin, s); sMax = Math.max(sMax, s);
+    }
+    sMin = Math.max(sMin, 0); sMax = Math.min(sMax, len);
+    if (sMin >= sMax) return;
+
+    // Same reasoning as the divider version: sample sMin/mid/sMax, plus every
+    // real vertex whose s falls in range, so a path shaped by several nearby
+    // points (hand-placed, or a previous card's detour) can't spike through a
+    // card's box in the gap between the 3 fixed samples.
+    const vertexSs = path.filter(p => p.s >= sMin && p.s <= sMax).map(p => p.s);
+    const crosses = [sMin, (sMin + sMax) / 2, sMax, ...vertexSs].some(s => {
+      const p = pointAt(s);
+      return p.x > left && p.x < right && p.y > top && p.y < bottom;
+    });
+    if (!crosses) return;
+
+    // Keep the line on whichever side it's already naturally on. (cs/co and
+    // perpExtent were computed for the reject above and are reused here.)
+    const midS = (sMin + sMax) / 2;
+    const pushPositive = oOnPath(midS) > co;
+    const detourO = pushPositive ? co + perpExtent + 3 : co - perpExtent - 3;
+
+    const before = path.filter(p => p.s <= sMin);
+    const after = path.filter(p => p.s >= sMax);
+    path = [...before, { s: sMin, o: detourO }, { s: sMax, o: detourO }, ...after];
+    maxO = Math.max(maxO, Math.abs(detourO));
+  });
+
+  return path.map(p => ({ x: ax + p.s * ux + p.o * nx, y: ay + p.s * uy + p.o * ny }));
+}
+
+// Point at half the total arc length along a polyline — used to keep the
+// secret-passage badge centered on a routed edge instead of on the straight
+// line it no longer draws.
+function routeMidpoint(pts) {
+  let total = 0;
+  for (let k = 0; k < pts.length - 1; k++) total += Math.hypot(pts[k + 1].x - pts[k].x, pts[k + 1].y - pts[k].y);
+  let target = total / 2;
+  for (let k = 0; k < pts.length - 1; k++) {
+    const segLen = Math.hypot(pts[k + 1].x - pts[k].x, pts[k + 1].y - pts[k].y);
+    if (target <= segLen || k === pts.length - 2) {
+      const t = segLen > 0 ? target / segLen : 0;
+      return { x: pts[k].x + t * (pts[k + 1].x - pts[k].x), y: pts[k].y + t * (pts[k + 1].y - pts[k].y) };
+    }
+    target -= segLen;
+  }
+  return pts[0];
+}
+
 // Both the graph realisation and the layout are randomised, so attempts differ.
 // Roll the dice ONCE, then try a few different ways of building and drawing
 // that same roll, and keep the cleanest. The faces, area types and hidden
@@ -635,6 +965,23 @@ function generateCrawl(count) {
     if (valid && crossings === 0) break;
   }
   return best;
+}
+
+// A face of 5 or 6 means an area has an unusually high number of ways in and
+// out — enough that one of them naturally reads as the one nobody's supposed
+// to notice. Pick one of that area's own edges at random and mark it secret.
+// Done independently per area, so a hub connected to another hub can end up
+// with two secret edges (one chosen from each end) — nothing here needs a
+// secret to be unique to one area.
+function markNaturalSecrets(areas, edges) {
+  const edgeList = [...edges.values()];
+  areas.forEach((a, i) => {
+    if (a.face < 5) return;
+    const incident = edgeList.filter(e => e.i === i || e.j === i);
+    if (!incident.length) return;
+    const pick = incident[Math.floor(Math.random() * incident.length)];
+    pick.state = 'secret';
+  });
 }
 
 
@@ -681,8 +1028,10 @@ function assignDepthsAndNumbers(areas, nodeRatios, depthCount) {
 
 // Depth of a point: 1 + number of dividers above it. Piecewise-linear
 // interpolation of each divider polyline at the point's x. Works entirely in
-// ratio space so it is render-size invariant.
-function dividerYAt(pts, rx) {
+// ratio space so it is render-size invariant. Tolerant of an unsorted points
+// array — a handle being mid-drag can temporarily put points out of rx order.
+function dividerYAt(ptsIn, rx) {
+  const pts = ptsIn.length > 1 ? [...ptsIn].sort((a, b) => a.rx - b.rx) : ptsIn;
   if (rx <= pts[0].rx) return pts[0].ry;
   for (let k = 0; k < pts.length - 1; k++) {
     const a = pts[k], b = pts[k + 1];
@@ -696,7 +1045,15 @@ function dividerYAt(pts, rx) {
 
 function depthOfRatio(state, rx, ry) {
   let d = 1;
-  for (const pts of state.dividers) if (dividerYAt(pts, rx) < ry) d++;
+  for (const pts of state.dividers) {
+    // Auto bend points (auto:true) exist purely to keep the drawn line off a
+    // card — that card's mere presence shouldn't be able to flip which side
+    // some OTHER area falls on. Only GM-placed points (including any auto
+    // point the GM has actually dragged or right-clicked, which sheds the
+    // flag on touch) count toward depth.
+    const real = pts.filter(p => !p.auto);
+    if (real.length && dividerYAt(real, rx) < ry) d++;
+  }
   return d;
 }
 
@@ -711,8 +1068,10 @@ function commitDepths(idx) {
     if (d !== a.depth) { a.depth = d; changed = true; }
   });
   areas.forEach(a => {
-    const span = document.querySelector(`#uccard-${idx}-${a.roomNum} .uc-depth`);
+    const card = document.getElementById(`uccard-${idx}-${a.roomNum}`);
+    const span = card?.querySelector('.uc-depth');
     if (span) span.textContent = `| D${a.depth}`;
+    if (card) positionUCBtnRow(card);   // depth digit count can change the badge's width
   });
   syncAdjacent(idx);
   return changed;
@@ -821,8 +1180,6 @@ function buildUCMap(idx, fullscreen = false) {
   const W = (cols + UC_PAD * 2) * UC_CELL_W;
   const H = (rows + UC_PAD * 2) * UC_CELL_H;
   const nodePos = state.nodeRatios.map(r => ({ x: r.rx * W, y: r.ry * H }));
-  const divPx = () => state.dividers.map(pts => pts.map(p => ({ x: p.rx * W, y: p.ry * H })));
-
   const svg = ucSvgEl('svg', {
     id: svgId, width: W, height: H, viewBox: `0 0 ${W} ${H}`,
     style: 'display:block;width:100%;height:auto;font-family:"National Park",sans-serif;user-select:none;cursor:default;',
@@ -866,7 +1223,7 @@ function buildUCMap(idx, fullscreen = false) {
 
   let connectMode = false, connectFrom = null;
   let dragging = null;        // node drag
-  let dividerDrag = null;     // { d, p } divider handle drag
+  let dividerDrag = null;     // { d, pt } divider handle drag — holds a live reference to the point object
   let highlightedNode = null;
 
   function boxEdgePoint(cx, cy, tx, ty, hw, hh) {
@@ -882,25 +1239,34 @@ function buildUCMap(idx, fullscreen = false) {
   //    deleted (removed). Right-click deletes directly.
   function drawEdges() {
     edgeLayer.innerHTML = '';
+    const dividerPx = dividerPixelPolylines(state, W, H);
     for (const [key, edge] of state.edges) {
       const ax = nodePos[edge.i].x, ay = nodePos[edge.i].y;
       const bx = nodePos[edge.j].x, by = nodePos[edge.j].y;
       const dx = bx - ax, dy = by - ay, len = Math.sqrt(dx * dx + dy * dy);
       if (len < 1) continue;
-      const px = -dy / len * 9, py = dx / len * 9;
+
+      // Routed around any card the straight A→B line would otherwise pass
+      // behind — same rendering-only detour as the depth dividers — and
+      // leaning away from any divider it runs close to first.
+      const routed = routeEdgePixels(ax, ay, bx, by, areas, nodePos, edge.i, edge.j, dividerPx);
+      const dAttr = ['M', routed[0].x, routed[0].y];
+      for (let k = 1; k < routed.length; k++) dAttr.push('L', routed[k].x, routed[k].y);
+      const dStr = dAttr.join(' ');
 
       const isSecret = edge.state === 'secret';
       const edgeG = ucSvgEl('g', { style: 'cursor:pointer' });
-      const lineAttrs = isSecret ? { 'stroke-dasharray': '2,5' } : {};
-      edgeG.appendChild(ucSvgEl('line', { x1: ax + px, y1: ay + py, x2: bx + px, y2: by + py, stroke: '#9ecee6', 'stroke-width': '1', 'stroke-linecap': 'round', ...lineAttrs }));
-      edgeG.appendChild(ucSvgEl('line', { x1: ax - px, y1: ay - py, x2: bx - px, y2: by - py, stroke: '#9ecee6', 'stroke-width': '1', 'stroke-linecap': 'round', ...lineAttrs }));
-      edgeG.appendChild(ucSvgEl('line', { x1: ax, y1: ay, x2: bx, y2: by, stroke: 'transparent', 'stroke-width': '16' }));
+      const lineAttrs = isSecret ? { 'stroke-dasharray': '2,12' } : {};
+      edgeG.appendChild(ucSvgEl('path', { d: dStr, fill: 'none', stroke: '#9ecee6', 'stroke-width': '7', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', ...lineAttrs }));
+      edgeG.appendChild(ucSvgEl('path', { d: dStr, fill: 'none', stroke: 'transparent', 'stroke-width': '16' }));
 
       if (isSecret) {
-        const mx = (ax + bx) / 2, my = (ay + by) / 2;
+        // Midpoint of the routed path, not the straight line, so the badge
+        // always sits on the line as drawn even when it bows around a card.
+        const half = routed.length > 2 ? routeMidpoint(routed) : { x: (ax + bx) / 2, y: (ay + by) / 2 };
         const badge = ucSvgEl('g');
-        badge.appendChild(ucSvgEl('circle', { cx: mx, cy: my, r: 13, fill: '#fff9f5', stroke: '#9ecee6', 'stroke-width': '0.75' }));
-        const t = ucSvgEl('text', { x: mx, y: my, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': '11', 'font-weight': 'bold', 'font-family': '"National Park",sans-serif', fill: '#262626' });
+        badge.appendChild(ucSvgEl('circle', { cx: half.x, cy: half.y, r: 13, fill: '#fff9f5', stroke: '#9ecee6', 'stroke-width': '0.75' }));
+        const t = ucSvgEl('text', { x: half.x, y: half.y, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': '11', 'font-weight': 'bold', 'font-family': '"National Park",sans-serif', fill: '#262626' });
         t.textContent = 'S';
         badge.appendChild(t);
         edgeG.appendChild(badge);
@@ -908,10 +1274,10 @@ function buildUCMap(idx, fullscreen = false) {
 
       edgeG.addEventListener('mouseenter', () => {
         if (connectMode || dragging || dividerDrag) return;
-        edgeG.querySelectorAll('line[stroke="#9ecee6"]').forEach(l => l.setAttribute('stroke', '#3fb5cc'));
+        edgeG.querySelectorAll('path[stroke="#9ecee6"]').forEach(l => l.setAttribute('stroke', '#3fb5cc'));
       });
       edgeG.addEventListener('mouseleave', () => {
-        edgeG.querySelectorAll('line[stroke="#3fb5cc"]').forEach(l => l.setAttribute('stroke', '#9ecee6'));
+        edgeG.querySelectorAll('path[stroke="#3fb5cc"]').forEach(l => l.setAttribute('stroke', '#9ecee6'));
       });
       edgeG.addEventListener('click', (e) => {
         if (connectMode || dragging || dividerDrag) return;
@@ -934,30 +1300,86 @@ function buildUCMap(idx, fullscreen = false) {
     }
   }
 
-  // ── Depth dividers: draggable polylines (handles move vertically only;
-  //    depth reassignment commits on RELEASE, drag is visual-only preview).
+  // ── Depth dividers: draggable polylines. Handles move freely on both axes
+  //    (depth reassignment commits on RELEASE, drag is visual-only preview),
+  //    clicking the line away from a handle inserts a new one, right-clicking
+  //    a handle removes it (never below 2 points — a line needs both ends),
+  //    and the drawn path is routed around any card it would otherwise pass
+  //    behind.
   function drawDividers() {
+    syncDividerAutoPoints(idx);   // promote/refresh real bend points before drawing
     dividerLayer.innerHTML = '';
-    const dpx = divPx();
     const x0 = -UC_CELL_W * 0.5, x1 = W + UC_CELL_W * 0.5;
 
-    dpx.forEach((pts, dIdx) => {
-      const path = ['M', x0, pts[0].y];
-      pts.forEach(p => path.push('L', p.x, p.y));
-      path.push('L', x1, pts[pts.length - 1].y);
+    state.dividers.forEach((pts, dIdx) => {
+      const sorted = [...pts].sort((a, b) => a.rx - b.rx);
+      const basePx = [
+        { x: x0, y: sorted[0].ry * H },
+        ...sorted.map(p => ({ x: p.rx * W, y: p.ry * H })),
+        { x: x1, y: sorted[sorted.length - 1].ry * H },
+      ];
+      const routed = routeDividerPixels(basePx, areas, nodePos);
+
+      const dAttr = ['M', routed[0].x, routed[0].y];
+      for (let k = 1; k < routed.length; k++) dAttr.push('L', routed[k].x, routed[k].y);
+      const dStr = dAttr.join(' ');
+
       dividerLayer.appendChild(ucSvgEl('path', {
-        d: path.join(' '), fill: 'none', stroke: '#fa8072', 'stroke-width': '1.5',
+        d: dStr, fill: 'none', stroke: '#fa8072', 'stroke-width': '1.5',
         'stroke-dasharray': '8,5', opacity: '0.75', 'pointer-events': 'none',
       }));
-      pts.forEach((p, pIdx) => {
+
+      // Wide invisible hit-stroke: clicking the line away from a handle drops
+      // a new one, sitting exactly on the current line so it never jumps it.
+      const hit = ucSvgEl('path', {
+        d: dStr, fill: 'none', stroke: 'transparent', 'stroke-width': '18',
+        style: 'cursor:crosshair', 'pointer-events': 'stroke',
+      });
+      hit.addEventListener('click', (e) => {
+        if (connectMode || dragging || dividerDrag) return;
+        e.stopPropagation();
+        const { x: mx } = toSVGCoords(e.clientX, e.clientY);
+        const rx = Math.min(1.1, Math.max(-0.1, mx / W));
+        const near = pts.some(p => Math.abs(p.rx - rx) < 0.015);
+        if (near) return;
+        pts.push({ rx, ry: dividerYAt(sorted, rx) });
+        pts.sort((a, b) => a.rx - b.rx);
+        markDirty(idx);
+        commitDepths(idx);
+        drawDividers();
+        drawEdges();   // edges lean away from dividers; this one just moved
+        drawNodes();
+      });
+      dividerLayer.appendChild(hit);
+
+      pts.forEach((p) => {
         const h = ucSvgEl('circle', {
-          cx: p.x, cy: p.y, r: 8, fill: '#fff9f5', stroke: '#fa8072',
-          'stroke-width': '1.5', style: 'cursor:ns-resize',
+          cx: p.rx * W, cy: p.ry * H, r: 8, fill: '#fff9f5', stroke: '#fa8072',
+          'stroke-width': '1.5', style: 'cursor:move',
         });
         h.addEventListener('mousedown', (e) => {
           if (e.button !== 0) return;
           e.stopPropagation();
-          dividerDrag = { d: dIdx, p: pIdx };
+          delete p.auto;   // grabbing a bend promotes it to a permanent, GM-placed point
+          dividerDrag = { d: dIdx, pt: p };
+        });
+        h.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          // Auto bend points are freely disposable — the next sync just puts
+          // one back if the card is still in the way. Only GM-placed points
+          // are floored at two, since a divider needs at least that many to
+          // mean anything.
+          const realCount = pts.filter(pt => !pt.auto).length;
+          if (!p.auto && realCount <= 2) return;
+          const at = pts.indexOf(p);
+          if (at === -1) return;
+          pts.splice(at, 1);
+          markDirty(idx);
+          commitDepths(idx);
+          drawDividers();
+          drawEdges();   // edges lean away from dividers; this one just moved
+          drawNodes();
         });
         dividerLayer.appendChild(h);
       });
@@ -1004,9 +1426,20 @@ function buildUCMap(idx, fullscreen = false) {
       const header = ucSvgEl('text', {
         x: x + 12, y: y + 22, 'text-anchor': 'start', 'font-size': '18',
         'font-weight': 'bold', fill: '#262626', 'font-family': '"National Park",sans-serif',
-        'pointer-events': 'none',
+        'pointer-events': 'all', style: 'cursor:pointer',
       });
       header.textContent = `${a.roomNum}. ${liveName || a.category}`.slice(0, 26);
+      // Independently interactive from the rest of the node — hover to
+      // underline, click to jump to this area's card. Both handlers stop
+      // propagation so this never also starts a node drag or enters
+      // connect-mode, which is what the surrounding group's own listeners do.
+      header.addEventListener('mouseenter', () => header.setAttribute('text-decoration', 'underline'));
+      header.addEventListener('mouseleave', () => header.removeAttribute('text-decoration'));
+      header.addEventListener('mousedown', (e) => e.stopPropagation());
+      header.addEventListener('click', (e) => {
+        e.stopPropagation();
+        focusUCCard(idx, a.roomNum);
+      });
       g.appendChild(header);
 
       // Depth tag, top right
@@ -1104,10 +1537,18 @@ function buildUCMap(idx, fullscreen = false) {
     const { x: mx, y: my } = toSVGCoords(e.clientX, e.clientY);
 
     if (dividerDrag) {
-      // Visual-only preview: move the handle, redraw dividers. Depth commit
-      // happens on mouseup.
-      const pts = state.dividers[dividerDrag.d];
-      pts[dividerDrag.p].ry = Math.min(Math.max(my / H, -0.1), 1.1);
+      // Visual-only preview: move the handle on both axes, redraw dividers.
+      // Depth commit happens on mouseup. Clamp ry against the neighboring
+      // dividers at this rx so bands can't invert or cross each other.
+      const rx = Math.min(1.1, Math.max(-0.1, mx / W));
+      let ry = Math.min(Math.max(my / H, -0.1), 1.1);
+      const CLAMP_EPS = 0.01;
+      const above = state.dividers[dividerDrag.d - 1];
+      const below = state.dividers[dividerDrag.d + 1];
+      if (above) ry = Math.max(ry, dividerYAt(above, rx) + CLAMP_EPS);
+      if (below) ry = Math.min(ry, dividerYAt(below, rx) - CLAMP_EPS);
+      dividerDrag.pt.rx = rx;
+      dividerDrag.pt.ry = ry;
       drawDividers();
       return;
     }
@@ -1117,6 +1558,7 @@ function buildUCMap(idx, fullscreen = false) {
       nodePos[dragging.nodeIdx].y = dragging.origY + dy;
       if (Math.abs(dx) + Math.abs(dy) > 4) dragging.moved = true;
       drawEdges();
+      drawDividers();   // routing already reads this live nodePos, not state.nodeRatios
       drawNodes();
       return;
     }
@@ -1131,10 +1573,12 @@ function buildUCMap(idx, fullscreen = false) {
 
   svg.addEventListener('mouseup', () => {
     if (dividerDrag) {
+      state.dividers[dividerDrag.d].sort((a, b) => a.rx - b.rx);
       dividerDrag = null;
       markDirty(idx);
       commitDepths(idx);     // commit on release
       drawDividers();
+      drawEdges();           // edges lean away from dividers; this one just moved
       drawNodes();           // depth tags may have changed
       return;
     }
@@ -1187,7 +1631,7 @@ function buildUCMap(idx, fullscreen = false) {
   svg.addEventListener('wheel', (e) => {
     e.preventDefault();
     const rect = svg.getBoundingClientRect();
-    if (e.ctrlKey) {
+    if (e.ctrlKey || e.metaKey) {
       const { x: mx, y: my } = toSVGCoords(e.clientX, e.clientY);
       const scale = 1 / (1 - e.deltaY * 0.01);
       const newW = Math.min(MAX_W, Math.max(MIN_W, vb.w * scale));
@@ -1263,7 +1707,7 @@ function refreshUCMap(idx) {
 
 // Appended to every generated description. The Area Design guide at the top of
 // the page explains what belongs here; this is the nudge to go do it.
-const UC_DESC_PLACEHOLDER = '(replace this text with your area description)';
+const UC_DESC_PLACEHOLDER = '<i>(replace this text with your area description)</i>';
 
 function escapeUC(str) {
   return String(str).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -1279,7 +1723,7 @@ function ucLineHTML(uc, html, isDesc = false) {
 // order with bold preserved.
 function buildAreaCard(idx, area) {
   const card = document.createElement('div');
-  card.className = 'card expanded';
+  card.className = 'card';   // collapsed by default — renderCrawlBlock expands only the first
   card.id = `uccard-${idx}-${area.roomNum}`;
   card.dataset.ucCard = '1';
   card.dataset.roomNum = area.roomNum;
@@ -1294,18 +1738,18 @@ function buildAreaCard(idx, area) {
   // — deliberately flavourless, because it's meant to be typed over.
   card.innerHTML = `
     <div class="card-header" onclick="toggleUCCard('${card.id}')" style="cursor:pointer">
-      <span class="card-title"><span class="editable uc-name" contenteditable="true" spellcheck="false" onclick="event.stopPropagation()">${escapeUC(area.category)}</span></span>
+      <span class="card-title"><span class="editable uc-name" contenteditable="false" spellcheck="false" onclick="ucNameClick(event, this)" ondblclick="ucNameDblClick(event, this)">${escapeUC(area.category)}</span></span>
       <span class="uc-level"><b class="pdf-red">${area.roomNum}</b> <b class="uc-depth pdf-blue">| D${area.depth}</b></span>
     </div>
     <div class="card-body">
       ${ucLineHTML('desc', `${escapeUC(area.typeName)}. ${UC_DESC_PLACEHOLDER}`, true)}
-      ${ucLineHTML('landmark', `<b>Landmark</b>&nbsp;${escapeUC(area.landmark)}`)}
-      ${ucLineHTML('hidden', `<b>Hidden</b> <span class="pdf-blue">(${area.hiddenType})</span>&nbsp;`)}
-      ${ucLineHTML('secret', `<b>Secret</b>&nbsp;`)}
-      ${ucLineHTML('encounter', `<b>Encounter.</b>&nbsp;`)}
+      ${ucLineHTML('landmark', `<b>Landmark. </b>&nbsp;${escapeUC(area.landmark)}`)}
+      ${ucLineHTML('hidden', `<b>Hidden. </b> <span class="pdf-blue">(${area.hiddenType})</span>&nbsp;`)}
+      ${ucLineHTML('secret', `<b>Secret. </b>&nbsp;`)}
+      ${ucLineHTML('encounter', `<b>Encounter. </b>&nbsp;`)}
       <div class="card-actions uc-btn-row">
-        <button class="uc-btn" onclick="rollHistory(${idx}, ${area.roomNum})">⟳ History</button>
-        <button class="uc-btn" onclick="rollHereThere(${idx}, ${area.roomNum})">⟳ Here &amp; There</button>
+        <button class="uc-btn" onclick="rollHistory(${idx}, ${area.roomNum})">History</button>
+        <button class="uc-btn" onclick="rollHereThere(${idx}, ${area.roomNum})">Here &amp; There</button>
       </div>
     </div>
   `;
@@ -1314,7 +1758,72 @@ function buildAreaCard(idx, area) {
 
 function toggleUCCard(id) {
   const card = document.getElementById(id);
-  if (card) card.classList.toggle('expanded');
+  if (!card) return;
+  const expanded = card.classList.toggle('expanded');
+  if (expanded) positionUCBtnRow(card);
+}
+
+// The title behaves like the rest of the header (click toggles the card)
+// UNLESS the click turns out to be the first half of a double-click, which
+// opens it for editing instead. Distinguishing the two needs a short delay:
+// a plain click is committed as a toggle only if no second click arrives in
+// time to make it a dblclick. The timer lives on the element itself so
+// clicking one card's title in quick succession with another's can't cross
+// wires between them.
+function ucNameClick(e, el) {
+  e.stopPropagation();
+  // Already editing: every further click is text selection (a triple-click to
+  // select the line sends a third click after dblclick opened the field), so
+  // it must never queue a toggle that would collapse the card mid-edit.
+  if (el.isContentEditable) return;
+  if (el._ucClickTimer) return;   // a second click is on its way to dblclick — let that handler take it
+  el._ucClickTimer = setTimeout(() => {
+    el._ucClickTimer = null;
+    const card = el.closest('.card');
+    if (card) toggleUCCard(card.id);
+  }, 250);
+}
+function ucNameDblClick(e, el) {
+  e.stopPropagation();
+  if (el._ucClickTimer) { clearTimeout(el._ucClickTimer); el._ucClickTimer = null; }
+  el.contentEditable = 'true';
+  el.focus();
+}
+
+// The hover History/Here & There row (.uc-btn-row) shares the generic
+// .card-actions overlay — position:absolute, pinned to the card's top-right —
+// which puts it right on top of the room number + depth badge (.uc-level) in
+// the header. Park it flush against that badge's actual left edge instead, so
+// it never covers the badge; a long area title can still run under it, which
+// is the preferred trade-off. Re-run whenever .uc-level's rendered width
+// could have changed (card just built, just expanded, or depth reassigned).
+function positionUCBtnRow(card) {
+  const level = card.querySelector('.uc-level');
+  const row = card.querySelector('.uc-btn-row');
+  if (!level || !row) return;
+  const cardRect = card.getBoundingClientRect();
+  const levelRect = level.getBoundingClientRect();
+  if (!cardRect.width || !levelRect.width) return;   // not laid out (e.g. collapsed)
+  const GAP = 8;
+  row.style.right = `${cardRect.right - levelRect.left + GAP}px`;
+}
+
+// Clicking an area's title on the map jumps to its card: collapse every
+// other card in the stack, expand this one, and scroll it into view. Closes
+// the fullscreen map overlay first if that's where the click came from,
+// since the target card lives in the page behind it.
+function focusUCCard(idx, roomNum) {
+  if (document.getElementById('map-fullscreen-overlay')?.classList.contains('active')) {
+    closeUCFullscreen();
+  }
+  const block = document.getElementById(`block-uc-${idx}`);
+  if (!block) return;
+  block.querySelectorAll('[data-uc-card]').forEach(card => {
+    const isTarget = String(card.dataset.roomNum) === String(roomNum);
+    card.classList.toggle('expanded', isTarget);
+    if (isTarget) positionUCBtnRow(card);
+  });
+  document.getElementById(`uccard-${idx}-${roomNum}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function toggleUCMapCard(id) {
@@ -1406,16 +1915,19 @@ function rollHereThere(idx, num) {
   const tgtNum = areas[tgtIdx].roomNum;
   const tgtDesc = ucDescOf(idx, tgtNum);
 
-  const here = UC_SOMETHING_HERE[d6() - 1];
+  const here = UC_SOMETHING_HERE[d6() - 1].toLowerCase();
   const there = d66pick(UC_SOMETHING_THERE);
 
+  // Each side names its own thing AND teases the other's, so either card
+  // read alone tells the GM what to expect without flipping to check —
+  // "something here is X. It's related to what is Y in area N," not a bare page ref.
   srcDesc.insertAdjacentHTML('beforeend',
-    ` <span data-uc-frag="here">Something here is <b>${here.toLowerCase()}</b>. See area <b class="pdf-red">${tgtNum}</b>.</span>`);
+    ` <span data-uc-frag="here">Something here is <b>${here}</b>. It's related to what is <b>${there}</b> in area <b class="pdf-red">${tgtNum}</b>.</span>`);
   srcCard.dataset.pairTarget = tgtNum;
 
   if (tgtDesc) {
     tgtDesc.insertAdjacentHTML('beforeend',
-      ` <span data-uc-frag="there" data-src="${num}">Something there is <b>${there}</b>. See area <b class="pdf-red">${num}</b>.</span>`);
+      ` <span data-uc-frag="there" data-src="${num}">Something here is <b>${there}</b>. It's related to what is <b>${here}</b> in area <b class="pdf-red">${num}</b>.</span>`);
   }
   markDirty(idx);
 }
@@ -1445,6 +1957,7 @@ function rollCrawl() {
   // Depths and Area Numbers are assigned last — they depend on final positions,
   // and numbers are permanent from that point on.
   const { areas, edges, nodeRatios, cols, rows } = generateCrawl(count);
+  markNaturalSecrets(areas, edges);
   const dividers = assignDepthsAndNumbers(areas, nodeRatios, depthCount);
 
   crawlAreas[idx] = areas;
@@ -1480,15 +1993,13 @@ function renderCrawlBlock(idx, name, cardSnaps) {
 
   const mapCardId = `ucmapcard-${idx}`;
   const mapCard = document.createElement('div');
-  mapCard.className = 'map-card expanded';
+  mapCard.className = 'map-card';
   mapCard.id = mapCardId;
   mapCard.innerHTML = `
     <div class="map-card-header" onclick="toggleUCMapCard('${mapCardId}')">
-      <span style="cursor:pointer;flex:1">Map <span class="map-chevron">▼</span></span>
+      <span style="cursor:pointer;flex:1">Map</span>
       <span style="display:flex;align-items:center;gap:4px" onclick="event.stopPropagation()">
-        <button onclick="zoomUC('${idx}', false, -0.2)" style="background:var(--grey-lightest);border:none;border-radius:3px;font-size:0.85em;padding:1px 7px;cursor:pointer;font-family:'National Park',sans-serif;color:var(--grey-darkest);line-height:1.4">−</button>
-        <button onclick="zoomUC('${idx}', false, 0.2)" style="background:var(--grey-lightest);border:none;border-radius:3px;font-size:0.85em;padding:1px 7px;cursor:pointer;font-family:'National Park',sans-serif;color:var(--grey-darkest);line-height:1.4">+</button>
-        <button onclick="openUCFullscreen('${idx}')" style="background:none;border:1px solid var(--blue-light);border-radius:3px;font-size:0.75em;padding:2px 8px;cursor:pointer;font-family:'National Park',sans-serif;text-transform:uppercase;letter-spacing:1px;color:var(--grey-darkest);">⛶ Fullscreen</button>
+        <button onclick="openUCFullscreen('${idx}')" style="background:none;border:1px solid var(--blue-light);border-radius:3px;font-size:0.75em;padding:2px 8px;cursor:pointer;font-family:'National Park',sans-serif;text-transform:uppercase;letter-spacing:1px;color:var(--grey-darkest);">⛶ Show Map</button>
       </span>
     </div>
     <div class="map-card-body" style="display:block"><div class="map-tile-wrap"></div></div>
@@ -1498,13 +2009,16 @@ function renderCrawlBlock(idx, name, cardSnaps) {
 
   const areas = crawlAreas[idx];
   const sorted = [...areas].sort((a, b) => a.roomNum - b.roomNum);
-  for (const area of sorted) {
+  sorted.forEach((area, i) => {
     const card = buildAreaCard(idx, area);
+    if (i === 0) card.classList.add('expanded');   // first area open, rest collapsed
     if (cardSnaps && cardSnaps[area.roomNum]) applyCardSnap(idx, card, cardSnaps[area.roomNum]);
     block.appendChild(card);
-  }
+  });
 
   out.appendChild(block);
+  // Only measurable once attached to the live document.
+  block.querySelectorAll('[data-uc-card]').forEach(positionUCBtnRow);
 }
 
 // ── EDIT TRACKING (delegated once) ────────────────────────────────────────────
@@ -1558,6 +2072,7 @@ document.addEventListener('keydown', (e) => {
 // wasteful — commit on blur.
 document.addEventListener('focusout', (e) => {
   const t = e.target;
+  if (t.classList?.contains('uc-name')) t.contentEditable = 'false';   // back to double-click-to-edit
   if (!t.classList?.contains('uc-name') && !t.closest?.('[data-uc="landmark"]')) return;
   const block = t.closest('.uc-block');
   if (block) refreshUCMap(block.dataset.crawlIdx);

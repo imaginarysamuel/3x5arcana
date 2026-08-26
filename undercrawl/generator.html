@@ -23,12 +23,48 @@
     <p class="header-area">A 3x5 Arcana Joint in Beta Testing</p>
   </header>
 
-  <!-- AREA DESIGN GUIDE — text from Undercrawl, "Making Crawls" (Area Design).
-       Open by default: the generator hands you scaffolding, and this is the
-       page that tells you what to do with it. -->
-  <details class="uc-guide" open>
-    <summary class="uc-guide-summary">Area Design — what goes in each field</summary>
-    <div class="uc-guide-body">
+  
+
+
+  <!-- CRAWL BUILDER -->
+  <div class="cluster-builder" id="crawlBuilder">
+    <div class="cluster-name-row">
+      <label>Name:</label>
+      <input type="text" id="crawlName" placeholder="e.g. Dverdaghar">
+    </div>
+
+    <div class="cluster-name-row" style="margin-top:8px">
+      <label>Areas:</label>
+      <span class="uc-presets">
+        <button type="button" class="uc-preset selected" data-count="10" onclick="setAreaPreset(this)">10 · Scenic Jaunt</button>
+        <button type="button" class="uc-preset" data-count="25" onclick="setAreaPreset(this)">25 · Taxing Journey</button>
+        <button type="button" class="uc-preset" data-count="50" onclick="setAreaPreset(this)">50 · Perilous Descent</button>
+      </span>
+      <input type="number" id="areaCount" min="2" max="99" value="10" style="width:4em" oninput="clearAreaPreset()">
+    </div>
+
+    <div class="cluster-name-row" style="margin-top:8px">
+      <label>Depths:</label>
+      <input type="number" id="depthCount" min="1" max="12" value="4" style="width:4em">
+    </div>
+
+    <div class="controls-row" style="justify-content:center;flex-direction:column;align-items:center;gap:6px;margin-top:12px">
+      <button class="roll-btn" style="width:3in" onclick="rollCrawl()">Roll an Undercrawl</button>
+      <div style="display:flex;gap:6px;width:3in">
+        <button class="roll-btn" style="flex:1" onclick="saveCrawls()">Save</button>
+        <button class="roll-btn" style="flex:1" onclick="document.getElementById('loadFileInput').click()">Load</button>
+      </div>
+      <input type="file" id="loadFileInput" accept=".json" style="display:none" onchange="loadCrawls(event)">
+    </div>
+  </div>
+      <!-- Area Design Card -->
+  <div class="card-container">
+    <div class="card" data-static>
+      <div class="card-header">
+        <div class="card-title">About Area Design Elements</div>
+      </div>
+      <div class="card-body">
+            <div class="uc-guide-body">
       <dl class="uc-guide-list">
         <dt>Name</dt>
         <dd>Easter eggs of world lore. Be specific; avoid flavorless options like 'Caves', or 'Mines'. Also, Area Number &amp; Depth Level.</dd>
@@ -53,40 +89,10 @@
       </dl>
       <p class="uc-guide-note">Fun Fact! → Landmark, Hidden, Secret is a term of design originally coined by Anne of the DIY &amp; Dragons blog!</p>
     </div>
-  </details>
-
-  <!-- CRAWL BUILDER -->
-  <div class="cluster-builder" id="crawlBuilder">
-    <div class="cluster-name-row">
-      <label>Name:</label>
-      <input type="text" id="crawlName" placeholder="e.g. Dverdaghar">
-    </div>
-
-    <div class="cluster-name-row" style="margin-top:8px">
-      <label>Areas:</label>
-      <span class="uc-presets">
-        <button type="button" class="uc-preset" data-count="10" onclick="setAreaPreset(this)">10 · Scenic Jaunt</button>
-        <button type="button" class="uc-preset selected" data-count="25" onclick="setAreaPreset(this)">25 · Taxing Journey</button>
-        <button type="button" class="uc-preset" data-count="50" onclick="setAreaPreset(this)">50 · Perilous Descent</button>
-      </span>
-      <input type="number" id="areaCount" min="2" max="99" value="25" style="width:4em" oninput="clearAreaPreset()">
-    </div>
-
-    <div class="cluster-name-row" style="margin-top:8px">
-      <label>Depths:</label>
-      <input type="number" id="depthCount" min="1" max="12" value="4" style="width:4em">
-    </div>
-
-    <div class="controls-row" style="justify-content:center;flex-direction:column;align-items:center;gap:6px;margin-top:12px">
-      <button class="roll-btn" style="width:3in" onclick="rollCrawl()">Roll an Undercrawl</button>
-      <div style="display:flex;gap:6px;width:3in">
-        <button class="roll-btn" style="flex:1" onclick="saveCrawls()">Save</button>
-        <button class="roll-btn" style="flex:1" onclick="document.getElementById('loadFileInput').click()">Load</button>
       </div>
-      <input type="file" id="loadFileInput" accept=".json" style="display:none" onchange="loadCrawls(event)">
     </div>
   </div>
-
+  
   <!-- OUTPUT -->
   <div id="output"></div>
 
@@ -94,11 +100,11 @@
   <div class="map-key">
     <div class="map-key-title">Map Key</div>
     <div class="map-key-items">
-      <span><strong>——</strong> Connection (click to cycle)</span>
-      <span><strong>· ·</strong> Secret Connection</span>
+      <span><strong>—</strong> Connection (click to cycle)</span>
+      <span><strong>···</strong> Secret Connection</span>
       <span><strong>✕</strong> Click again (or right-click) to delete</span>
       <span>Click an area, then another, to draw a new connection</span>
-      <span>Drag the salmon handles to reshape Depth Levels</span>
+      <span>Drag the round red handles to reshape Depth Levels</span>
       <span>On a card, press <strong>Enter</strong> for a new line</span>
     </div>
   </div>
