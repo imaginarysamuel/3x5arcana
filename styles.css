@@ -1136,7 +1136,12 @@ p.header-area {
   padding: 10px;
   margin: 7px auto 4px;
   width: 150%;
-  max-width: 5.25in;
+  /* Capped at the container width plus the .235in the transform shifts it
+     left, so the tab still overhangs on the left but ends flush with the
+     container on the right. A bare 5.25in cap made the header ~504px wide on
+     a 375px phone, widening the whole page and pushing the fullscreen map's
+     close button off-screen. On desktop this resolves within ~2px of 5.25in. */
+  max-width: min(5.25in, calc(100% + .235in));
   max-height: .5in;
   transition: none !important;
   cursor: default !important;

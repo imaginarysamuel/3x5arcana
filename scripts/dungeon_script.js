@@ -1513,7 +1513,6 @@ function rollCluster() {
   clusterRooms[clusterCount] = rooms;
   mapCard.querySelector('.map-tile-wrap').appendChild(buildSVGMap(rooms, clusterCount, false));
   block.appendChild(mapCard);
-  toggleMapCard(mapCardId); // open on load; must be in DOM for scrollHeight to be readable
 
   block.appendChild(buildNotesCard(clusterCount, null));
 
@@ -1698,6 +1697,10 @@ function rollCluster() {
   });
 
   out.appendChild(block);
+  // Open the map now that the block is in the document — toggleMapCard looks
+  // the card up by id and sizes it from scrollHeight, and neither works while
+  // the block is still detached (which is why calling it earlier did nothing).
+  toggleMapCard(mapCardId);
   block.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
@@ -2154,7 +2157,11 @@ function restoreDungeons(clusters) {
     block.appendChild(hdr);
     const mapCardId = `mapcard-${idx}`;
     const mapCard = document.createElement('div');
-    mapCard.className = 'map-card' + (saved.mapOpen ? ' expanded' : '');
+    // Start collapsed; a saved-open map is reopened below via toggleMapCard once
+    // the block is attached. Setting 'expanded' here only marked the card open —
+    // the body's height comes from toggleMapCard, so the map stayed hidden and
+    // the first click closed it instead of showing it.
+    mapCard.className = 'map-card';
     mapCard.id = mapCardId;
     mapCard.innerHTML = `
           <div class="map-card-header" onclick="toggleMapCard('${mapCardId}')">
@@ -2177,6 +2184,7 @@ function restoreDungeons(clusters) {
     renderRoomCards(block, idx, saved.rooms, saved.cardSnaps);
 
     out.appendChild(block);
+    if (saved.mapOpen) toggleMapCard(mapCardId);   // only sizes correctly once attached
   });
 
   clusterCount = Math.max(clusterCount, clusters.length);
