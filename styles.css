@@ -1154,6 +1154,15 @@ p.header-area {
   color: var(--grey-lightest);
 }
 
+/* .cluster-header borrows .card.bookmark's look, including pointer-events:none
+   — right for a decorative tab, but this header holds controls, and
+   pointer-events is inherited. A child set to auto still receives clicks
+   under a none parent. */
+.cluster-header button,
+.cluster-header .cluster-name-edit {
+  pointer-events: auto;
+}
+
 .cluster-name-edit {
   cursor: text;
   border-bottom: 1px solid rgba(255,255,255,0.3);
