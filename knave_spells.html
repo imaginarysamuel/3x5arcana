@@ -31,7 +31,12 @@
 
   <!-- Configuration -->
   <script>
-    const STACK_DATA_URL = "https://opensheet.elk.sh/1umIkrZB7ehEbC-1lNm6XL6VlQmVAIiSDCQ5HmgqktS8/knave_spells";
+    // A saved snapshot of the Google Sheet, served from this site, so the page
+    // doesn't wait on (or depend on) opensheet.elk.sh at load time. The sheet
+    // is still the source of truth: after editing it, run this from the repo
+    // root, then commit the file:
+    //   curl -s "https://opensheet.elk.sh/1umIkrZB7ehEbC-1lNm6XL6VlQmVAIiSDCQ5HmgqktS8/knave_spells" -o stacks/stacks_json/knave_spells.json
+    const STACK_DATA_URL = "/stacks/stacks_json/knave_spells.json";
   </script>
 
 <!-- Favorites section (appears when you have favorites) -->

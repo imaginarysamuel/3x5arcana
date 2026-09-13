@@ -1,7 +1,12 @@
 // 📌 monsters_script.js
 // 🧸 Monster page data fetching and filtering
 
-const monsterSheetUrl = "https://opensheet.elk.sh/1E9c3F3JPCDnxqLE0qVtW0K7PBsgHSd7s5oU8p8qeAAY/All";
+// Monster data is a saved snapshot of the Google Sheet, served from this site,
+// so the page no longer waits on (or depends on) opensheet.elk.sh at load time.
+// The sheet is still the source of truth: after editing it, refresh the
+// snapshot by running this from the repo root, then commit monsters.json:
+//   curl -s "https://opensheet.elk.sh/1E9c3F3JPCDnxqLE0qVtW0K7PBsgHSd7s5oU8p8qeAAY/All" -o monsters.json
+const monsterDataUrl = "/monsters.json";
 let data = [];
 let currentMinLevel = 0;
 let currentMaxLevel = 30;
@@ -14,7 +19,7 @@ const monsterRangeMax = document.getElementById("range-max");
 // Show loading state
 showLoading("Loading...");
 
-fetch(monsterSheetUrl)
+fetch(monsterDataUrl)
   .then(response => response.json())
   .then(d => {
     data = d;

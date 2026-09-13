@@ -1,12 +1,17 @@
 // 📌 magic_items_script.js
 // Fetch magic item data
-const magicItemSheetUrl = "https://opensheet.elk.sh/1WM6VoP1l_aXr2Z8G45wlTnbwVY87y3qZ_7PgD7HMBj8/Magic_Items";
+// A saved snapshot of the Google Sheet, served from this site, so the page
+// doesn't wait on (or depend on) opensheet.elk.sh at load time. The sheet is
+// still the source of truth: after editing it, run this from the repo root,
+// then commit magic_items.json:
+//   curl -s "https://opensheet.elk.sh/1WM6VoP1l_aXr2Z8G45wlTnbwVY87y3qZ_7PgD7HMBj8/Magic_Items" -o magic_items.json
+const magicItemDataUrl = "/magic_items.json";
 let data = [];
 
 showLoading("Loading...");
 
-// Fetch magic item data from spreadsheet
-fetch(magicItemSheetUrl)
+// Fetch magic item data (local snapshot of the Google Sheet)
+fetch(magicItemDataUrl)
   .then(response => response.json())
   .then(d => {
     data = d;

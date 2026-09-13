@@ -1,6 +1,11 @@
 // 📌 spells_script.js
 // 📌 Spell Data Source
-const spellSheetUrl = "https://opensheet.elk.sh/1ZsdxP3KiZZ1YCGcxddqNMKhZH2LOV1uwAhVyYqBlR3E/Spells";
+// A saved snapshot of the Google Sheet, served from this site, so the page
+// doesn't wait on (or depend on) opensheet.elk.sh at load time. The sheet is
+// still the source of truth: after editing it, run this from the repo root,
+// then commit spells.json:
+//   curl -s "https://opensheet.elk.sh/1ZsdxP3KiZZ1YCGcxddqNMKhZH2LOV1uwAhVyYqBlR3E/Spells" -o spells.json
+const spellDataUrl = "/spells.json";
 let data = [];
 let currentMinTier = 1;
 let currentMaxTier = 5;
@@ -17,8 +22,8 @@ const filterPriestCheckbox = document.getElementById("filter-priest");
 // Show loading state
 showLoading("Loading...");
 
-// 📌 Fetch spell data from Google Sheet
-fetch(spellSheetUrl)
+// 📌 Fetch spell data (local snapshot of the Google Sheet)
+fetch(spellDataUrl)
   .then(response => response.json())
   .then(d => {
     console.log("✅ Fetched Spell Data:", d);
